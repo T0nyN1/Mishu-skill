@@ -93,11 +93,11 @@ Talk naturally in English or Chinese, or use `/mishu <subcommand>`:
 
 ```mermaid
 flowchart LR
-  U((You)) <--> C[Claude + Mishu skill<br/>conversation · judgment · breakdown · coaching]
-  C -- only through --> S[mishu.py<br/>validation · computation · rendering · permissions]
-  S --> V[(Vault ~/MishuVault<br/>Markdown, single source of truth)]
-  V --> B[BOARD.md / dashboard.html]
-  G[guard.py hook] -. blocks writes that bypass mishu.py .-> C
+  U(("You")) <--> C["Claude + Mishu skill<br/>conversation · judgment · breakdown · coaching"]
+  C -->|"only through"| S["mishu.py<br/>validation · computation · rendering · permissions"]
+  S --> V[("Vault ~/MishuVault<br/>Markdown, single source of truth")]
+  V --> B["BOARD.md / dashboard.html"]
+  G["guard.py hook"] -.->|"blocks writes that bypass mishu.py"| C
 ```
 
 **The AI makes judgment calls; the script enforces the rules.** Progress percentages, pace lights, time caps and the advice-card format are all computed by `mishu.py`. Every day looks the same, and no number is ever an AI guess.

@@ -232,7 +232,7 @@ flowchart TB
   R1 -- 读状态 --> Repo
   R1 -- 提交今日清单 --> Repo
   R1 -- 推送清单 --> Bot --> User
-  User -- 回复"1✅ 2❌ 没时间" --> Bot
+  User -->|"回复：1✅ 2❌ 没时间"| Bot
   Bot -- webhook 触发 --> R2
   R2 -- 更新进度 --> Repo
   Local <--> Repo

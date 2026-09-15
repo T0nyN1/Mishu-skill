@@ -242,7 +242,7 @@ flowchart TB
   R1 -- read state --> Repo
   R1 -- commit today's list --> Repo
   R1 -- push the list --> Bot --> User
-  User -- replies "1✅ 2❌ no time" --> Bot
+  User -->|"reply: 1✅ 2❌ no time"| Bot
   Bot -- webhook trigger --> R2
   R2 -- update progress --> Repo
   Local <--> Repo

@@ -84,11 +84,11 @@ open examples/demo-vault-zh/dashboard.html
 
 ```mermaid
 flowchart LR
-  U((你)) <--> C[Claude + Mishu skill<br/>对话 · 判断 · 拆解 · 诊断]
-  C -- 只能通过 --> S[mishu.py<br/>校验 · 计算 · 渲染 · 权限]
-  S --> V[(档案库 ~/MishuVault<br/>Markdown 唯一数据源)]
-  V --> B[BOARD.md / dashboard.html]
-  G[guard.py hook] -. 拦截绕过 mishu.py 的写入 .-> C
+  U(("你")) <--> C["Claude + Mishu skill<br/>对话 · 判断 · 拆解 · 诊断"]
+  C -->|"只能通过"| S["mishu.py<br/>校验 · 计算 · 渲染 · 权限"]
+  S --> V[("档案库 ~/MishuVault<br/>Markdown 唯一数据源")]
+  V --> B["BOARD.md / dashboard.html"]
+  G["guard.py hook"] -.->|"拦截绕过 mishu.py 的写入"| C
 ```
 
 **AI 负责判断，脚本负责规则。** 进度百分比、节奏灯、时长上限、建议卡格式都由 `mishu.py` 按固定规则处理，所以每天看到的内容结构始终一致，数字也不是 AI 估出来的。
