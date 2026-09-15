@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alex’s Mishu desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#EDF0EE; --surface:#FFFFFF; --paper:#FAFBF9; --sunk:#E3E8E5;
+  --ink:#18201D; --muted:#58655F; --faint:#88948F; --rule:#D3DAD6; --rule-strong:#B9C3BE;
+  --accent:#2D4BA0; --accent-soft:#E2E7F6;
+  --ok:#2F7D4F; --ok-soft:#DCEEE2; --warn:#9C6800; --warn-soft:#F5E9CB;
+  --crit:#B3392A; --crit-soft:#F6DDD8; --idle:#6F7B76; --idle-soft:#E4E9E6;
+  --serif:"Noto Serif SC","Songti SC","STSong",serif;
+  --sans:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0F1412; --surface:#171D1A; --paper:#141A17; --sunk:#202824;
+    --ink:#E3E9E6; --muted:#9EABA5; --faint:#6F7B76; --rule:#2A332F; --rule-strong:#3B4641;
+    --accent:#98ACF2; --accent-soft:#1F2946;
+    --ok:#6FC392; --ok-soft:#163323; --warn:#E2B04C; --warn-soft:#382C10;
+    --crit:#F08676; --crit-soft:#3B1C17; --idle:#8F9A95; --idle-soft:#222A26;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0F1412; --surface:#171D1A; --paper:#141A17; --sunk:#202824;
+  --ink:#E3E9E6; --muted:#9EABA5; --faint:#6F7B76; --rule:#2A332F; --rule-strong:#3B4641;
+  --accent:#98ACF2; --accent-soft:#1F2946;
+  --ok:#6FC392; --ok-soft:#163323; --warn:#E2B04C; --warn-soft:#382C10;
+  --crit:#F08676; --crit-soft:#3B1C17; --idle:#8F9A95; --idle-soft:#222A26;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font:14px/1.6 var(--sans)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+h1,h2,h3,h4{margin:0;text-wrap:balance}
+ul,ol{margin:0;padding:0;list-style:none}
+dl,dd{margin:0}
+a{color:var(--accent)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1280px;margin:0 auto;padding-inline:24px;padding-block:28px 40px}
+
+/* masthead */
+.masthead{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px 40px;padding-bottom:22px;border-bottom:1px solid var(--rule-strong)}
+.brand{display:flex;align-items:center;gap:14px}
+.seal{display:grid;place-items:center;width:44px;height:44px;border:2px solid var(--accent);color:var(--accent);font:700 22px/1 var(--serif);border-radius:6px;transform:rotate(-4deg)}
+.brand h1{font:700 26px/1.2 var(--serif);letter-spacing:.02em}
+.when{margin:2px 0 0;color:var(--muted);font-size:12.5px}
+.kpis{display:flex;flex-wrap:wrap;gap:12px 36px}
+.kpi dt{font-size:11.5px;color:var(--muted);letter-spacing:.08em}
+.kpi dd{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 8px}
+.big{font-size:24px;font-weight:500;line-height:1.2}
+.of{color:var(--muted);font-size:12.5px}
+.meter{flex-basis:100%;height:4px;background:var(--sunk);border-radius:2px;overflow:hidden;min-width:160px}
+.meter span{display:block;height:100%;background:var(--accent)}
+.lights{display:flex;gap:4px}
+
+/* layout */
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:28px;margin-top:28px;align-items:start}
+.primary{display:flex;flex-direction:column;gap:24px;min-width:0}
+.side{display:flex;flex-direction:column;gap:16px;position:sticky;top:20px;max-height:calc(100vh - 40px);overflow-y:auto;min-width:0}
+
+/* rounded panels shared by Today, Needs attention, Inbox */
+.box-panel{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:16px 18px}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--rule)}
+.panel-head .count{font-size:12px;color:var(--muted);background:var(--sunk);border-radius:999px;padding:0 8px;line-height:20px}
+h2{font:600 17px/1.3 var(--serif);letter-spacing:.03em}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.empty{color:var(--muted);margin:10px 0 0}
+
+/* status pills */
+.pill{display:inline-flex;align-items:center;gap:6px;padding:1px 9px 1px 7px;border-radius:999px;font-size:12px;font-weight:500;white-space:nowrap;background:var(--idle-soft);color:var(--idle)}
+.pill i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.crit{background:var(--crit-soft);color:var(--crit)}
+
+/* needs attention */
+.attention ul{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.att{display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;padding:10px 12px;border-radius:8px;background:var(--idle-soft)}
+.att.crit{background:var(--crit-soft)} .att.warn{background:var(--warn-soft)} .att.done{background:var(--ok-soft)}
+.att .tag{font-size:12px;font-weight:700;padding-top:1px}
+.att.crit .tag{color:var(--crit)} .att.warn .tag{color:var(--warn)} .att.done .tag{color:var(--ok)} .att.note .tag{color:var(--muted)}
+.att .id{text-decoration:none;font-size:12.5px;margin-right:8px}
+.att .t{font-weight:500}
+.att p{margin:2px 0 0;color:var(--muted);font-size:13px}
+
+/* goal cards */
+.goals{display:flex;flex-direction:column;gap:14px}
+.legend{font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+.expect-key{display:inline-block;width:2px;height:12px;background:var(--ink)}
+.goal{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:18px 20px 12px}
+.goal.s-crit{border-color:color-mix(in srgb,var(--crit) 45%,var(--rule))}
+.goal-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.ident{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.gid{color:var(--ink);font-weight:500;font-size:13px}
+.type{border:1px solid var(--rule-strong);border-radius:4px;padding:0 5px;line-height:18px}
+.goal-title{font:600 19px/1.35 var(--serif);margin:6px 0 14px}
+.goal-body{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:18px 28px}
+.col-a{display:flex;flex-direction:column;gap:10px;min-width:0}
+.measure-head{display:flex;align-items:baseline;gap:10px}
+.measure-head .num{font:500 22px/1 var(--mono)}
+.measure-head .sub{font-size:12px;color:var(--muted)}
+.bar{position:relative;height:8px;background:var(--sunk);border-radius:4px;margin-top:8px}
+.bar .fill{position:absolute;inset:0 auto 0 0;border-radius:4px;background:var(--accent)}
+.bar .fill.ok{background:var(--ok)} .bar .fill.warn{background:var(--warn)} .bar .fill.crit{background:var(--crit)}
+.bar.thin{height:5px;flex:1;margin:0}
+.expect{position:absolute;top:-4px;bottom:-4px;width:2px;margin-left:-1px;background:var(--ink);border-radius:1px}
+.detail{margin:6px 0 0;font-size:12.5px;color:var(--muted)}
+.freq{display:flex;align-items:center;gap:10px;font-size:12.5px}
+.freq .k{color:var(--muted);white-space:nowrap}
+.dots{display:flex;gap:4px;flex-wrap:wrap}
+.dot{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--rule-strong)}
+.dot.on{background:var(--ink);border-color:var(--ink)}
+.freq .v{margin-left:auto;white-space:nowrap}
+.metric{display:flex;align-items:baseline;gap:8px;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+.metric b{color:var(--ink);font-size:14px}
+.arrow{color:var(--faint)}
+.funnel{display:flex;flex-wrap:wrap;gap:0;font-size:12.5px}
+.funnel li{display:flex;flex-direction:column;padding:4px 14px 4px 0;margin-right:14px;border-right:1px solid var(--rule)}
+.funnel li:last-child{border-right:0}
+.funnel .k{color:var(--muted);font-size:11.5px}
+.funnel .v{font-size:15px}
+.funnel small{color:var(--faint)}
+.facts{display:flex;flex-direction:column;gap:8px;font-size:13px}
+.facts div{display:grid;grid-template-columns:38px minmax(0,1fr);gap:8px}
+.facts dt{color:var(--muted);font-size:12px;padding-top:1px}
+.hard{font:700 10.5px/1 var(--sans);color:var(--crit);border:1px solid currentColor;border-radius:3px;padding:1px 3px;margin-left:6px;vertical-align:1px}
+.next{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px dashed var(--rule)}
+.next .k{font-size:12px;color:var(--muted)}
+.next .id{font-size:12.5px;color:var(--accent)}
+.next .t{font-weight:500}
+.next .est{font-size:12px;color:var(--muted)}
+.next .none{color:var(--muted)}
+.risks{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.risks li{font-size:12px;color:var(--warn);background:var(--warn-soft);border-radius:4px;padding:1px 7px}
+.activity{display:flex;align-items:flex-end;gap:10px;margin-top:12px}
+.strip{display:grid;grid-template-columns:repeat(14,1fr);gap:3px;align-items:end;height:26px;width:168px}
+.strip .b{height:var(--h);background:var(--accent);opacity:.75;border-radius:1.5px}
+.strip .b.zero{height:2px;background:var(--rule-strong);opacity:1}
+.strip .b:last-child{opacity:1}
+.cap{font-size:11.5px;color:var(--faint)}
+
+/* expandable details */
+.more{margin-top:10px;border-top:1px solid var(--rule)}
+.more summary{cursor:pointer;padding:9px 0 3px;font-size:12.5px;color:var(--muted);list-style:none}
+.more summary::before{content:"▸";display:inline-block;width:14px;transition:transform .15s}
+.more[open] summary::before{transform:rotate(90deg)}
+.more summary::-webkit-details-marker{display:none}
+.more-body{display:flex;flex-direction:column;gap:8px;padding:6px 0 10px}
+.more h4{font:600 13px/1.4 var(--sans);margin-top:8px;color:var(--muted)}
+.dw{margin:0;font-size:13px}
+.dw .k,.phases small{color:var(--muted);font-size:12px;margin-right:8px}
+.phases{display:flex;flex-wrap:wrap;gap:6px}
+.ph{font-size:12.5px;border:1px solid var(--rule);border-radius:4px;padding:1px 8px;color:var(--muted)}
+.ph.active{border-color:var(--accent);color:var(--ink)}
+.ph.done{text-decoration:line-through;text-decoration-color:var(--faint)}
+.ph small{margin:0 0 0 6px}
+.tasks{display:flex;flex-direction:column}
+.task{display:grid;grid-template-columns:18px 34px minmax(0,1fr) auto;gap:8px;padding:4px 0;font-size:13px;border-bottom:1px solid var(--rule)}
+.task:last-child{border-bottom:0}
+.task .g{color:var(--muted);text-align:center}
+.task.m-done .t,.task.m-cancelled .t{color:var(--faint)}
+.task.m-cancelled .t{text-decoration:line-through}
+.task.m-done .g{color:var(--ok)} .task.m-doing .g{color:var(--accent)} .task.m-waiting .g{color:var(--warn)}
+.task .id{color:var(--muted);font-size:12px}
+.task .meta{font-size:11.5px;color:var(--faint);text-align:right}
+.table-wrap{overflow-x:auto}
+.logs{width:100%;border-collapse:collapse;font-size:12.5px}
+.logs th{text-align:left;font-weight:500;color:var(--faint);font-size:11.5px;padding:3px 10px 3px 0;border-bottom:1px solid var(--rule)}
+.logs td{padding:4px 10px 4px 0;border-bottom:1px solid var(--rule);vertical-align:top;white-space:nowrap}
+.logs td:last-child{white-space:normal;min-width:180px}
+.logs .r.ok{color:var(--ok)} .logs .r.warn{color:var(--warn)} .logs .r.crit{color:var(--crit)}
+.rc{font:500 11px/1 var(--mono);color:var(--warn);border:1px solid currentColor;border-radius:3px;padding:1px 4px;margin-right:6px}
+.decisions li{font-size:13px;padding:3px 0}
+.decisions small{display:block;color:var(--muted)}
+
+/* today: first in the main column, groups side by side */
+.today{padding:18px 22px 18px}
+.today .panel-head h2{font-size:19px}
+.groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:4px 28px}
+.groups .g-main{grid-column:1/-1}
+.date{color:var(--muted);font-size:12.5px}
+.today-meta{margin:4px 0 6px;font-size:12px;color:var(--muted)}
+.grp{margin-top:12px}
+.grp h3{font:700 12px/1.4 var(--sans);letter-spacing:.12em;color:var(--muted);display:flex;gap:8px;align-items:baseline;padding-bottom:4px;border-bottom:1px solid var(--rule)}
+.grp h3 small{font-weight:400;letter-spacing:0;color:var(--faint)}
+.item{display:grid;grid-template-columns:20px minmax(0,1fr) auto;gap:10px;align-items:start;padding:8px 0;border-bottom:1px dashed var(--rule)}
+.item:last-child{border-bottom:0}
+.box{width:18px;height:18px;margin-top:2px;border:1.5px solid var(--rule-strong);border-radius:4px;display:grid;place-items:center;font-size:12px;line-height:1;font-weight:700}
+.box.ok{border-color:var(--ok);background:var(--ok);color:var(--surface)}
+.box.warn{border-color:var(--warn);color:var(--warn)}
+.box.crit{border-color:var(--crit);color:var(--crit)}
+.box.idle{color:var(--idle)}
+.it .line{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.it .id{font-size:11.5px;color:var(--accent)}
+.it .t{font-weight:500}
+.has-r.ok .t{color:var(--muted)}
+.it .sub{font-size:12px;color:var(--muted);margin-top:2px}
+.item .time{font-size:12px;color:var(--muted);white-space:nowrap;padding-top:2px}
+.grp li.none{color:var(--faint);padding:6px 0;font-size:12.5px}
+.wait li{font-size:12.5px;color:var(--muted);padding:5px 0}
+.review{margin-top:16px;padding:12px 14px;border-radius:8px;background:var(--sunk)}
+.review h3{font:600 14px/1.4 var(--serif)}
+.stats{margin:4px 0 8px;font-size:12.5px}
+.review .extra li{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--muted);padding:3px 0}
+.tag-extra{margin-left:auto;font-size:11px;border:1px solid var(--rule-strong);border-radius:3px;padding:0 4px;white-space:nowrap}
+.review dl{display:flex;flex-direction:column;gap:4px;font-size:13px}
+.review dl div{display:grid;grid-template-columns:64px minmax(0,1fr);gap:8px}
+.review dt{color:var(--muted);font-size:12px}
+.pending{margin:14px 0 0;font-size:12.5px;color:var(--muted)}
+
+/* advice cards */
+.advice-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.advice-list h2{grid-column:1/-1}
+.advice{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:14px 16px}
+.advice header{display:flex;gap:8px;align-items:center;font-size:11.5px;color:var(--muted)}
+.advice .cat{color:var(--accent);font-weight:700}
+.advice .lvl{margin-left:auto;border:1px solid var(--rule-strong);border-radius:3px;padding:0 4px}
+.advice h3{font:600 15px/1.4 var(--serif);margin:6px 0 8px}
+.goal-ref{display:block;font:400 11.5px/1.4 var(--sans);color:var(--muted)}
+.advice dl{display:flex;flex-direction:column;gap:4px;font-size:13px}
+.advice dl div{display:grid;grid-template-columns:32px minmax(0,1fr);gap:6px}
+.advice dt{color:var(--muted);font-size:12px}
+.opts{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.opts li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;padding:8px 10px;border:1px solid var(--rule);border-radius:6px;font-size:13px}
+.opts li.rec{border-color:var(--accent);background:var(--accent-soft)}
+.opts b{color:var(--accent)}
+.opts p{margin:0}
+.opts .cost{font-size:12px;color:var(--muted)}
+.rec-line{margin:10px 0 0;font-size:13px}
+.ask{margin:4px 0 0;font-size:13px;font-weight:500}
+
+/* secondary info */
+.minor h2{font-size:15px}
+.minor ul{margin-top:4px}
+.minor li{padding:8px 0;border-bottom:1px solid var(--rule);font-size:13px}
+.minor li:last-child{border-bottom:0;padding-bottom:0}
+.minor small{display:block;color:var(--muted)}
+.minor .lbl{font-size:11.5px;color:var(--muted);margin-left:6px}
+.foot{margin-top:40px;padding-top:14px;border-top:1px solid var(--rule);font-size:12px;color:var(--faint)}
+
+/* English typography */
+html[lang="en"]{--serif:"Source Serif 4",Georgia,"Times New Roman",serif;--sans:"IBM Plex Sans",-apple-system,"Segoe UI",system-ui,sans-serif}
+html[lang="en"] .advice dl div{grid-template-columns:72px minmax(0,1fr)}
+html[lang="en"] .facts div{grid-template-columns:72px minmax(0,1fr)}
+html[lang="en"] .review dl div{grid-template-columns:88px minmax(0,1fr)}
+html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
+
+/* Empty vault onboarding */
+.welcome{padding:22px 24px;border-color:var(--accent)}
+.welcome h2{font-size:21px}
+.welcome p{margin:8px 0 0;color:var(--muted)}
+.steps{list-style:none;counter-reset:s;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:14px}
+.steps li{counter-increment:s;background:var(--sunk);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.steps li::before{content:counter(s);font:500 12px/1 var(--mono);color:var(--accent)}
+.steps b{font-weight:600}
+.steps span{font-size:13px;color:var(--muted)}
+.try code{font-family:var(--mono);font-size:12.5px;background:var(--accent-soft);color:var(--accent);padding:2px 6px;border-radius:4px}
+
+@media (max-width: 980px){
+  /* narrow: welcome → today → attention → advice → goals → inbox */
+  .layout{display:flex;flex-direction:column;gap:20px}
+  .primary,.side{display:contents}
+  .welcome{order:0} .today{order:1} .attention{order:2} .advice-list{order:3} .goals{order:4} .minor{order:5}
+  .side{position:static;max-height:none}
+}
+@media (max-width: 560px){
+  .wrap{padding-inline:16px}
+  .goal{padding:16px 14px 10px}
+  .goal-body{grid-template-columns:minmax(0,1fr)}
+  .task{grid-template-columns:18px 34px minmax(0,1fr)}
+  .task .meta{grid-column:3;text-align:left}
+  .kpis{gap:12px 24px}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <div class="brand">
+      <span class="seal" aria-hidden="true">秘</span>
+      <div><h1>Alex’s Mishu desk</h1>
+      <p class="mono when">2026-09-14 Mon · week 38</p></div>
+    </div>
+    <dl class="kpis">
+      <div class="kpi wide"><dt>This week</dt><dd><span class="mono big">2h35m</span><span class="mono of">/ 25h</span>
+        <span class="meter" aria-hidden="true"><span style="width:10.3%"></span></span></dd></div>
+      <div class="kpi"><dt>Active goals</dt><dd><span class="mono big">5</span>
+        <span class="lights"><span class="pill ok"><i aria-hidden="true"></i>2</span><span class="pill warn"><i aria-hidden="true"></i>2</span><span class="pill crit"><i aria-hidden="true"></i>1</span></span></dd></div>
+      <div class="kpi"><dt>Inbox</dt><dd><span class="mono big">2</span><span class="of">to process</span></dd></div>
+    </dl>
+  </header>
+
+  <main class="layout">
+    <div class="primary">
+      <section class="today box-panel" aria-labelledby="today-h">
+  <div class="panel-head"><h2 id="today-h">Today</h2><span class="mono date">09-14 Mon</span></div>
+  <p class="today-meta mono">Available 4h · energy 3/5 · planned 2h20m (cap 2h48m)</p>
+  <div class="groups">
+    <div class="grp g-main"><h3>Main<small>max 3</small></h3><ul><li class="item has-r ok">
+  <span class="box ok" aria-label="✓">✓</span>
+  <div class="it"><div class="line"><span class="id mono">G03.T02</span><span class="t">Build a target company list (20)</span></div>
+  <div class="sub">22 companies saved in Notion</div></div>
+  <span class="time mono">50m</span>
+</li><li class="item has-r crit">
+  <span class="box crit" aria-label="✗">✗</span>
+  <div class="it"><div class="line"><span class="id mono">G01.T04</span><span class="t">Compare 3 iCloud sync options in a table</span></div>
+  <div class="sub">reason U Unclear · still unsure how to compare</div></div>
+  <span class="time mono">45m</span>
+</li></ul></div><div class="grp g-habit"><h3>Habits</h3><ul><li class="item has-r ok">
+  <span class="box ok" aria-label="✓">✓</span>
+  <div class="it"><div class="line"><span class="id mono">G02.T01</span><span class="t">Strength session (A/B alternating)</span></div>
+  <div class="sub">last 7 days 2/4</div></div>
+  <span class="time mono">35m</span>
+</li></ul></div><div class="grp g-errand"><h3>Errands</h3><ul><li class="item has-r ok">
+  <span class="box ok" aria-label="✓">✓</span>
+  <div class="it"><div class="line"><span class="id mono">G05.T02</span><span class="t">Place the order</span></div>
+  <div class="sub">ordered, arrives Wednesday</div></div>
+  <span class="time mono">10m</span>
+</li></ul></div>
+    <div class="grp g-wait"><h3>Waiting / follow-up</h3><ul class="wait"><li>G01.T06 Ask a designer friend for the app icon (waiting on Sam, 3 days) → follow up today</li></ul></div>
+  </div>
+  <div class="review">
+  <h3>Evening check-in</h3>
+  <p class="stats mono">done 3/4 · main 1/2 · spent 2h35m</p>
+  <ul class="extra"><li><span class="box warn">◐</span><span class="id mono">G01.T03</span> sub-agent verified commit e19f55: list view wired, edit view missing<small class="tag-extra">unplanned</small></li></ul>
+  <dl><div><dt>Tomorrow</dt><dd class="mono">G01.T03 · G03.T03</dd></div>
+  <div><dt>In one line</dt><dd>Good day — the application block finally cleared</dd></div></dl>
+</div>
+</section><section class="advice-list" aria-labelledby="adv-h"><h2 id="adv-h">Mishu’s advice</h2><article class="advice">
+  <header><span class="aid mono">A0914-1</span><span class="cat">Adjust</span><span class="lvl mono">L2</span></header>
+  <h3><span class="goal-ref">G03 Land a new-grad offer</span>Applications are behind pace</h3>
+  <dl><div><dt>Facts</dt><dd>Last 7 days: 3/10 applications; G03.T02 deferred twice, both times reason U (unclear which companies)</dd></div><div><dt>Diagnosis</dt><dd>The bottleneck is the missing target list, not time</dd></div></dl>
+  <ol class="opts"><li class="rec"><b class="mono">A</b><div><p>Spend 45m on the list today; keep next week&#x27;s quota</p><p class="cost">Cost: 1–2 fewer applications this week</p></div></li><li class=""><b class="mono">B</b><div><p>Lower the quota to 6 per week</p><p class="cost">Cost: Offer likely ~2 weeks later</p></div></li></ol>
+  <p class="rec-line">Recommended <b class="mono">A</b>: already on today&#x27;s main list</p>
+  <p class="ask">Your call: Reply A or B</p>
+</article><article class="advice">
+  <header><span class="aid mono">A0914-2</span><span class="cat">Coach</span><span class="lvl mono">L2</span></header>
+  <h3><span class="goal-ref">G01 Ship budgeting app v1</span>Stuck on the iCloud sync research</h3>
+  <dl><div><dt>Facts</dt><dd>G01.T04 deferred 3 times; 2 of them with reason U (unclear where to start)</dd></div><div><dt>Diagnosis</dt><dd>The task is too vague: “compare 3 options” has no concrete first step or output format</dd></div></dl>
+  <ol class="opts"><li class="rec"><b class="mono">A</b><div><p>Split it: ① 25m list CloudKit / Core Data+CloudKit / a third-party SDK with doc links ② 30m fill a cost/complexity/offline table</p><p class="cost">Cost: One more breakdown step; no extra work today</p></div></li><li class=""><b class="mono">B</b><div><p>Skip sync in v1 and move it after M3</p><p class="cost">Cost: No multi-device sync at launch; may hurt early retention</p></div></li></ol>
+  <p class="rec-line">Recommended <b class="mono">A</b>: sync is core; only the task definition is unclear</p>
+  <p class="ask">Your call: Reply A or B and I&#x27;ll update the plan</p>
+</article></section><section class="goals" aria-labelledby="goals-h">
+        <div class="sec-head"><h2 id="goals-h">Goals</h2><span class="legend"><span class="expect-key"></span>expected progress by now</span></div>
+        <article class="goal s-crit" id="G03">
+  <header class="goal-head">
+    <div class="ident"><span class="gid mono">G03</span><span class="type">Pipeline</span><span class="pri mono">P0</span><span class="area">Career</span></div>
+    <span class="pill crit"><i aria-hidden="true"></i>At risk</span>
+  </header>
+  <h3 class="goal-title">Land a new-grad offer</h3>
+  <div class="goal-body">
+    <div class="col-a"><div class="measure"><div class="measure-head"><span class="num">33%</span></div><div class="bar" role="img" aria-label="Progress 33%"><span class="fill crit" style="width:33.3%"></span></div><p class="detail">M2 Apply in volume in progress; funnel: Applied 3 → Screened 1 → Interview 0 → Offer 0/1</p></div><div class="freq"><span class="k">last 7 days</span><div class="dots" aria-hidden="true"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><span class="v mono">3/10 apps</span></div><ol class="funnel"><li><span class="k">Applied</span><span class="v mono">3</span></li><li><span class="k">Screened</span><span class="v mono">1</span></li><li><span class="k">Interview</span><span class="v mono">0</span></li><li><span class="k">Offer</span><span class="v mono">0<small>/1</small></span></li></ol></div>
+    <dl class="facts">
+      <div><dt>Pace</dt><dd>Last 7 days 3/10 apps</dd></div>
+      <div><dt>Due</dt><dd class="mono">11-15<b class="hard" title="hard deadline">hard</b></dd></div>
+      <div><dt>This week</dt><dd>Last 7 days 3/10 apps · spent 50m</dd></div>
+    </dl>
+  </div>
+  <div class="next"><span class="k">Next</span><span class="id mono">G03.T03</span><span class="t">Apply to 5 target companies</span><span class="mono est">45m</span></div>
+  
+  <div class="activity"><div class="strip" role="img" aria-label="last 14 days: 2h20m"><span class="b zero" style="--h:0%" title="09-01 · no time logged"></span><span class="b zero" style="--h:0%" title="09-02 · no time logged"></span><span class="b zero" style="--h:0%" title="09-03 · no time logged"></span><span class="b zero" style="--h:0%" title="09-04 · no time logged"></span><span class="b" style="--h:90%" title="09-05 · 1h30m · 2 done"></span><span class="b zero" style="--h:0%" title="09-06 · no time logged"></span><span class="b zero" style="--h:0%" title="09-07 · no time logged"></span><span class="b zero" style="--h:0%" title="09-08 · no time logged"></span><span class="b zero" style="--h:0%" title="09-09 · no time logged"></span><span class="b zero" style="--h:0%" title="09-10 · no time logged"></span><span class="b zero" style="--h:0%" title="09-11 · no time logged"></span><span class="b zero" style="--h:0%" title="09-12 · no time logged"></span><span class="b zero" style="--h:0%" title="09-13 · no time logged"></span><span class="b" style="--h:50%" title="09-14 · 50m · 1 done"></span></div><span class="cap">last 14 days: 2h20m</span></div>
+  <details class="more">
+  <summary>Actions, log &amp; decisions</summary>
+  <div class="more-body">
+    <p class="dw"><span class="k">Definition of done</span>Signed at least one mobile engineering offer</p>
+    <p class="dw"><span class="k">Evidence</span>Link/file</p>
+    <ol class="phases"><li class="ph done"><span class="mono">M1</span> Polish the résumé<small class="mono">09-07</small></li><li class="ph active"><span class="mono">M2</span> Apply in volume<small class="mono">10-15</small></li><li class="ph todo"><span class="mono">M3</span> Interviews<small class="mono">11-10</small></li><li class="ph todo"><span class="mono">M4</span> Choose an offer<small class="mono">11-15</small></li></ol>
+    <h4>Actions</h4><ul class="tasks"><li class="task m-done"><span class="g" title="done">✓</span><span class="id mono">T01</span><span class="t">Rewrite project bullets against target JDs</span><span class="meta mono">90m · M1</span></li><li class="task m-done"><span class="g" title="done">✓</span><span class="id mono">T02</span><span class="t">Build a target company list (20)</span><span class="meta mono">45m · M2 · deferred 2×</span></li><li class="task m-todo"><span class="g" title="todo">○</span><span class="id mono">T03</span><span class="t">Apply to 5 target companies</span><span class="meta mono">45m · M2</span></li><li class="task m-todo"><span class="g" title="todo">○</span><span class="id mono">T04</span><span class="t">Prepare 5 STAR behavioral stories</span><span class="meta mono">60m · M3</span></li></ul>
+    <h4>Recent log</h4>
+    <div class="table-wrap"><table class="logs"><thead><tr><th>Date</th><th>Item</th><th>Result</th><th>Time/value</th><th>Evidence</th><th>Note</th></tr></thead>
+    <tbody><tr><td class="mono">09-14</td><td class="mono">T02</td><td class="r ok">✓</td><td class="mono">50m</td><td title="Link/file">🔗</td><td>22 companies saved in Notion</td></tr><tr><td class="mono">09-13</td><td class="mono">funnel:Screened</td><td class="r ">=</td><td class="mono">+1</td><td title="Link/file">🔗</td><td>recruiter email</td></tr><tr><td class="mono">09-10</td><td class="mono">funnel:Applied</td><td class="r ">=</td><td class="mono">+3</td><td title="Link/file">🔗</td><td>application screenshots</td></tr><tr><td class="mono">09-10</td><td class="mono">T02</td><td class="r crit">✗</td><td class="mono"></td><td title=""></td><td><span class="rc" title="Unclear">U</span></td></tr><tr><td class="mono">09-08</td><td class="mono">T02</td><td class="r crit">✗</td><td class="mono"></td><td title=""></td><td><span class="rc" title="Unclear">U</span>no idea which companies to target</td></tr><tr><td class="mono">09-05</td><td class="mono">M1</td><td class="r ok">✓</td><td class="mono"></td><td title="Link/file">🔗</td><td>phase completed</td></tr><tr><td class="mono">09-05</td><td class="mono">T01</td><td class="r ok">✓</td><td class="mono">1h30m</td><td title="Link/file">🔗</td><td>résumé v3 uploaded</td></tr><tr><td class="mono">09-01</td><td class="mono">created</td><td class="r ">=</td><td class="mono"></td><td title="System">⚙️</td><td>goal created (active)</td></tr></tbody></table></div>
+    
+  </div>
+</details>
+</article><article class="goal s-warn" id="G02">
+  <header class="goal-head">
+    <div class="ident"><span class="gid mono">G02</span><span class="type">Habit</span><span class="pri mono">P1</span><span class="area">Health</span></div>
+    <span class="pill warn"><i aria-hidden="true"></i>Watch</span>
+  </header>
+  <h3 class="goal-title">Get down to 70 kg</h3>
+  <div class="goal-body">
+    <div class="col-a"><div class="measure"><div class="measure-head"><span class="num">24%</span></div><div class="bar" role="img" aria-label="Progress 24%"><span class="fill warn" style="width:23.8%"></span></div><p class="detail">76.1kg, baseline 78 → target 70</p></div><div class="freq"><span class="k">last 7 days</span><div class="dots" aria-hidden="true"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span></div><span class="v mono">3/4 times</span></div><div class="metric mono"><span>baseline 78</span><span class="arrow">→</span><b>76.1kg</b><span class="arrow">→</span><span>target 70</span></div></div>
+    <dl class="facts">
+      <div><dt>Pace</dt><dd>Last 7 days 3/4 times</dd></div>
+      <div><dt>Due</dt><dd class="mono">—</dd></div>
+      <div><dt>This week</dt><dd>Last 7 days 3/4 times · spent 35m</dd></div>
+    </dl>
+  </div>
+  <div class="next"><span class="k">Next</span><span class="id mono">G02.T01</span><span class="t">Strength session (A/B alternating)</span><span class="mono est">40m</span></div>
+  
+  <div class="activity"><div class="strip" role="img" aria-label="last 14 days: 4h"><span class="b zero" style="--h:0%" title="09-01 · no time logged"></span><span class="b zero" style="--h:0%" title="09-02 · no time logged"></span><span class="b" style="--h:40%" title="09-03 · 40m · 1 done"></span><span class="b zero" style="--h:0%" title="09-04 · no time logged"></span><span class="b" style="--h:35%" title="09-05 · 35m · 1 done"></span><span class="b" style="--h:12%" title="09-06 · 5m · 1 done"></span><span class="b" style="--h:40%" title="09-07 · 40m · 1 done"></span><span class="b zero" style="--h:0%" title="09-08 · no time logged"></span><span class="b" style="--h:40%" title="09-09 · 40m · 1 done"></span><span class="b zero" style="--h:0%" title="09-10 · no time logged"></span><span class="b zero" style="--h:0%" title="09-11 · no time logged"></span><span class="b" style="--h:40%" title="09-12 · 40m · 1 done"></span><span class="b" style="--h:12%" title="09-13 · 5m · 1 done"></span><span class="b" style="--h:35%" title="09-14 · 35m · 1 done"></span></div><span class="cap">last 14 days: 4h</span></div>
+  <details class="more">
+  <summary>Actions, log &amp; decisions</summary>
+  <div class="more-body">
+    <p class="dw"><span class="k">Definition of done</span>Two consecutive weeks at or below 70 kg</p>
+    <p class="dw"><span class="k">Evidence</span>Photo</p>
+    
+    <h4>Actions</h4><ul class="tasks"><li class="task m-todo"><span class="g" title="todo">○</span><span class="id mono">T01</span><span class="t">Strength session (A/B alternating)</span><span class="meta mono">40m</span></li><li class="task m-todo"><span class="g" title="todo">○</span><span class="id mono">T02</span><span class="t">Weigh in and snap the scale</span><span class="meta mono">5m · every sun</span></li></ul>
+    <h4>Recent log</h4>
+    <div class="table-wrap"><table class="logs"><thead><tr><th>Date</th><th>Item</th><th>Result</th><th>Time/value</th><th>Evidence</th><th>Note</th></tr></thead>
+    <tbody><tr><td class="mono">09-14</td><td class="mono">Weight</td><td class="r ">=</td><td class="mono">76.1kg</td><td title="Verbal">💬</td><td>no photo today; verbal report</td></tr><tr><td class="mono">09-14</td><td class="mono">T01</td><td class="r ok">✓</td><td class="mono">35m</td><td title="Verbal">💬</td><td></td></tr><tr><td class="mono">09-13</td><td class="mono">Weight</td><td class="r ">=</td><td class="mono">76.4kg</td><td title="Photo">📷</td><td>scale photo checked, not stored</td></tr><tr><td class="mono">09-13</td><td class="mono">T02</td><td class="r ok">✓</td><td class="mono">5m</td><td title="Photo">📷</td><td></td></tr><tr><td class="mono">09-12</td><td class="mono">T01</td><td class="r ok">✓</td><td class="mono">40m</td><td title="Verbal">💬</td><td></td></tr><tr><td class="mono">09-09</td><td class="mono">T01</td><td class="r ok">✓</td><td class="mono">40m</td><td title="Verbal">💬</td><td></td></tr><tr><td class="mono">09-07</td><td class="mono">T01</td><td class="r ok">✓</td><td class="mono">40m</td><td title="Verbal">💬</td><td></td></tr><tr><td class="mono">09-06</td><td class="mono">Weight</td><td class="r ">=</td><td class="mono">77.2kg</td><td title="Photo">📷</td><td>scale photo checked</td></tr><tr><td class="mono">09-06</td><td class="mono">T02</td><td class="r ok">✓</td><td class="mono">5m</td><td title="Photo">📷</td><td></td></tr><tr><td class="mono">09-05</td><td class="mono">T01</td><td class="r ok">✓</td><td class="mono">35m</td><td title="Verbal">💬</td><td></td></tr></tbody></table></div>
+    
+  </div>
+</details>
+</article><article class="goal s-warn" id="G04">
+  <header class="goal-head">
+    <div class="ident"><span class="gid mono">G04</span><span class="type">Learning</span><span class="pri mono">P2</span><span class="area">Learning</span></div>
+    <span class="pill warn"><i aria-hidden="true"></i>Watch</span>
+  </header>
+  <h3 class="goal-title">Finish the Rust Book</h3>
+  <div class="goal-body">
+    <div class="col-a"><div class="measure"><div class="measure-head"><span class="num">25%</span><span class="sub">expected 11%</span></div><div class="bar" role="img" aria-label="Progress 25%"><span class="fill warn" style="width:25.0%"></span><span class="expect" style="left:10.7%" title="expected by now: 11%"></span></div><p class="detail">Mastered 5/20 chapters · studied 5</p></div></div>
+    <dl class="facts">
+      <div><dt>Pace</dt><dd>Actual 25% / expected 11% (pace ratio 2.33)</dd></div>
+      <div><dt>Due</dt><dd class="mono">12-31</dd></div>
+      <div><dt>This week</dt><dd>Spent 0m / budget 3.5h · 0 done</dd></div>
+    </dl>
+  </div>
+  <div class="next"><span class="k">Next</span><span class="id mono">G04.T02</span><span class="t">Read chapter 6 and do the exercises</span><span class="mono est">90m</span></div>
+  <ul class="risks"><li>8 days without progress</li></ul>
+  <div class="activity"><div class="strip" role="img" aria-label="last 14 days: 1h40m"><span class="b zero" style="--h:0%" title="09-01 · no time logged"></span><span class="b zero" style="--h:0%" title="09-02 · no time logged"></span><span class="b zero" style="--h:0%" title="09-03 · no time logged"></span><span class="b zero" style="--h:0%" title="09-04 · no time logged"></span><span class="b zero" style="--h:0%" title="09-05 · no time logged"></span><span class="b" style="--h:100%" title="09-06 · 1h40m · 1 done"></span><span class="b zero" style="--h:0%" title="09-07 · no time logged"></span><span class="b zero" style="--h:0%" title="09-08 · no time logged"></span><span class="b zero" style="--h:0%" title="09-09 · no time logged"></span><span class="b zero" style="--h:0%" title="09-10 · no time logged"></span><span class="b zero" style="--h:0%" title="09-11 · no time logged"></span><span class="b zero" style="--h:0%" title="09-12 · no time logged"></span><span class="b zero" style="--h:0%" title="09-13 · no time logged"></span><span class="b zero" style="--h:0%" title="09-14 · no time logged"></span></div><span class="cap">last 14 days: 1h40m</span></div>
+  <details class="more">
+  <summary>Actions, log &amp; decisions</summary>
+  <div class="more-body">
+    <p class="dw"><span class="k">Definition of done</span>All 20 chapters&#x27; exercises done, plus a small Rust CLI budget tool</p>
+    <p class="dw"><span class="k">Evidence</span>Link/file</p>
+    
+    <h4>Actions</h4><ul class="tasks"><li class="task m-done"><span class="g" title="done">✓</span><span class="id mono">T01</span><span class="t">Read chapter 5 and do the exercises</span><span class="meta mono">90m</span></li><li class="task m-todo"><span class="g" title="todo">○</span><span class="id mono">T02</span><span class="t">Read chapter 6 and do the exercises</span><span class="meta mono">90m</span></li><li class="task m-todo"><span class="g" title="todo">○</span><span class="id mono">T03</span><span class="t">Read chapter 7 and do the exercises</span><span class="meta mono">60m</span></li></ul>
+    <h4>Recent log</h4>
+    <div class="table-wrap"><table class="logs"><thead><tr><th>Date</th><th>Item</th><th>Result</th><th>Time/value</th><th>Evidence</th><th>Note</th></tr></thead>
+    <tbody><tr><td class="mono">09-06</td><td class="mono">chapters</td><td class="r ">=</td><td class="mono">studied 5/mastered 5</td><td title="Link/file">🔗</td><td></td></tr><tr><td class="mono">09-06</td><td class="mono">T01</td><td class="r ok">✓</td><td class="mono">1h40m</td><td title="Link/file">🔗</td><td>exercises in rust-book/ch05</td></tr><tr><td class="mono">09-01</td><td class="mono">created</td><td class="r ">=</td><td class="mono"></td><td title="System">⚙️</td><td>goal created (active)</td></tr></tbody></table></div>
+    
+  </div>
+</details>
+</article><article class="goal s-ok" id="G01">
+  <header class="goal-head">
+    <div class="ident"><span class="gid mono">G01</span><span class="type">Project</span><span class="pri mono">P1</span><span class="area">Career</span></div>
+    <span class="pill ok"><i aria-hidden="true"></i>On track</span>
+  </header>
+  <h3 class="goal-title">Ship budgeting app v1</h3>
+  <div class="goal-body">
+    <div class="col-a"><div class="measure"><div class="measure-head"><span class="num">25%</span><span class="sub">expected 14%</span></div><div class="bar" role="img" aria-label="Progress 25%"><span class="fill ok" style="width:25.0%"></span><span class="expect" style="left:14.4%" title="expected by now: 14%"></span></div><p class="detail">M2 Core expense tracking in progress</p></div></div>
+    <dl class="facts">
+      <div><dt>Pace</dt><dd>Actual 25% / expected 14% (pace ratio 1.73)</dd></div>
+      <div><dt>Due</dt><dd class="mono">11-30<b class="hard" title="hard deadline">hard</b></dd></div>
+      <div><dt>This week</dt><dd>Spent 1h / budget 8h · 0 done</dd></div>
+    </dl>
+  </div>
+  <div class="next"><span class="k">Next</span><span class="id mono">G01.T03</span><span class="t">Implement local expense CRUD</span><span class="mono est">120m</span></div>
+  <ul class="risks"><li>T04 deferred 3 times</li><li>T06 waiting on Sam for 3 days</li></ul>
+  <div class="activity"><div class="strip" role="img" aria-label="last 14 days: 4h45m"><span class="b zero" style="--h:0%" title="09-01 · no time logged"></span><span class="b" style="--h:90%" title="09-02 · 1h30m · 1 done"></span><span class="b zero" style="--h:0%" title="09-03 · no time logged"></span><span class="b" style="--h:75%" title="09-04 · 1h15m · 2 done"></span><span class="b zero" style="--h:0%" title="09-05 · no time logged"></span><span class="b zero" style="--h:0%" title="09-06 · no time logged"></span><span class="b zero" style="--h:0%" title="09-07 · no time logged"></span><span class="b zero" style="--h:0%" title="09-08 · no time logged"></span><span class="b" style="--h:60%" title="09-09 · 1h"></span><span class="b zero" style="--h:0%" title="09-10 · no time logged"></span><span class="b zero" style="--h:0%" title="09-11 · no time logged"></span><span class="b zero" style="--h:0%" title="09-12 · no time logged"></span><span class="b zero" style="--h:0%" title="09-13 · no time logged"></span><span class="b" style="--h:60%" title="09-14 · 1h"></span></div><span class="cap">last 14 days: 4h45m</span></div>
+  <details class="more">
+  <summary>Actions, log &amp; decisions</summary>
+  <div class="more-body">
+    <p class="dw"><span class="k">Definition of done</span>Live on the App Store with 10 real users</p>
+    <p class="dw"><span class="k">Evidence</span>Code check · ~/code/budget-app</p>
+    <ol class="phases"><li class="ph done"><span class="mono">M1</span> Requirements &amp; prototype<small class="mono">09-10</small></li><li class="ph active"><span class="mono">M2</span> Core expense tracking<small class="mono">10-20</small></li><li class="ph todo"><span class="mono">M3</span> Polish &amp; launch<small class="mono">11-30</small></li></ol>
+    <h4>Actions</h4><ul class="tasks"><li class="task m-done"><span class="g" title="done">✓</span><span class="id mono">T01</span><span class="t">Wireframe the 5 core screens</span><span class="meta mono">90m · M1</span></li><li class="task m-done"><span class="g" title="done">✓</span><span class="id mono">T02</span><span class="t">Pick the stack and scaffold the project</span><span class="meta mono">60m · M1</span></li><li class="task m-doing"><span class="g" title="doing">◐</span><span class="id mono">T03</span><span class="t">Implement local expense CRUD</span><span class="meta mono">120m · M2</span></li><li class="task m-todo"><span class="g" title="todo">○</span><span class="id mono">T04</span><span class="t">Compare 3 iCloud sync options in a table</span><span class="meta mono">45m · M2 · deferred 3×</span></li><li class="task m-todo"><span class="g" title="todo">○</span><span class="id mono">T05</span><span class="t">Design the category &amp; tag model</span><span class="meta mono">60m · M2</span></li><li class="task m-waiting"><span class="g" title="waiting">‖</span><span class="id mono">T06</span><span class="t">Ask a designer friend for the app icon</span><span class="meta mono">15m · M2 · waiting on Sam</span></li></ul>
+    <h4>Recent log</h4>
+    <div class="table-wrap"><table class="logs"><thead><tr><th>Date</th><th>Item</th><th>Result</th><th>Time/value</th><th>Evidence</th><th>Note</th></tr></thead>
+    <tbody><tr><td class="mono">09-14</td><td class="mono">T03</td><td class="r warn">◐</td><td class="mono">1h</td><td title="Code check">🔍</td><td><span class="rc" title="Underestimated">O</span>sub-agent verified commit e19f55: list view wired, edit view missing</td></tr><tr><td class="mono">09-14</td><td class="mono">T04</td><td class="r crit">✗</td><td class="mono"></td><td title=""></td><td><span class="rc" title="Unclear">U</span>still unsure how to compare</td></tr><tr><td class="mono">09-12</td><td class="mono">T04</td><td class="r crit">✗</td><td class="mono"></td><td title=""></td><td><span class="rc" title="Unclear">U</span>not sure where to start comparing</td></tr><tr><td class="mono">09-10</td><td class="mono">T04</td><td class="r idle">➜</td><td class="mono"></td><td title=""></td><td><span class="rc" title="No time">T</span></td></tr><tr><td class="mono">09-09</td><td class="mono">T03</td><td class="r warn">◐</td><td class="mono">1h</td><td title="Code check">🔍</td><td><span class="rc" title="Underestimated">O</span>commit c41e9a model layer done, UI not wired</td></tr><tr><td class="mono">09-04</td><td class="mono">M1</td><td class="r ok">✓</td><td class="mono"></td><td title="Code check">🔍</td><td>wireframes and scaffold verified</td></tr><tr><td class="mono">09-04</td><td class="mono">T02</td><td class="r ok">✓</td><td class="mono">1h15m</td><td title="Code check">🔍</td><td>commit 8b7d02 SwiftUI+SwiftData scaffold</td></tr><tr><td class="mono">09-02</td><td class="mono">T01</td><td class="r ok">✓</td><td class="mono">1h30m</td><td title="Code check">🔍</td><td>commit 3f2a1c wireframes in docs/</td></tr><tr><td class="mono">09-01</td><td class="mono">created</td><td class="r ">=</td><td class="mono"></td><td title="System">⚙️</td><td>goal created (active)</td></tr></tbody></table></div>
+    <h4>Decisions</h4><ul class="decisions"><li><span class="mono">09-13 D01</span> Drop multi-currency support<small>Reason: keep v1 focused</small></li></ul>
+  </div>
+</details>
+</article><article class="goal s-ok" id="G05">
+  <header class="goal-head">
+    <div class="ident"><span class="gid mono">G05</span><span class="type">Errand</span><span class="pri mono">P3</span><span class="area">Life</span></div>
+    <span class="pill ok"><i aria-hidden="true"></i>On track</span>
+  </header>
+  <h3 class="goal-title">Buy a monitor arm</h3>
+  <div class="goal-body">
+    <div class="col-a"><div class="measure"><div class="measure-head"><span class="num">100%</span></div><div class="bar" role="img" aria-label="Progress 100%"><span class="fill ok" style="width:100.0%"></span></div><p class="detail">2/2 items</p></div></div>
+    <dl class="facts">
+      <div><dt>Pace</dt><dd>Done</dd></div>
+      <div><dt>Due</dt><dd class="mono">09-20</dd></div>
+      <div><dt>This week</dt><dd>Spent 10m / budget 0.5h · 1 done</dd></div>
+    </dl>
+  </div>
+  <div class="next"><span class="k">Next</span><span class="none">All actions done</span></div>
+  
+  <div class="activity"><div class="strip" role="img" aria-label="last 14 days: 30m"><span class="b zero" style="--h:0%" title="09-01 · no time logged"></span><span class="b zero" style="--h:0%" title="09-02 · no time logged"></span><span class="b zero" style="--h:0%" title="09-03 · no time logged"></span><span class="b zero" style="--h:0%" title="09-04 · no time logged"></span><span class="b zero" style="--h:0%" title="09-05 · no time logged"></span><span class="b zero" style="--h:0%" title="09-06 · no time logged"></span><span class="b zero" style="--h:0%" title="09-07 · no time logged"></span><span class="b zero" style="--h:0%" title="09-08 · no time logged"></span><span class="b zero" style="--h:0%" title="09-09 · no time logged"></span><span class="b zero" style="--h:0%" title="09-10 · no time logged"></span><span class="b" style="--h:20%" title="09-11 · 20m · 1 done"></span><span class="b zero" style="--h:0%" title="09-12 · no time logged"></span><span class="b zero" style="--h:0%" title="09-13 · no time logged"></span><span class="b" style="--h:12%" title="09-14 · 10m · 1 done"></span></div><span class="cap">last 14 days: 30m</span></div>
+  <details class="more">
+  <summary>Actions, log &amp; decisions</summary>
+  <div class="more-body">
+    <p class="dw"><span class="k">Definition of done</span>Arm delivered and mounted</p>
+    <p class="dw"><span class="k">Evidence</span>Verbal</p>
+    
+    <h4>Actions</h4><ul class="tasks"><li class="task m-done"><span class="g" title="done">✓</span><span class="id mono">T01</span><span class="t">Compare 3 arms on load and price</span><span class="meta mono">20m</span></li><li class="task m-done"><span class="g" title="done">✓</span><span class="id mono">T02</span><span class="t">Place the order</span><span class="meta mono">10m</span></li></ul>
+    <h4>Recent log</h4>
+    <div class="table-wrap"><table class="logs"><thead><tr><th>Date</th><th>Item</th><th>Result</th><th>Time/value</th><th>Evidence</th><th>Note</th></tr></thead>
+    <tbody><tr><td class="mono">09-14</td><td class="mono">T02</td><td class="r ok">✓</td><td class="mono">10m</td><td title="Verbal">💬</td><td>ordered, arrives Wednesday</td></tr><tr><td class="mono">09-11</td><td class="mono">T01</td><td class="r ok">✓</td><td class="mono">20m</td><td title="Verbal">💬</td><td></td></tr><tr><td class="mono">09-08</td><td class="mono">created</td><td class="r ">=</td><td class="mono"></td><td title="System">⚙️</td><td>goal created (active)</td></tr></tbody></table></div>
+    
+  </div>
+</details>
+</article>
+      </section>
+    </div>
+
+    <aside class="side">
+      <section class="attention box-panel" aria-labelledby="att-h">
+        <div class="panel-head"><h2 id="att-h">Needs attention</h2><span class="mono count">5</span></div>
+        <ul><li class="att crit"><span class="tag">Risk</span><div><a class="id mono" href="#G03">G03</a><span class="t">Land a new-grad offer</span><p>Last 7 days 3/10 apps</p></div></li><li class="att warn"><span class="tag">Watch</span><div><a class="id mono" href="#G02">G02</a><span class="t">Get down to 70 kg</span><p>Last 7 days 3/4 times</p></div></li><li class="att warn"><span class="tag">Watch</span><div><a class="id mono" href="#G04">G04</a><span class="t">Finish the Rust Book</span><p>Actual 25% / expected 11% (pace ratio 2.33); 8 days without progress</p></div></li><li class="att note"><span class="tag">Note</span><div><a class="id mono" href="#G01">G01</a><span class="t">Ship budgeting app v1</span><p>T04 deferred 3 times; T06 waiting on Sam for 3 days</p></div></li><li class="att done"><span class="tag">Close?</span><div><a class="id mono" href="#G05">G05</a><span class="t">Buy a monitor arm</span><p>All actions done — confirm whether to close the goal</p></div></li></ul>
+      </section>
+      <section class="minor box-panel"><div class="panel-head"><h2>Inbox</h2><span class="mono count">2</span></div><ul><li>2026-09-03 Build a personal website</li><li>2026-09-10 Get a driver&#x27;s license before year end?</li></ul></section>
+      
+    </aside>
+  </main>
+
+  <footer class="foot">Read-only view · generated by mishu.py at 2026-09-14 21:52 · to change anything, just talk to Mishu</footer>
+</div>
+</body>
+</html>

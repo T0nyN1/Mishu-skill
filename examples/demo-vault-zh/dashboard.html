@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>小林的秘书台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#EDF0EE; --surface:#FFFFFF; --paper:#FAFBF9; --sunk:#E3E8E5;
+  --ink:#18201D; --muted:#58655F; --faint:#88948F; --rule:#D3DAD6; --rule-strong:#B9C3BE;
+  --accent:#2D4BA0; --accent-soft:#E2E7F6;
+  --ok:#2F7D4F; --ok-soft:#DCEEE2; --warn:#9C6800; --warn-soft:#F5E9CB;
+  --crit:#B3392A; --crit-soft:#F6DDD8; --idle:#6F7B76; --idle-soft:#E4E9E6;
+  --serif:"Noto Serif SC","Songti SC","STSong",serif;
+  --sans:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0F1412; --surface:#171D1A; --paper:#141A17; --sunk:#202824;
+    --ink:#E3E9E6; --muted:#9EABA5; --faint:#6F7B76; --rule:#2A332F; --rule-strong:#3B4641;
+    --accent:#98ACF2; --accent-soft:#1F2946;
+    --ok:#6FC392; --ok-soft:#163323; --warn:#E2B04C; --warn-soft:#382C10;
+    --crit:#F08676; --crit-soft:#3B1C17; --idle:#8F9A95; --idle-soft:#222A26;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0F1412; --surface:#171D1A; --paper:#141A17; --sunk:#202824;
+  --ink:#E3E9E6; --muted:#9EABA5; --faint:#6F7B76; --rule:#2A332F; --rule-strong:#3B4641;
+  --accent:#98ACF2; --accent-soft:#1F2946;
+  --ok:#6FC392; --ok-soft:#163323; --warn:#E2B04C; --warn-soft:#382C10;
+  --crit:#F08676; --crit-soft:#3B1C17; --idle:#8F9A95; --idle-soft:#222A26;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font:14px/1.6 var(--sans)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+h1,h2,h3,h4{margin:0;text-wrap:balance}
+ul,ol{margin:0;padding:0;list-style:none}
+dl,dd{margin:0}
+a{color:var(--accent)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1280px;margin:0 auto;padding-inline:24px;padding-block:28px 40px}
+
+/* masthead */
+.masthead{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px 40px;padding-bottom:22px;border-bottom:1px solid var(--rule-strong)}
+.brand{display:flex;align-items:center;gap:14px}
+.seal{display:grid;place-items:center;width:44px;height:44px;border:2px solid var(--accent);color:var(--accent);font:700 22px/1 var(--serif);border-radius:6px;transform:rotate(-4deg)}
+.brand h1{font:700 26px/1.2 var(--serif);letter-spacing:.02em}
+.when{margin:2px 0 0;color:var(--muted);font-size:12.5px}
+.kpis{display:flex;flex-wrap:wrap;gap:12px 36px}
+.kpi dt{font-size:11.5px;color:var(--muted);letter-spacing:.08em}
+.kpi dd{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 8px}
+.big{font-size:24px;font-weight:500;line-height:1.2}
+.of{color:var(--muted);font-size:12.5px}
+.meter{flex-basis:100%;height:4px;background:var(--sunk);border-radius:2px;overflow:hidden;min-width:160px}
+.meter span{display:block;height:100%;background:var(--accent)}
+.lights{display:flex;gap:4px}
+
+/* layout */
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:28px;margin-top:28px;align-items:start}
+.primary{display:flex;flex-direction:column;gap:24px;min-width:0}
+.side{display:flex;flex-direction:column;gap:16px;position:sticky;top:20px;max-height:calc(100vh - 40px);overflow-y:auto;min-width:0}
+
+/* rounded panels shared by Today, Needs attention, Inbox */
+.box-panel{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:16px 18px}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--rule)}
+.panel-head .count{font-size:12px;color:var(--muted);background:var(--sunk);border-radius:999px;padding:0 8px;line-height:20px}
+h2{font:600 17px/1.3 var(--serif);letter-spacing:.03em}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.empty{color:var(--muted);margin:10px 0 0}
+
+/* status pills */
+.pill{display:inline-flex;align-items:center;gap:6px;padding:1px 9px 1px 7px;border-radius:999px;font-size:12px;font-weight:500;white-space:nowrap;background:var(--idle-soft);color:var(--idle)}
+.pill i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.crit{background:var(--crit-soft);color:var(--crit)}
+
+/* needs attention */
+.attention ul{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.att{display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;padding:10px 12px;border-radius:8px;background:var(--idle-soft)}
+.att.crit{background:var(--crit-soft)} .att.warn{background:var(--warn-soft)} .att.done{background:var(--ok-soft)}
+.att .tag{font-size:12px;font-weight:700;padding-top:1px}
+.att.crit .tag{color:var(--crit)} .att.warn .tag{color:var(--warn)} .att.done .tag{color:var(--ok)} .att.note .tag{color:var(--muted)}
+.att .id{text-decoration:none;font-size:12.5px;margin-right:8px}
+.att .t{font-weight:500}
+.att p{margin:2px 0 0;color:var(--muted);font-size:13px}
+
+/* goal cards */
+.goals{display:flex;flex-direction:column;gap:14px}
+.legend{font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+.expect-key{display:inline-block;width:2px;height:12px;background:var(--ink)}
+.goal{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:18px 20px 12px}
+.goal.s-crit{border-color:color-mix(in srgb,var(--crit) 45%,var(--rule))}
+.goal-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.ident{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.gid{color:var(--ink);font-weight:500;font-size:13px}
+.type{border:1px solid var(--rule-strong);border-radius:4px;padding:0 5px;line-height:18px}
+.goal-title{font:600 19px/1.35 var(--serif);margin:6px 0 14px}
+.goal-body{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:18px 28px}
+.col-a{display:flex;flex-direction:column;gap:10px;min-width:0}
+.measure-head{display:flex;align-items:baseline;gap:10px}
+.measure-head .num{font:500 22px/1 var(--mono)}
+.measure-head .sub{font-size:12px;color:var(--muted)}
+.bar{position:relative;height:8px;background:var(--sunk);border-radius:4px;margin-top:8px}
+.bar .fill{position:absolute;inset:0 auto 0 0;border-radius:4px;background:var(--accent)}
+.bar .fill.ok{background:var(--ok)} .bar .fill.warn{background:var(--warn)} .bar .fill.crit{background:var(--crit)}
+.bar.thin{height:5px;flex:1;margin:0}
+.expect{position:absolute;top:-4px;bottom:-4px;width:2px;margin-left:-1px;background:var(--ink);border-radius:1px}
+.detail{margin:6px 0 0;font-size:12.5px;color:var(--muted)}
+.freq{display:flex;align-items:center;gap:10px;font-size:12.5px}
+.freq .k{color:var(--muted);white-space:nowrap}
+.dots{display:flex;gap:4px;flex-wrap:wrap}
+.dot{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--rule-strong)}
+.dot.on{background:var(--ink);border-color:var(--ink)}
+.freq .v{margin-left:auto;white-space:nowrap}
+.metric{display:flex;align-items:baseline;gap:8px;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+.metric b{color:var(--ink);font-size:14px}
+.arrow{color:var(--faint)}
+.funnel{display:flex;flex-wrap:wrap;gap:0;font-size:12.5px}
+.funnel li{display:flex;flex-direction:column;padding:4px 14px 4px 0;margin-right:14px;border-right:1px solid var(--rule)}
+.funnel li:last-child{border-right:0}
+.funnel .k{color:var(--muted);font-size:11.5px}
+.funnel .v{font-size:15px}
+.funnel small{color:var(--faint)}
+.facts{display:flex;flex-direction:column;gap:8px;font-size:13px}
+.facts div{display:grid;grid-template-columns:38px minmax(0,1fr);gap:8px}
+.facts dt{color:var(--muted);font-size:12px;padding-top:1px}
+.hard{font:700 10.5px/1 var(--sans);color:var(--crit);border:1px solid currentColor;border-radius:3px;padding:1px 3px;margin-left:6px;vertical-align:1px}
+.next{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px dashed var(--rule)}
+.next .k{font-size:12px;color:var(--muted)}
+.next .id{font-size:12.5px;color:var(--accent)}
+.next .t{font-weight:500}
+.next .est{font-size:12px;color:var(--muted)}
+.next .none{color:var(--muted)}
+.risks{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.risks li{font-size:12px;color:var(--warn);background:var(--warn-soft);border-radius:4px;padding:1px 7px}
+.activity{display:flex;align-items:flex-end;gap:10px;margin-top:12px}
+.strip{display:grid;grid-template-columns:repeat(14,1fr);gap:3px;align-items:end;height:26px;width:168px}
+.strip .b{height:var(--h);background:var(--accent);opacity:.75;border-radius:1.5px}
+.strip .b.zero{height:2px;background:var(--rule-strong);opacity:1}
+.strip .b:last-child{opacity:1}
+.cap{font-size:11.5px;color:var(--faint)}
+
+/* expandable details */
+.more{margin-top:10px;border-top:1px solid var(--rule)}
+.more summary{cursor:pointer;padding:9px 0 3px;font-size:12.5px;color:var(--muted);list-style:none}
+.more summary::before{content:"▸";display:inline-block;width:14px;transition:transform .15s}
+.more[open] summary::before{transform:rotate(90deg)}
+.more summary::-webkit-details-marker{display:none}
+.more-body{display:flex;flex-direction:column;gap:8px;padding:6px 0 10px}
+.more h4{font:600 13px/1.4 var(--sans);margin-top:8px;color:var(--muted)}
+.dw{margin:0;font-size:13px}
+.dw .k,.phases small{color:var(--muted);font-size:12px;margin-right:8px}
+.phases{display:flex;flex-wrap:wrap;gap:6px}
+.ph{font-size:12.5px;border:1px solid var(--rule);border-radius:4px;padding:1px 8px;color:var(--muted)}
+.ph.active{border-color:var(--accent);color:var(--ink)}
+.ph.done{text-decoration:line-through;text-decoration-color:var(--faint)}
+.ph small{margin:0 0 0 6px}
+.tasks{display:flex;flex-direction:column}
+.task{display:grid;grid-template-columns:18px 34px minmax(0,1fr) auto;gap:8px;padding:4px 0;font-size:13px;border-bottom:1px solid var(--rule)}
+.task:last-child{border-bottom:0}
+.task .g{color:var(--muted);text-align:center}
+.task.m-done .t,.task.m-cancelled .t{color:var(--faint)}
+.task.m-cancelled .t{text-decoration:line-through}
+.task.m-done .g{color:var(--ok)} .task.m-doing .g{color:var(--accent)} .task.m-waiting .g{color:var(--warn)}
+.task .id{color:var(--muted);font-size:12px}
+.task .meta{font-size:11.5px;color:var(--faint);text-align:right}
+.table-wrap{overflow-x:auto}
+.logs{width:100%;border-collapse:collapse;font-size:12.5px}
+.logs th{text-align:left;font-weight:500;color:var(--faint);font-size:11.5px;padding:3px 10px 3px 0;border-bottom:1px solid var(--rule)}
+.logs td{padding:4px 10px 4px 0;border-bottom:1px solid var(--rule);vertical-align:top;white-space:nowrap}
+.logs td:last-child{white-space:normal;min-width:180px}
+.logs .r.ok{color:var(--ok)} .logs .r.warn{color:var(--warn)} .logs .r.crit{color:var(--crit)}
+.rc{font:500 11px/1 var(--mono);color:var(--warn);border:1px solid currentColor;border-radius:3px;padding:1px 4px;margin-right:6px}
+.decisions li{font-size:13px;padding:3px 0}
+.decisions small{display:block;color:var(--muted)}
+
+/* today: first in the main column, groups side by side */
+.today{padding:18px 22px 18px}
+.today .panel-head h2{font-size:19px}
+.groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:4px 28px}
+.groups .g-main{grid-column:1/-1}
+.date{color:var(--muted);font-size:12.5px}
+.today-meta{margin:4px 0 6px;font-size:12px;color:var(--muted)}
+.grp{margin-top:12px}
+.grp h3{font:700 12px/1.4 var(--sans);letter-spacing:.12em;color:var(--muted);display:flex;gap:8px;align-items:baseline;padding-bottom:4px;border-bottom:1px solid var(--rule)}
+.grp h3 small{font-weight:400;letter-spacing:0;color:var(--faint)}
+.item{display:grid;grid-template-columns:20px minmax(0,1fr) auto;gap:10px;align-items:start;padding:8px 0;border-bottom:1px dashed var(--rule)}
+.item:last-child{border-bottom:0}
+.box{width:18px;height:18px;margin-top:2px;border:1.5px solid var(--rule-strong);border-radius:4px;display:grid;place-items:center;font-size:12px;line-height:1;font-weight:700}
+.box.ok{border-color:var(--ok);background:var(--ok);color:var(--surface)}
+.box.warn{border-color:var(--warn);color:var(--warn)}
+.box.crit{border-color:var(--crit);color:var(--crit)}
+.box.idle{color:var(--idle)}
+.it .line{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.it .id{font-size:11.5px;color:var(--accent)}
+.it .t{font-weight:500}
+.has-r.ok .t{color:var(--muted)}
+.it .sub{font-size:12px;color:var(--muted);margin-top:2px}
+.item .time{font-size:12px;color:var(--muted);white-space:nowrap;padding-top:2px}
+.grp li.none{color:var(--faint);padding:6px 0;font-size:12.5px}
+.wait li{font-size:12.5px;color:var(--muted);padding:5px 0}
+.review{margin-top:16px;padding:12px 14px;border-radius:8px;background:var(--sunk)}
+.review h3{font:600 14px/1.4 var(--serif)}
+.stats{margin:4px 0 8px;font-size:12.5px}
+.review .extra li{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--muted);padding:3px 0}
+.tag-extra{margin-left:auto;font-size:11px;border:1px solid var(--rule-strong);border-radius:3px;padding:0 4px;white-space:nowrap}
+.review dl{display:flex;flex-direction:column;gap:4px;font-size:13px}
+.review dl div{display:grid;grid-template-columns:64px minmax(0,1fr);gap:8px}
+.review dt{color:var(--muted);font-size:12px}
+.pending{margin:14px 0 0;font-size:12.5px;color:var(--muted)}
+
+/* advice cards */
+.advice-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.advice-list h2{grid-column:1/-1}
+.advice{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:14px 16px}
+.advice header{display:flex;gap:8px;align-items:center;font-size:11.5px;color:var(--muted)}
+.advice .cat{color:var(--accent);font-weight:700}
+.advice .lvl{margin-left:auto;border:1px solid var(--rule-strong);border-radius:3px;padding:0 4px}
+.advice h3{font:600 15px/1.4 var(--serif);margin:6px 0 8px}
+.goal-ref{display:block;font:400 11.5px/1.4 var(--sans);color:var(--muted)}
+.advice dl{display:flex;flex-direction:column;gap:4px;font-size:13px}
+.advice dl div{display:grid;grid-template-columns:32px minmax(0,1fr);gap:6px}
+.advice dt{color:var(--muted);font-size:12px}
+.opts{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.opts li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;padding:8px 10px;border:1px solid var(--rule);border-radius:6px;font-size:13px}
+.opts li.rec{border-color:var(--accent);background:var(--accent-soft)}
+.opts b{color:var(--accent)}
+.opts p{margin:0}
+.opts .cost{font-size:12px;color:var(--muted)}
+.rec-line{margin:10px 0 0;font-size:13px}
+.ask{margin:4px 0 0;font-size:13px;font-weight:500}
+
+/* secondary info */
+.minor h2{font-size:15px}
+.minor ul{margin-top:4px}
+.minor li{padding:8px 0;border-bottom:1px solid var(--rule);font-size:13px}
+.minor li:last-child{border-bottom:0;padding-bottom:0}
+.minor small{display:block;color:var(--muted)}
+.minor .lbl{font-size:11.5px;color:var(--muted);margin-left:6px}
+.foot{margin-top:40px;padding-top:14px;border-top:1px solid var(--rule);font-size:12px;color:var(--faint)}
+
+/* English typography */
+html[lang="en"]{--serif:"Source Serif 4",Georgia,"Times New Roman",serif;--sans:"IBM Plex Sans",-apple-system,"Segoe UI",system-ui,sans-serif}
+html[lang="en"] .advice dl div{grid-template-columns:72px minmax(0,1fr)}
+html[lang="en"] .facts div{grid-template-columns:72px minmax(0,1fr)}
+html[lang="en"] .review dl div{grid-template-columns:88px minmax(0,1fr)}
+html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
+
+/* Empty vault onboarding */
+.welcome{padding:22px 24px;border-color:var(--accent)}
+.welcome h2{font-size:21px}
+.welcome p{margin:8px 0 0;color:var(--muted)}
+.steps{list-style:none;counter-reset:s;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:14px}
+.steps li{counter-increment:s;background:var(--sunk);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.steps li::before{content:counter(s);font:500 12px/1 var(--mono);color:var(--accent)}
+.steps b{font-weight:600}
+.steps span{font-size:13px;color:var(--muted)}
+.try code{font-family:var(--mono);font-size:12.5px;background:var(--accent-soft);color:var(--accent);padding:2px 6px;border-radius:4px}
+
+@media (max-width: 980px){
+  /* narrow: welcome → today → attention → advice → goals → inbox */
+  .layout{display:flex;flex-direction:column;gap:20px}
+  .primary,.side{display:contents}
+  .welcome{order:0} .today{order:1} .attention{order:2} .advice-list{order:3} .goals{order:4} .minor{order:5}
+  .side{position:static;max-height:none}
+}
+@media (max-width: 560px){
+  .wrap{padding-inline:16px}
+  .goal{padding:16px 14px 10px}
+  .goal-body{grid-template-columns:minmax(0,1fr)}
+  .task{grid-template-columns:18px 34px minmax(0,1fr)}
+  .task .meta{grid-column:3;text-align:left}
+  .kpis{gap:12px 24px}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <div class="brand">
+      <span class="seal" aria-hidden="true">秘</span>
+      <div><h1>小林的秘书台</h1>
+      <p class="mono when">2026-09-14 周一 · 第 38 周</p></div>
+    </div>
+    <dl class="kpis">
+      <div class="kpi wide"><dt>本周</dt><dd><span class="mono big">2h35m</span><span class="mono of">/ 25h</span>
+        <span class="meter" aria-hidden="true"><span style="width:10.3%"></span></span></dd></div>
+      <div class="kpi"><dt>活跃目标</dt><dd><span class="mono big">5</span>
+        <span class="lights"><span class="pill ok"><i aria-hidden="true"></i>2</span><span class="pill warn"><i aria-hidden="true"></i>2</span><span class="pill crit"><i aria-hidden="true"></i>1</span></span></dd></div>
+      <div class="kpi"><dt>收件箱</dt><dd><span class="mono big">2</span><span class="of">条待录入</span></dd></div>
+    </dl>
+  </header>
+
+  <main class="layout">
+    <div class="primary">
+      <section class="today box-panel" aria-labelledby="today-h">
+  <div class="panel-head"><h2 id="today-h">今日清单</h2><span class="mono date">09-14 周一</span></div>
+  <p class="today-meta mono">可用 4h · 精力 3/5 · 计划 2h20m（上限 2h48m）</p>
+  <div class="groups">
+    <div class="grp g-main"><h3>主线<small>最多 3 项</small></h3><ul><li class="item has-r ok">
+  <span class="box ok" aria-label="✓">✓</span>
+  <div class="it"><div class="line"><span class="id mono">G03.T02</span><span class="t">整理目标公司清单（20 家）</span></div>
+  <div class="sub">清单 22 家已存到 Notion</div></div>
+  <span class="time mono">50m</span>
+</li><li class="item has-r crit">
+  <span class="box crit" aria-label="✗">✗</span>
+  <div class="it"><div class="line"><span class="id mono">G01.T04</span><span class="t">调研 3 种 iCloud 同步方案并写对比表</span></div>
+  <div class="sub">原因 U 不清楚 · 还是不知道从哪比较</div></div>
+  <span class="time mono">45m</span>
+</li></ul></div><div class="grp g-habit"><h3>习惯</h3><ul><li class="item has-r ok">
+  <span class="box ok" aria-label="✓">✓</span>
+  <div class="it"><div class="line"><span class="id mono">G02.T01</span><span class="t">力量训练 A/B 组交替</span></div>
+  <div class="sub">近7天 2/4</div></div>
+  <span class="time mono">35m</span>
+</li></ul></div><div class="grp g-errand"><h3>事务</h3><ul><li class="item has-r ok">
+  <span class="box ok" aria-label="✓">✓</span>
+  <div class="it"><div class="line"><span class="id mono">G05.T02</span><span class="t">下单</span></div>
+  <div class="sub">已下单，周三到货</div></div>
+  <span class="time mono">10m</span>
+</li></ul></div>
+    <div class="grp g-wait"><h3>等待 / 跟进</h3><ul class="wait"><li>G01.T06 请设计朋友出 App 图标（等小王，已 3 天） → 建议今天跟进</li></ul></div>
+  </div>
+  <div class="review">
+  <h3>晚间回顾</h3>
+  <p class="stats mono">完成 3/4 · 主线 1/2 · 投入 2h35m</p>
+  <ul class="extra"><li><span class="box warn">◐</span><span class="id mono">G01.T03</span> 子代理核验 commit e19f55：列表页已接数据，编辑页未做<small class="tag-extra">计划外</small></li></ul>
+  <dl><div><dt>明日预排</dt><dd class="mono">G01.T03 · G03.T03</dd></div>
+  <div><dt>一句话</dt><dd>今天效率不错，投递的心结解开了</dd></div></dl>
+</div>
+</section><section class="advice-list" aria-labelledby="adv-h"><h2 id="adv-h">秘书建议</h2><article class="advice">
+  <header><span class="aid mono">A0914-1</span><span class="cat">调整</span><span class="lvl mono">L2</span></header>
+  <h3><span class="goal-ref">G03 拿到秋招 offer</span>投递节奏落后</h3>
+  <dl><div><dt>事实</dt><dd>近7天投递 3/10 家；G03.T02 推迟 2 次，原因都是 U（不清楚投哪家）</dd></div><div><dt>判断</dt><dd>瓶颈是缺少目标公司清单，不是时间不够</dd></div></dl>
+  <ol class="opts"><li class="rec"><b class="mono">A</b><div><p>今天先花 45m 建清单，下周配额不变</p><p class="cost">代价： 本周投递数再少 1-2 家</p></div></li><li class=""><b class="mono">B</b><div><p>配额降到 6 家/周</p><p class="cost">代价： 预计拿到 offer 的时间推迟约 2 周</p></div></li></ol>
+  <p class="rec-line">推荐 <b class="mono">A</b>: 已排进今日主线</p>
+  <p class="ask">需要你: 回复 A 或 B</p>
+</article><article class="advice">
+  <header><span class="aid mono">A0914-2</span><span class="cat">教练</span><span class="lvl mono">L2</span></header>
+  <h3><span class="goal-ref">G01 上线记账 App v1</span>iCloud 同步调研卡住了</h3>
+  <dl><div><dt>事实</dt><dd>G01.T04 已推迟 3 次，其中 2 次原因是 U（不清楚从哪开始）</dd></div><div><dt>判断</dt><dd>任务太模糊：「调研 3 种方案」没有明确的第一步和产出格式</dd></div></dl>
+  <ol class="opts"><li class="rec"><b class="mono">A</b><div><p>拆成两步：① 25m 列出 CloudKit/Core Data+CloudKit/第三方 3 个候选及官方文档链接 ② 30m 按“成本/复杂度/离线支持”填对比表</p><p class="cost">代价： 多一次拆解，今天不增加工作量</p></div></li><li class=""><b class="mono">B</b><div><p>v1 先不做同步，挪到 M3 之后</p><p class="cost">代价： 上架时没有多设备同步，可能影响前 10 个用户的留存</p></div></li></ol>
+  <p class="rec-line">推荐 <b class="mono">A</b>: 同步是核心体验，只是任务定义不清</p>
+  <p class="ask">需要你: 回复 A 或 B，我来更新计划</p>
+</article></section><section class="goals" aria-labelledby="goals-h">
+        <div class="sec-head"><h2 id="goals-h">目标</h2><span class="legend"><span class="expect-key"></span>按时间应有的进度</span></div>
+        <article class="goal s-crit" id="G03">
+  <header class="goal-head">
+    <div class="ident"><span class="gid mono">G03</span><span class="type">漏斗型</span><span class="pri mono">P0</span><span class="area">事业</span></div>
+    <span class="pill crit"><i aria-hidden="true"></i>风险</span>
+  </header>
+  <h3 class="goal-title">拿到秋招 offer</h3>
+  <div class="goal-body">
+    <div class="col-a"><div class="measure"><div class="measure-head"><span class="num">33%</span></div><div class="bar" role="img" aria-label="进度 33%"><span class="fill crit" style="width:33.3%"></span></div><p class="detail">M2 集中投递 进行中；漏斗：投递 3 → 初筛通过 1 → 面试 0 → offer 0/1</p></div><div class="freq"><span class="k">近 7 天</span><div class="dots" aria-hidden="true"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><span class="v mono">3/10 家</span></div><ol class="funnel"><li><span class="k">投递</span><span class="v mono">3</span></li><li><span class="k">初筛通过</span><span class="v mono">1</span></li><li><span class="k">面试</span><span class="v mono">0</span></li><li><span class="k">offer</span><span class="v mono">0<small>/1</small></span></li></ol></div>
+    <dl class="facts">
+      <div><dt>节奏</dt><dd>近7天 3/10 家</dd></div>
+      <div><dt>截止</dt><dd class="mono">11-15<b class="hard" title="硬截止">硬</b></dd></div>
+      <div><dt>本周</dt><dd>近7天 3/10 家 · 投入 50m</dd></div>
+    </dl>
+  </div>
+  <div class="next"><span class="k">下一步</span><span class="id mono">G03.T03</span><span class="t">投递 5 家目标公司</span><span class="mono est">45m</span></div>
+  
+  <div class="activity"><div class="strip" role="img" aria-label="近 14 天 · 2h20m"><span class="b zero" style="--h:0%" title="09-01 · 无投入"></span><span class="b zero" style="--h:0%" title="09-02 · 无投入"></span><span class="b zero" style="--h:0%" title="09-03 · 无投入"></span><span class="b zero" style="--h:0%" title="09-04 · 无投入"></span><span class="b" style="--h:90%" title="09-05 · 1h30m · 完成 2"></span><span class="b zero" style="--h:0%" title="09-06 · 无投入"></span><span class="b zero" style="--h:0%" title="09-07 · 无投入"></span><span class="b zero" style="--h:0%" title="09-08 · 无投入"></span><span class="b zero" style="--h:0%" title="09-09 · 无投入"></span><span class="b zero" style="--h:0%" title="09-10 · 无投入"></span><span class="b zero" style="--h:0%" title="09-11 · 无投入"></span><span class="b zero" style="--h:0%" title="09-12 · 无投入"></span><span class="b zero" style="--h:0%" title="09-13 · 无投入"></span><span class="b" style="--h:50%" title="09-14 · 50m · 完成 1"></span></div><span class="cap">近 14 天 · 2h20m</span></div>
+  <details class="more">
+  <summary>行动、日志与决策</summary>
+  <div class="more-body">
+    <p class="dw"><span class="k">完成标准</span>拿到至少 1 个客户端开发 offer 并签约</p>
+    <p class="dw"><span class="k">证据</span>链接/文件</p>
+    <ol class="phases"><li class="ph done"><span class="mono">M1</span> 简历打磨<small class="mono">09-07</small></li><li class="ph active"><span class="mono">M2</span> 集中投递<small class="mono">10-15</small></li><li class="ph todo"><span class="mono">M3</span> 面试<small class="mono">11-10</small></li><li class="ph todo"><span class="mono">M4</span> 选择 offer<small class="mono">11-15</small></li></ol>
+    <h4>行动</h4><ul class="tasks"><li class="task m-done"><span class="g" title="完成">✓</span><span class="id mono">T01</span><span class="t">按 JD 改写简历项目经历</span><span class="meta mono">90m · M1</span></li><li class="task m-done"><span class="g" title="完成">✓</span><span class="id mono">T02</span><span class="t">整理目标公司清单（20 家）</span><span class="meta mono">45m · M2 · 推迟过 2 次</span></li><li class="task m-todo"><span class="g" title="待办">○</span><span class="id mono">T03</span><span class="t">投递 5 家目标公司</span><span class="meta mono">45m · M2</span></li><li class="task m-todo"><span class="g" title="待办">○</span><span class="id mono">T04</span><span class="t">准备 5 个 STAR 行为面试故事</span><span class="meta mono">60m · M3</span></li></ul>
+    <h4>最近日志</h4>
+    <div class="table-wrap"><table class="logs"><thead><tr><th>日期</th><th>事项</th><th>结果</th><th>用时/数值</th><th>证据</th><th>备注</th></tr></thead>
+    <tbody><tr><td class="mono">09-14</td><td class="mono">T02</td><td class="r ok">✓</td><td class="mono">50m</td><td title="链接/文件">🔗</td><td>清单 22 家已存到 Notion</td></tr><tr><td class="mono">09-13</td><td class="mono">漏斗:初筛通过</td><td class="r ">=</td><td class="mono">+1</td><td title="链接/文件">🔗</td><td>邮件通知</td></tr><tr><td class="mono">09-10</td><td class="mono">漏斗:投递</td><td class="r ">=</td><td class="mono">+3</td><td title="链接/文件">🔗</td><td>官网投递截图</td></tr><tr><td class="mono">09-10</td><td class="mono">T02</td><td class="r crit">✗</td><td class="mono"></td><td title=""></td><td><span class="rc" title="不清楚">U</span></td></tr><tr><td class="mono">09-08</td><td class="mono">T02</td><td class="r crit">✗</td><td class="mono"></td><td title=""></td><td><span class="rc" title="不清楚">U</span>不知道该投哪些公司</td></tr><tr><td class="mono">09-05</td><td class="mono">M1</td><td class="r ok">✓</td><td class="mono"></td><td title="链接/文件">🔗</td><td>阶段完成</td></tr><tr><td class="mono">09-05</td><td class="mono">T01</td><td class="r ok">✓</td><td class="mono">1h30m</td><td title="链接/文件">🔗</td><td>简历 v3 已上传云盘</td></tr><tr><td class="mono">09-01</td><td class="mono">创建</td><td class="r ">=</td><td class="mono"></td><td title="系统">⚙️</td><td>目标创建（active）</td></tr></tbody></table></div>
+    
+  </div>
+</details>
+</article><article class="goal s-warn" id="G02">
+  <header class="goal-head">
+    <div class="ident"><span class="gid mono">G02</span><span class="type">习惯型</span><span class="pri mono">P1</span><span class="area">健康</span></div>
+    <span class="pill warn"><i aria-hidden="true"></i>注意</span>
+  </header>
+  <h3 class="goal-title">减到 70kg</h3>
+  <div class="goal-body">
+    <div class="col-a"><div class="measure"><div class="measure-head"><span class="num">24%</span></div><div class="bar" role="img" aria-label="进度 24%"><span class="fill warn" style="width:23.8%"></span></div><p class="detail">76.1kg，基线 78 → 目标 70</p></div><div class="freq"><span class="k">近 7 天</span><div class="dots" aria-hidden="true"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span></div><span class="v mono">3/4 次</span></div><div class="metric mono"><span>基线 78</span><span class="arrow">→</span><b>76.1kg</b><span class="arrow">→</span><span>目标 70</span></div></div>
+    <dl class="facts">
+      <div><dt>节奏</dt><dd>近7天 3/4 次</dd></div>
+      <div><dt>截止</dt><dd class="mono">—</dd></div>
+      <div><dt>本周</dt><dd>近7天 3/4 次 · 投入 35m</dd></div>
+    </dl>
+  </div>
+  <div class="next"><span class="k">下一步</span><span class="id mono">G02.T01</span><span class="t">力量训练 A/B 组交替</span><span class="mono est">40m</span></div>
+  
+  <div class="activity"><div class="strip" role="img" aria-label="近 14 天 · 4h"><span class="b zero" style="--h:0%" title="09-01 · 无投入"></span><span class="b zero" style="--h:0%" title="09-02 · 无投入"></span><span class="b" style="--h:40%" title="09-03 · 40m · 完成 1"></span><span class="b zero" style="--h:0%" title="09-04 · 无投入"></span><span class="b" style="--h:35%" title="09-05 · 35m · 完成 1"></span><span class="b" style="--h:12%" title="09-06 · 5m · 完成 1"></span><span class="b" style="--h:40%" title="09-07 · 40m · 完成 1"></span><span class="b zero" style="--h:0%" title="09-08 · 无投入"></span><span class="b" style="--h:40%" title="09-09 · 40m · 完成 1"></span><span class="b zero" style="--h:0%" title="09-10 · 无投入"></span><span class="b zero" style="--h:0%" title="09-11 · 无投入"></span><span class="b" style="--h:40%" title="09-12 · 40m · 完成 1"></span><span class="b" style="--h:12%" title="09-13 · 5m · 完成 1"></span><span class="b" style="--h:35%" title="09-14 · 35m · 完成 1"></span></div><span class="cap">近 14 天 · 4h</span></div>
+  <details class="more">
+  <summary>行动、日志与决策</summary>
+  <div class="more-body">
+    <p class="dw"><span class="k">完成标准</span>连续两周体重 ≤ 70kg</p>
+    <p class="dw"><span class="k">证据</span>照片</p>
+    
+    <h4>行动</h4><ul class="tasks"><li class="task m-todo"><span class="g" title="待办">○</span><span class="id mono">T01</span><span class="t">力量训练 A/B 组交替</span><span class="meta mono">40m</span></li><li class="task m-todo"><span class="g" title="待办">○</span><span class="id mono">T02</span><span class="t">称体重并拍照记录</span><span class="meta mono">5m · 每 sun</span></li></ul>
+    <h4>最近日志</h4>
+    <div class="table-wrap"><table class="logs"><thead><tr><th>日期</th><th>事项</th><th>结果</th><th>用时/数值</th><th>证据</th><th>备注</th></tr></thead>
+    <tbody><tr><td class="mono">09-14</td><td class="mono">体重</td><td class="r ">=</td><td class="mono">76.1kg</td><td title="口头">💬</td><td>用户不方便拍照，口头报告</td></tr><tr><td class="mono">09-14</td><td class="mono">T01</td><td class="r ok">✓</td><td class="mono">35m</td><td title="口头">💬</td><td></td></tr><tr><td class="mono">09-13</td><td class="mono">体重</td><td class="r ">=</td><td class="mono">76.4kg</td><td title="照片">📷</td><td>秤读数照片已查看，未保存照片</td></tr><tr><td class="mono">09-13</td><td class="mono">T02</td><td class="r ok">✓</td><td class="mono">5m</td><td title="照片">📷</td><td></td></tr><tr><td class="mono">09-12</td><td class="mono">T01</td><td class="r ok">✓</td><td class="mono">40m</td><td title="口头">💬</td><td></td></tr><tr><td class="mono">09-09</td><td class="mono">T01</td><td class="r ok">✓</td><td class="mono">40m</td><td title="口头">💬</td><td></td></tr><tr><td class="mono">09-07</td><td class="mono">T01</td><td class="r ok">✓</td><td class="mono">40m</td><td title="口头">💬</td><td></td></tr><tr><td class="mono">09-06</td><td class="mono">体重</td><td class="r ">=</td><td class="mono">77.2kg</td><td title="照片">📷</td><td>秤读数照片已查看</td></tr><tr><td class="mono">09-06</td><td class="mono">T02</td><td class="r ok">✓</td><td class="mono">5m</td><td title="照片">📷</td><td></td></tr><tr><td class="mono">09-05</td><td class="mono">T01</td><td class="r ok">✓</td><td class="mono">35m</td><td title="口头">💬</td><td></td></tr></tbody></table></div>
+    
+  </div>
+</details>
+</article><article class="goal s-warn" id="G04">
+  <header class="goal-head">
+    <div class="ident"><span class="gid mono">G04</span><span class="type">学习型</span><span class="pri mono">P2</span><span class="area">学习</span></div>
+    <span class="pill warn"><i aria-hidden="true"></i>注意</span>
+  </header>
+  <h3 class="goal-title">学完 Rust Book</h3>
+  <div class="goal-body">
+    <div class="col-a"><div class="measure"><div class="measure-head"><span class="num">25%</span><span class="sub">应有 11%</span></div><div class="bar" role="img" aria-label="进度 25%"><span class="fill warn" style="width:25.0%"></span><span class="expect" style="left:10.7%" title="按时间应有 11%"></span></div><p class="detail">已掌握 5/20 章 · 已学 5</p></div></div>
+    <dl class="facts">
+      <div><dt>节奏</dt><dd>实际 25% / 应有 11%（节奏比 2.33）</dd></div>
+      <div><dt>截止</dt><dd class="mono">12-31</dd></div>
+      <div><dt>本周</dt><dd>投入 0m / 预算 3.5h · 完成 0 项</dd></div>
+    </dl>
+  </div>
+  <div class="next"><span class="k">下一步</span><span class="id mono">G04.T02</span><span class="t">读第 6 章并完成练习</span><span class="mono est">90m</span></div>
+  <ul class="risks"><li>已 8 天未推进</li></ul>
+  <div class="activity"><div class="strip" role="img" aria-label="近 14 天 · 1h40m"><span class="b zero" style="--h:0%" title="09-01 · 无投入"></span><span class="b zero" style="--h:0%" title="09-02 · 无投入"></span><span class="b zero" style="--h:0%" title="09-03 · 无投入"></span><span class="b zero" style="--h:0%" title="09-04 · 无投入"></span><span class="b zero" style="--h:0%" title="09-05 · 无投入"></span><span class="b" style="--h:100%" title="09-06 · 1h40m · 完成 1"></span><span class="b zero" style="--h:0%" title="09-07 · 无投入"></span><span class="b zero" style="--h:0%" title="09-08 · 无投入"></span><span class="b zero" style="--h:0%" title="09-09 · 无投入"></span><span class="b zero" style="--h:0%" title="09-10 · 无投入"></span><span class="b zero" style="--h:0%" title="09-11 · 无投入"></span><span class="b zero" style="--h:0%" title="09-12 · 无投入"></span><span class="b zero" style="--h:0%" title="09-13 · 无投入"></span><span class="b zero" style="--h:0%" title="09-14 · 无投入"></span></div><span class="cap">近 14 天 · 1h40m</span></div>
+  <details class="more">
+  <summary>行动、日志与决策</summary>
+  <div class="more-body">
+    <p class="dw"><span class="k">完成标准</span>20 章全部完成课后练习，并用 Rust 写一个命令行记账小工具</p>
+    <p class="dw"><span class="k">证据</span>链接/文件</p>
+    
+    <h4>行动</h4><ul class="tasks"><li class="task m-done"><span class="g" title="完成">✓</span><span class="id mono">T01</span><span class="t">读第 5 章并完成练习</span><span class="meta mono">90m</span></li><li class="task m-todo"><span class="g" title="待办">○</span><span class="id mono">T02</span><span class="t">读第 6 章并完成练习</span><span class="meta mono">90m</span></li><li class="task m-todo"><span class="g" title="待办">○</span><span class="id mono">T03</span><span class="t">读第 7 章并完成练习</span><span class="meta mono">60m</span></li></ul>
+    <h4>最近日志</h4>
+    <div class="table-wrap"><table class="logs"><thead><tr><th>日期</th><th>事项</th><th>结果</th><th>用时/数值</th><th>证据</th><th>备注</th></tr></thead>
+    <tbody><tr><td class="mono">09-06</td><td class="mono">章</td><td class="r ">=</td><td class="mono">学5/掌握5</td><td title="链接/文件">🔗</td><td></td></tr><tr><td class="mono">09-06</td><td class="mono">T01</td><td class="r ok">✓</td><td class="mono">1h40m</td><td title="链接/文件">🔗</td><td>练习代码 rust-book/ch05</td></tr><tr><td class="mono">09-01</td><td class="mono">创建</td><td class="r ">=</td><td class="mono"></td><td title="系统">⚙️</td><td>目标创建（active）</td></tr></tbody></table></div>
+    
+  </div>
+</details>
+</article><article class="goal s-ok" id="G01">
+  <header class="goal-head">
+    <div class="ident"><span class="gid mono">G01</span><span class="type">项目型</span><span class="pri mono">P1</span><span class="area">事业</span></div>
+    <span class="pill ok"><i aria-hidden="true"></i>正常</span>
+  </header>
+  <h3 class="goal-title">上线记账 App v1</h3>
+  <div class="goal-body">
+    <div class="col-a"><div class="measure"><div class="measure-head"><span class="num">25%</span><span class="sub">应有 14%</span></div><div class="bar" role="img" aria-label="进度 25%"><span class="fill ok" style="width:25.0%"></span><span class="expect" style="left:14.4%" title="按时间应有 14%"></span></div><p class="detail">M2 核心记账功能 进行中</p></div></div>
+    <dl class="facts">
+      <div><dt>节奏</dt><dd>实际 25% / 应有 14%（节奏比 1.73）</dd></div>
+      <div><dt>截止</dt><dd class="mono">11-30<b class="hard" title="硬截止">硬</b></dd></div>
+      <div><dt>本周</dt><dd>投入 1h / 预算 8h · 完成 0 项</dd></div>
+    </dl>
+  </div>
+  <div class="next"><span class="k">下一步</span><span class="id mono">G01.T03</span><span class="t">实现账目 CRUD 本地存储</span><span class="mono est">120m</span></div>
+  <ul class="risks"><li>T04 已推迟 3 次</li><li>T06 等待小王 3 天</li></ul>
+  <div class="activity"><div class="strip" role="img" aria-label="近 14 天 · 4h45m"><span class="b zero" style="--h:0%" title="09-01 · 无投入"></span><span class="b" style="--h:90%" title="09-02 · 1h30m · 完成 1"></span><span class="b zero" style="--h:0%" title="09-03 · 无投入"></span><span class="b" style="--h:75%" title="09-04 · 1h15m · 完成 2"></span><span class="b zero" style="--h:0%" title="09-05 · 无投入"></span><span class="b zero" style="--h:0%" title="09-06 · 无投入"></span><span class="b zero" style="--h:0%" title="09-07 · 无投入"></span><span class="b zero" style="--h:0%" title="09-08 · 无投入"></span><span class="b" style="--h:60%" title="09-09 · 1h"></span><span class="b zero" style="--h:0%" title="09-10 · 无投入"></span><span class="b zero" style="--h:0%" title="09-11 · 无投入"></span><span class="b zero" style="--h:0%" title="09-12 · 无投入"></span><span class="b zero" style="--h:0%" title="09-13 · 无投入"></span><span class="b" style="--h:60%" title="09-14 · 1h"></span></div><span class="cap">近 14 天 · 4h45m</span></div>
+  <details class="more">
+  <summary>行动、日志与决策</summary>
+  <div class="more-body">
+    <p class="dw"><span class="k">完成标准</span>App Store 上架，且有 10 个真实用户在用</p>
+    <p class="dw"><span class="k">证据</span>代码核验 · ~/code/ledger-app</p>
+    <ol class="phases"><li class="ph done"><span class="mono">M1</span> 需求与原型<small class="mono">09-10</small></li><li class="ph active"><span class="mono">M2</span> 核心记账功能<small class="mono">10-20</small></li><li class="ph todo"><span class="mono">M3</span> 打磨与上架<small class="mono">11-30</small></li></ol>
+    <h4>行动</h4><ul class="tasks"><li class="task m-done"><span class="g" title="完成">✓</span><span class="id mono">T01</span><span class="t">画出 5 个核心页面线框图</span><span class="meta mono">90m · M1</span></li><li class="task m-done"><span class="g" title="完成">✓</span><span class="id mono">T02</span><span class="t">确定技术栈并搭建项目骨架</span><span class="meta mono">60m · M1</span></li><li class="task m-doing"><span class="g" title="进行中">◐</span><span class="id mono">T03</span><span class="t">实现账目 CRUD 本地存储</span><span class="meta mono">120m · M2</span></li><li class="task m-todo"><span class="g" title="待办">○</span><span class="id mono">T04</span><span class="t">调研 3 种 iCloud 同步方案并写对比表</span><span class="meta mono">45m · M2 · 推迟过 3 次</span></li><li class="task m-todo"><span class="g" title="待办">○</span><span class="id mono">T05</span><span class="t">设计分类与标签数据结构</span><span class="meta mono">60m · M2</span></li><li class="task m-waiting"><span class="g" title="等待">‖</span><span class="id mono">T06</span><span class="t">请设计朋友出 App 图标</span><span class="meta mono">15m · M2 · 等小王</span></li></ul>
+    <h4>最近日志</h4>
+    <div class="table-wrap"><table class="logs"><thead><tr><th>日期</th><th>事项</th><th>结果</th><th>用时/数值</th><th>证据</th><th>备注</th></tr></thead>
+    <tbody><tr><td class="mono">09-14</td><td class="mono">T03</td><td class="r warn">◐</td><td class="mono">1h</td><td title="代码核验">🔍</td><td><span class="rc" title="低估工作量">O</span>子代理核验 commit e19f55：列表页已接数据，编辑页未做</td></tr><tr><td class="mono">09-14</td><td class="mono">T04</td><td class="r crit">✗</td><td class="mono"></td><td title=""></td><td><span class="rc" title="不清楚">U</span>还是不知道从哪比较</td></tr><tr><td class="mono">09-12</td><td class="mono">T04</td><td class="r crit">✗</td><td class="mono"></td><td title=""></td><td><span class="rc" title="不清楚">U</span>不知道从哪开始比较</td></tr><tr><td class="mono">09-10</td><td class="mono">T04</td><td class="r idle">➜</td><td class="mono"></td><td title=""></td><td><span class="rc" title="没时间">T</span></td></tr><tr><td class="mono">09-09</td><td class="mono">T03</td><td class="r warn">◐</td><td class="mono">1h</td><td title="代码核验">🔍</td><td><span class="rc" title="低估工作量">O</span>commit c41e9a 模型层完成，UI 未接</td></tr><tr><td class="mono">09-04</td><td class="mono">M1</td><td class="r ok">✓</td><td class="mono"></td><td title="代码核验">🔍</td><td>线框图与骨架均已核验</td></tr><tr><td class="mono">09-04</td><td class="mono">T02</td><td class="r ok">✓</td><td class="mono">1h15m</td><td title="代码核验">🔍</td><td>commit 8b7d02 SwiftUI+SwiftData 骨架</td></tr><tr><td class="mono">09-02</td><td class="mono">T01</td><td class="r ok">✓</td><td class="mono">1h30m</td><td title="代码核验">🔍</td><td>commit 3f2a1c 线框图提交到 docs/</td></tr><tr><td class="mono">09-01</td><td class="mono">创建</td><td class="r ">=</td><td class="mono"></td><td title="系统">⚙️</td><td>目标创建（active）</td></tr></tbody></table></div>
+    <h4>决策</h4><ul class="decisions"><li><span class="mono">09-13 D01</span> 砍掉多币种支持<small>原因: v1 聚焦核心记账</small></li></ul>
+  </div>
+</details>
+</article><article class="goal s-ok" id="G05">
+  <header class="goal-head">
+    <div class="ident"><span class="gid mono">G05</span><span class="type">事务型</span><span class="pri mono">P3</span><span class="area">生活</span></div>
+    <span class="pill ok"><i aria-hidden="true"></i>正常</span>
+  </header>
+  <h3 class="goal-title">买显示器支架</h3>
+  <div class="goal-body">
+    <div class="col-a"><div class="measure"><div class="measure-head"><span class="num">100%</span></div><div class="bar" role="img" aria-label="进度 100%"><span class="fill ok" style="width:100.0%"></span></div><p class="detail">2/2 项</p></div></div>
+    <dl class="facts">
+      <div><dt>节奏</dt><dd>完成</dd></div>
+      <div><dt>截止</dt><dd class="mono">09-20</dd></div>
+      <div><dt>本周</dt><dd>投入 10m / 预算 0.5h · 完成 1 项</dd></div>
+    </dl>
+  </div>
+  <div class="next"><span class="k">下一步</span><span class="none">行动已全部完成</span></div>
+  
+  <div class="activity"><div class="strip" role="img" aria-label="近 14 天 · 30m"><span class="b zero" style="--h:0%" title="09-01 · 无投入"></span><span class="b zero" style="--h:0%" title="09-02 · 无投入"></span><span class="b zero" style="--h:0%" title="09-03 · 无投入"></span><span class="b zero" style="--h:0%" title="09-04 · 无投入"></span><span class="b zero" style="--h:0%" title="09-05 · 无投入"></span><span class="b zero" style="--h:0%" title="09-06 · 无投入"></span><span class="b zero" style="--h:0%" title="09-07 · 无投入"></span><span class="b zero" style="--h:0%" title="09-08 · 无投入"></span><span class="b zero" style="--h:0%" title="09-09 · 无投入"></span><span class="b zero" style="--h:0%" title="09-10 · 无投入"></span><span class="b" style="--h:20%" title="09-11 · 20m · 完成 1"></span><span class="b zero" style="--h:0%" title="09-12 · 无投入"></span><span class="b zero" style="--h:0%" title="09-13 · 无投入"></span><span class="b" style="--h:12%" title="09-14 · 10m · 完成 1"></span></div><span class="cap">近 14 天 · 30m</span></div>
+  <details class="more">
+  <summary>行动、日志与决策</summary>
+  <div class="more-body">
+    <p class="dw"><span class="k">完成标准</span>支架到货并装好</p>
+    <p class="dw"><span class="k">证据</span>口头</p>
+    
+    <h4>行动</h4><ul class="tasks"><li class="task m-done"><span class="g" title="完成">✓</span><span class="id mono">T01</span><span class="t">对比 3 款支架的承重与价格</span><span class="meta mono">20m</span></li><li class="task m-done"><span class="g" title="完成">✓</span><span class="id mono">T02</span><span class="t">下单</span><span class="meta mono">10m</span></li></ul>
+    <h4>最近日志</h4>
+    <div class="table-wrap"><table class="logs"><thead><tr><th>日期</th><th>事项</th><th>结果</th><th>用时/数值</th><th>证据</th><th>备注</th></tr></thead>
+    <tbody><tr><td class="mono">09-14</td><td class="mono">T02</td><td class="r ok">✓</td><td class="mono">10m</td><td title="口头">💬</td><td>已下单，周三到货</td></tr><tr><td class="mono">09-11</td><td class="mono">T01</td><td class="r ok">✓</td><td class="mono">20m</td><td title="口头">💬</td><td></td></tr><tr><td class="mono">09-08</td><td class="mono">创建</td><td class="r ">=</td><td class="mono"></td><td title="系统">⚙️</td><td>目标创建（active）</td></tr></tbody></table></div>
+    
+  </div>
+</details>
+</article>
+      </section>
+    </div>
+
+    <aside class="side">
+      <section class="attention box-panel" aria-labelledby="att-h">
+        <div class="panel-head"><h2 id="att-h">需要关注</h2><span class="mono count">5</span></div>
+        <ul><li class="att crit"><span class="tag">风险</span><div><a class="id mono" href="#G03">G03</a><span class="t">拿到秋招 offer</span><p>近7天 3/10 家</p></div></li><li class="att warn"><span class="tag">注意</span><div><a class="id mono" href="#G02">G02</a><span class="t">减到 70kg</span><p>近7天 3/4 次</p></div></li><li class="att warn"><span class="tag">注意</span><div><a class="id mono" href="#G04">G04</a><span class="t">学完 Rust Book</span><p>实际 25% / 应有 11%（节奏比 2.33）；已 8 天未推进</p></div></li><li class="att note"><span class="tag">备注</span><div><a class="id mono" href="#G01">G01</a><span class="t">上线记账 App v1</span><p>T04 已推迟 3 次；T06 等待小王 3 天</p></div></li><li class="att done"><span class="tag">待结束</span><div><a class="id mono" href="#G05">G05</a><span class="t">买显示器支架</span><p>行动已全部完成，待确认是否结束目标</p></div></li></ul>
+      </section>
+      <section class="minor box-panel"><div class="panel-head"><h2>收件箱</h2><span class="mono count">2</span></div><ul><li>2026-09-03 想做一个个人网站</li><li>2026-09-10 年底前考个驾照？</li></ul></section>
+      
+    </aside>
+  </main>
+
+  <footer class="foot">只读视图 · 由 mishu.py 于 2026-09-14 21:52 生成 · 修改数据请直接和秘书对话</footer>
+</div>
+</body>
+</html>

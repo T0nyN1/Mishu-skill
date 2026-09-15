@@ -1,0 +1,12 @@
+{
+  "hashes": {
+    "G01": "6d9fe1a085fda8329a993fd5b05616a8c0cfcaf9ea23517d6a99f14c004c31bc",
+    "G02": "a6f2ce7b813aa7a47a2e6ccbfa3e7d73b6ecbe6f6347054ce2c25d815df2743b",
+    "G03": "9037c952da68e7339e71329ccce1df0ed94733d43aadc43a450cd09d2b5530de",
+    "G04": "ef2fc7cc5193a505d74ae6f7893b078d190ad5ddfa8f2ecc2f5ca1a030e63b65",
+    "G05": "1f6aa6de39fc55c1d86ec6a2b74690b196651dcb416fe7c5983511e08c4317a9"
+  },
+  "advice": {
+    "0914": 2
+  }
+}

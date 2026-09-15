@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+examples/.demo-config-*/
+.DS_Store
+.claude/
+.idea/

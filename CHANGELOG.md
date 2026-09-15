@@ -1,0 +1,44 @@
+# Changelog
+
+Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [Semantic Versioning](https://semver.org/).
+
+## [Unreleased]
+
+## [0.2.0] - 2026-09-14
+
+### Changed
+- **Renamed the project to Mishu (秘书).**
+  - Skill: `skill/mishu`, invoked as `/mishu`.
+  - CLI: `sec.py` → `mishu.py`.
+  - Vault metadata: `.secretary/` → `.mishu/`.
+  - Config: `~/.config/mishu/`.
+  - Environment variables: `MISHU_VAULT`, `MISHU_CONFIG`, `MISHU_TODAY`.
+- Skill instructions (SKILL.md, workflows, references) are now written in English. Mishu still talks to users in their own language.
+- Docs moved to `docs/en/` and `docs/zh-CN/`.
+
+### Added
+- **English/Chinese output.** Each vault's `profile.lang` (`en`/`zh`) selects the language of the board, daily plans, check-ins, advice cards, CLI messages and the web dashboard. Goal files and daily plans parse in either language, so you can switch at any time without migrating.
+- **Empty first run with guided onboarding.**
+  - `context` detects an empty or unconfigured vault.
+  - The setup workflow walks the user through a brain dump, picking the top 3–5 goals, and intake for each.
+  - The dashboard and board show a welcome panel while the vault is empty.
+- **Demo vaults in both languages:** `bash examples/build_demo.sh [en|zh|all]`.
+- **English README and CONTRIBUTING**, alongside the Chinese versions.
+- **A translation-coverage test** and Chinese-output tests (22 tests in total).
+- **Advice categories** now use `nudge`/`adjust`/`coach`/`insight`; the Chinese names are still accepted as aliases.
+
+## [0.1.0] - 2026-09-14
+
+First usable version (MVP, named "Secretary").
+
+### Added
+- **Universal paradigm:** 5 goal types; 4 progress methods × 3 pace methods; one vocabulary of IDs and status, result, evidence and reason codes.
+- **The CLI as the vault's only writer:**
+  - Definition of Ready, capacity gate, external-edit hash detection.
+  - Progress, pace lights, staleness, candidate scoring.
+  - Rendering of the board, daily plans, check-ins and advice cards.
+  - Progress-level vs. structural write permissions.
+- **A read-only web dashboard** (single file, light/dark, responsive).
+- **A PreToolUse write guard**, with a dev mode.
+- **Workflows:** setup, add (7-step intake), today, checkin, log, stuck (coach mode), status.
+- **Evidence protocol:** read-only sub-agent code checks, photo checks with a verbal fallback, links.
