@@ -179,6 +179,10 @@ class TestMetricsAndPlan(Base):
         self.assertIn("deferred", self.run_cli("plan", "--hours", "4", "--energy", "3", "--main", "G01.T02", ok=False).stderr)
         self.assertIn("Needs breakdown", self.run_cli("candidates", "--hours", "4", "--energy", "3").stdout)
 
+    def test_time_cap_has_no_float_rounding_error(self):
+        self.add(PROJECT)
+        self.assertIn("cap 2h6m", self.run_cli("candidates", "--hours", "3", "--energy", "3").stdout)
+
     def test_plan_and_checkin(self):
         self.add(PROJECT)
         self.add(HABIT)

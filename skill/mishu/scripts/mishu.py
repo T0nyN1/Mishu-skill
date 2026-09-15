@@ -2330,7 +2330,7 @@ def score_task(g, mt, x, t, prof):
 def build_candidates(v: Vault, hours, energy):
     t = today()
     prof = v.profile
-    cap = int(hours * 60 * 0.7)
+    cap = int(round(hours * 60 * 0.7))
     habits, main, errands, waiting, breakdown = [], [], [], [], []
     for g in v.goals():
         if g.status != "active":
@@ -2474,7 +2474,7 @@ def cmd_plan(args):
             sections[key].append((g, x, cost, use_min))
     if len(sections["main"]) > 3:
         raise MishuError(tr("At most 3 main items"))
-    cap = int(args.hours * 60 * 0.7)
+    cap = int(round(args.hours * 60 * 0.7))
     if total > cap:
         raise MishuError(tr("Planned total {t} exceeds the cap {c} (available × 0.7); remove something",
                             t=fmt_hm(total), c=fmt_hm(cap)))
