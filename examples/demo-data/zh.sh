@@ -1,5 +1,19 @@
 # 中文演示数据 —— 由 build_demo.sh 调用（使用 $CLI、$VAULT 和 on()）。
-on 2026-09-01 $CLI init --vault "$VAULT" --lang zh --name 小林 --capacity 25h --daily 3h --weekend 5h --wip 5 --tone coach
+on 2026-08-01 $CLI init --vault "$VAULT" --lang zh --name 小林 --capacity 25h --daily 3h --weekend 5h --wip 5 --tone coach
+
+# ── 8 月已完成的目标，让「已完成」面板有内容可看
+on 2026-08-01 $CLI add-goal --file - <<'JSON'
+{"title": "上线个人作品集网站", "type": "project", "area": "事业", "priority": "P2",
+ "start": "2026-08-01", "deadline": "2026-08-31", "budget": "4h/w",
+ "why": "投简历时能附上一个链接", "done_when": "网站上线，并包含 3 个项目案例",
+ "phases": [{"title": "搭建与发布", "due": "2026-08-25"}],
+ "tasks": [{"title": "选模板并部署上线", "est": "90m", "phase": "M1"},
+           {"title": "写 3 个项目案例", "est": "120m", "phase": "M1"}]}
+JSON
+on 2026-08-05 $CLI log G01.T01 --result done --time 90m --evidence link --note "已部署到 xiaolin.dev"
+on 2026-08-18 $CLI log G01.T02 --result done --time 2h --evidence link --note "3 个案例已发布"
+on 2026-08-18 $CLI phase done G01.M1 --evidence link
+on 2026-08-22 $CLI set G01 status done --confirmed --reason "网站已上线，含 3 个项目案例"
 
 on 2026-09-01 $CLI add-goal --file - <<'JSON'
 {"title": "上线记账 App v1", "type": "project", "area": "事业", "priority": "P1",
@@ -57,36 +71,36 @@ JSON
 on 2026-09-03 $CLI inbox add "想做一个个人网站"
 on 2026-09-10 $CLI inbox add "年底前考个驾照？"
 
-on 2026-09-02 $CLI log G01.T01 --result done --time 90m --evidence code --note "commit 3f2a1c 线框图提交到 docs/"
-on 2026-09-03 $CLI log G02.T01 --result done --time 40m --evidence verbal
-on 2026-09-04 $CLI log G01.T02 --result done --time 75m --evidence code --note "commit 8b7d02 SwiftUI+SwiftData 骨架"
-on 2026-09-04 $CLI phase done G01.M1 --evidence code --note "线框图与骨架均已核验"
-on 2026-09-05 $CLI log G03.T01 --result done --time 90m --evidence link --note "简历 v3 已上传云盘"
-on 2026-09-05 $CLI phase done G03.M1 --evidence link
-on 2026-09-05 $CLI log G02.T01 --result done --time 35m --evidence verbal
-on 2026-09-06 $CLI log G04.T01 --result done --time 100m --evidence link --note "练习代码 rust-book/ch05"
-on 2026-09-06 $CLI units G04 --done 5 --mastered 5 --evidence link
-on 2026-09-06 $CLI log G02.T02 --result done --time 5m --evidence photo
-on 2026-09-06 $CLI metric G02 77.2 --evidence photo --note "秤读数照片已查看"
-on 2026-09-07 $CLI log G02.T01 --result done --time 40m --evidence verbal
-on 2026-09-08 $CLI log G03.T02 --result skip --reason U --note "不知道该投哪些公司"
-on 2026-09-09 $CLI log G01.T03 --result partial --time 60m --reason O --evidence code --note "commit c41e9a 模型层完成，UI 未接"
-on 2026-09-09 $CLI log G02.T01 --result done --time 40m --evidence verbal
-on 2026-09-10 $CLI log G03.T02 --result skip --reason U
-on 2026-09-10 $CLI funnel G03 投递 +3 --evidence link --note "官网投递截图"
-on 2026-09-10 $CLI log G01.T04 --result moved --reason T
-on 2026-09-11 $CLI task set G01.T06 blocked --wait 小王
-on 2026-09-11 $CLI log G05.T01 --result done --time 20m --evidence verbal
-on 2026-09-12 $CLI log G01.T04 --result skip --reason U --note "不知道从哪开始比较"
-on 2026-09-12 $CLI log G02.T01 --result done --time 40m --evidence verbal
-on 2026-09-13 $CLI log G02.T02 --result done --time 5m --evidence photo
-on 2026-09-13 $CLI metric G02 76.4 --evidence photo --note "秤读数照片已查看，未保存照片"
-on 2026-09-13 $CLI funnel G03 初筛通过 +1 --evidence link --note "邮件通知"
-on 2026-09-13 $CLI decide G01 "砍掉多币种支持" --reason "v1 聚焦核心记账" --revisit 2026-12-01
+on 2026-09-02 $CLI log G02.T01 --result done --time 90m --evidence code --note "commit 3f2a1c 线框图提交到 docs/"
+on 2026-09-03 $CLI log G03.T01 --result done --time 40m --evidence verbal
+on 2026-09-04 $CLI log G02.T02 --result done --time 75m --evidence code --note "commit 8b7d02 SwiftUI+SwiftData 骨架"
+on 2026-09-04 $CLI phase done G02.M1 --evidence code --note "线框图与骨架均已核验"
+on 2026-09-05 $CLI log G04.T01 --result done --time 90m --evidence link --note "简历 v3 已上传云盘"
+on 2026-09-05 $CLI phase done G04.M1 --evidence link
+on 2026-09-05 $CLI log G03.T01 --result done --time 35m --evidence verbal
+on 2026-09-06 $CLI log G05.T01 --result done --time 100m --evidence link --note "练习代码 rust-book/ch05"
+on 2026-09-06 $CLI units G05 --done 5 --mastered 5 --evidence link
+on 2026-09-06 $CLI log G03.T02 --result done --time 5m --evidence photo
+on 2026-09-06 $CLI metric G03 77.2 --evidence photo --note "秤读数照片已查看"
+on 2026-09-07 $CLI log G03.T01 --result done --time 40m --evidence verbal
+on 2026-09-08 $CLI log G04.T02 --result skip --reason U --note "不知道该投哪些公司"
+on 2026-09-09 $CLI log G02.T03 --result partial --time 60m --reason O --evidence code --note "commit c41e9a 模型层完成，UI 未接"
+on 2026-09-09 $CLI log G03.T01 --result done --time 40m --evidence verbal
+on 2026-09-10 $CLI log G04.T02 --result skip --reason U
+on 2026-09-10 $CLI funnel G04 投递 +3 --evidence link --note "官网投递截图"
+on 2026-09-10 $CLI log G02.T04 --result moved --reason T
+on 2026-09-11 $CLI task set G02.T06 blocked --wait 小王
+on 2026-09-11 $CLI log G06.T01 --result done --time 20m --evidence verbal
+on 2026-09-12 $CLI log G02.T04 --result skip --reason U --note "不知道从哪开始比较"
+on 2026-09-12 $CLI log G03.T01 --result done --time 40m --evidence verbal
+on 2026-09-13 $CLI log G03.T02 --result done --time 5m --evidence photo
+on 2026-09-13 $CLI metric G03 76.4 --evidence photo --note "秤读数照片已查看，未保存照片"
+on 2026-09-13 $CLI funnel G04 初筛通过 +1 --evidence link --note "邮件通知"
+on 2026-09-13 $CLI decide G02 "砍掉多币种支持" --reason "v1 聚焦核心记账" --revisit 2026-12-01
 
-on 2026-09-14 $CLI plan --hours 4 --energy 3 --main G03.T02,G01.T04 --habit G02.T01 --errand G05.T02 --advice-file - <<'JSON' >/dev/null
-[{"category": "adjust", "goal": "G03", "title": "投递节奏落后", "level": "L2",
-  "facts": "近7天投递 3/10 家；G03.T02 推迟 2 次，原因都是 U（不清楚投哪家）",
+on 2026-09-14 $CLI plan --hours 4 --energy 3 --main G04.T02,G02.T04 --habit G03.T01 --errand G06.T02 --advice-file - <<'JSON' >/dev/null
+[{"category": "adjust", "goal": "G04", "title": "投递节奏落后", "level": "L2",
+  "facts": "近7天投递 3/10 家；G04.T02 推迟 2 次，原因都是 U（不清楚投哪家）",
   "judgment": "瓶颈是缺少目标公司清单，不是时间不够",
   "options": [{"label": "A", "text": "今天先花 45m 建清单，下周配额不变", "cost": "本周投递数再少 1-2 家"},
               {"label": "B", "text": "配额降到 6 家/周", "cost": "预计拿到 offer 的时间推迟约 2 周"}],
@@ -94,19 +108,19 @@ on 2026-09-14 $CLI plan --hours 4 --energy 3 --main G03.T02,G01.T04 --habit G02.
 JSON
 
 on 2026-09-14 $CLI checkin \
-  --item "G03.T02|done|50m||link|清单 22 家已存到 Notion" \
-  --item "G01.T04|skip||U||还是不知道从哪比较" \
-  --item "G02.T01|done|35m||verbal|" \
-  --item "G05.T02|done|10m||verbal|已下单，周三到货" \
-  --item "G01.T03|partial|60m|O|code|子代理核验 commit e19f55：列表页已接数据，编辑页未做" \
-  --tomorrow "G01.T03,G03.T03" \
+  --item "G04.T02|done|50m||link|清单 22 家已存到 Notion" \
+  --item "G02.T04|skip||U||还是不知道从哪比较" \
+  --item "G03.T01|done|35m||verbal|" \
+  --item "G06.T02|done|10m||verbal|已下单，周三到货" \
+  --item "G02.T03|partial|60m|O|code|子代理核验 commit e19f55：列表页已接数据，编辑页未做" \
+  --tomorrow "G02.T03,G04.T03" \
   --summary "今天效率不错，投递的心结解开了" \
   --advice-file - <<'JSON' >/dev/null
-{"category": "coach", "goal": "G01", "title": "iCloud 同步调研卡住了", "level": "L2",
- "facts": "G01.T04 已推迟 3 次，其中 2 次原因是 U（不清楚从哪开始）",
+{"category": "coach", "goal": "G02", "title": "iCloud 同步调研卡住了", "level": "L2",
+ "facts": "G02.T04 已推迟 3 次，其中 2 次原因是 U（不清楚从哪开始）",
  "judgment": "任务太模糊：「调研 3 种方案」没有明确的第一步和产出格式",
  "options": [{"label": "A", "text": "拆成两步：① 25m 列出 CloudKit/Core Data+CloudKit/第三方 3 个候选及官方文档链接 ② 30m 按“成本/复杂度/离线支持”填对比表", "cost": "多一次拆解，今天不增加工作量"},
              {"label": "B", "text": "v1 先不做同步，挪到 M3 之后", "cost": "上架时没有多设备同步，可能影响前 10 个用户的留存"}],
  "recommend": "A", "recommend_reason": "同步是核心体验，只是任务定义不清", "ask": "回复 A 或 B，我来更新计划"}
 JSON
-on 2026-09-14 $CLI metric G02 76.1 --evidence verbal --note "用户不方便拍照，口头报告" >/dev/null
+on 2026-09-14 $CLI metric G03 76.1 --evidence verbal --note "用户不方便拍照，口头报告" >/dev/null

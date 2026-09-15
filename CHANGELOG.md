@@ -4,6 +4,16 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versio
 
 ## [Unreleased]
 
+### Added
+- **Completed history.** Setting a goal to `done` now stamps a completion date. The board and web dashboard get a "Completed" block with a short brief per goal (dates, days taken, time spent, actions done, definition of done), and the new `done` command lists every completed goal with its closing note. Reopening a goal clears the date.
+- Both demo vaults include a goal completed in August.
+
+### Fixed
+- The daily candidate picker could suggest a later action before an earlier one in the same goal and phase (e.g. "place the order" before "compare keyboards"). Actions are now suggested in order, and a skipped action is labelled "after G01.T01".
+- Chinese advice cards had a stray space after 「代价：」; the "Your call" and "Reason" labels used half-width colons.
+- Chinese lists in candidates and error messages used English commas.
+- Processing an inbox item shifts the numbers of the remaining items; mishu.py now prints the renumbered list, and the workflows tell Mishu to re-list before each `--inbox N`.
+
 ## [0.2.0] - 2026-09-14
 
 ### Changed

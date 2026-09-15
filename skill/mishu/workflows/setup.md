@@ -50,7 +50,7 @@ TXT
 1. **Brain dump.** Ask the user to list **everything** on their plate, unorganized: projects, habits, errands, job hunting, studying, small purchases.
 2. **Capture each item** with `inbox add "…"`, so nothing is lost.
 3. **Pick the first batch.** Show the captured list and agree on the **3–5 most important**, in priority order. Say plainly that the rest stays in the inbox for later.
-4. **Run intake.** Take each chosen item through `workflows/add.md` with `--inbox N`.
+4. **Run intake.** Take each chosen item through `workflows/add.md` with `--inbox N`. Numbers shift after each item is processed, so re-check `inbox list` before every `--inbox N`.
    - Do the first one fully.
    - Batch questions for the rest to keep things moving.
    - The capacity gate will stop you if the batch doesn't fit their hours. Treat that as a real trade-off for the user, not an error.

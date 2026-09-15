@@ -96,4 +96,5 @@ JSON
      Then preview again.
    - **Success:** paste the goal card and ask "Create it?"
 3. **After an explicit yes,** run it without `--dry-run`. Add `--inbox N` if it came from the inbox.
+   - Inbox numbers shift after every processed item. **Run `inbox list` right before each `--inbox N`** (mishu.py also prints the renumbered list after processing).
 4. **Tell the user** the goal ID and the **first next action**.

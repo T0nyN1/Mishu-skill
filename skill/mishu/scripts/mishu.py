@@ -51,6 +51,11 @@ def sep():
     return "；" if _LANG == "zh" else "; "
 
 
+def comma():
+    """Separator between list items."""
+    return "，" if _LANG == "zh" else ", "
+
+
 def paren(s):
     return f"（{s}）" if _LANG == "zh" else f" ({s})"
 
@@ -578,7 +583,7 @@ class Decision:
         return "- " + " | ".join(parts)
 
 
-GOAL_KEY_ORDER = ["id", "title", "type", "area", "priority", "status", "created", "start", "deadline",
+GOAL_KEY_ORDER = ["id", "title", "type", "area", "priority", "status", "created", "start", "deadline", "completed",
                   "why", "done_when", "budget", "review", "verify", "measure", "phases"]
 
 
@@ -729,7 +734,7 @@ def validate_goal(g: Goal, strict_ready=False):
         E.append(tr("status must be one of {v}", v="/".join(STATUSES)))
     if m.get("priority") not in PRIORITY_W:
         E.append(tr("priority must be P0-P3"))
-    for k in ("created", "start", "deadline"):
+    for k in ("created", "start", "deadline", "completed"):
         try:
             parse_date(m.get(k))
         except MishuError as e:
@@ -1236,6 +1241,46 @@ def none_line():
     return paren(tr("none")).strip()
 
 
+def completion_date(g: Goal):
+    d = parse_date(g.meta.get("completed"))[0]
+    if d:
+        return d
+    for dc in reversed(g.decisions):
+        if "status" in dc.text and "done" in dc.text:
+            return parse_date(dc.date)[0]
+    dates = [parse_date(lg.date)[0] for lg in g.logs]
+    return max([x for x in dates if x], default=None)
+
+
+def completed_summaries(vault: Vault):
+    """Completed goals, newest first — a short retrospective card for each."""
+    out = []
+    for g in vault.goals(archive=True):
+        if g.status != "done":
+            continue
+        end = completion_date(g)
+        start = parse_date(g.meta.get("start") or g.meta.get("created"))[0]
+        closing = next((dc for dc in reversed(g.decisions) if "status" in dc.text and "done" in dc.text), None)
+        out.append({
+            "gid": g.gid, "title": g.title, "type": g.type, "type_label": type_label(g.type),
+            "icon": TYPE_ICON.get(g.type, ""), "area": g.meta.get("area", ""),
+            "start": start.isoformat() if start else "", "completed": end.isoformat() if end else "",
+            "days": (end - start).days + 1 if start and end else None,
+            "minutes": sum(minutes_in(lg.value) for lg in g.logs),
+            "actions_done": sum(1 for x in g.tasks if x.mark == "x"),
+            "done_when": g.meta.get("done_when", ""), "why": g.meta.get("why", ""),
+            "closing_note": closing.reason if closing else "",
+        })
+    out.sort(key=lambda c: (c["completed"], c["gid"]), reverse=True)
+    return out
+
+
+def completed_line(c):
+    span = f"{c['start'][5:]} → {c['completed'][5:]}" if c["start"] else c["completed"][5:]
+    return tr("{span} · {d} days · spent {t} · {n} actions done", span=span, d=c["days"] if c["days"] else "?",
+              t=fmt_hm(c["minutes"]), n=c["actions_done"])
+
+
 def attention_items(active, prof):
     """Shared by the Markdown board and the HTML dashboard."""
     items = []
@@ -1307,6 +1352,11 @@ def render_board(vault: Vault):
             out.append(f"- {m['light']} {g.gid} {g.title}" + (f" — {last.text}{paren(last.did)}" if last else ""))
     else:
         out.append(none_line())
+    done = completed_summaries(vault)
+    out += ["", "## ✅ " + tr("Completed")]
+    out += [f"- ✅ {c['gid']} {c['icon']} {c['title']} — {completed_line(c)}" for c in done[:5]] or [none_line()]
+    if len(done) > 5:
+        out.append(paren(tr("{n} in total — run `mishu.py done` to see all", n=len(done))).strip())
     (vault.root / "BOARD.md").write_text("\n".join(out) + "\n", "utf-8")
     render_html(vault)
 
@@ -1431,6 +1481,7 @@ def build_view(vault: Vault):
         "counts": {"ok": counts["🟢"], "warn": counts["🟡"], "crit": counts["🔴"]}, "active_n": len(active),
         "goal_n": len(goals), "checkin_time": prof.get("checkin_time"),
         "attention": attention_items(active, prof), "goals": gv, "others": others,
+        "completed": [{**c, "line": completed_line(c)} for c in completed_summaries(vault)],
         "daily": parse_daily(vault.daily_path(t)), "advice": advice, "inbox": inbox,
         "activity_max": max([a["minutes"] for x in gv for a in x["activity"]] + [60]),
     }
@@ -1474,7 +1525,7 @@ def render_advice(a: dict, aid: str, vault: Vault):
              f"> **{tr('Facts')}** {clean(a['facts'])}", f"> **{tr('Diagnosis')}** {clean(a['judgment'])}"]
     if opts:
         lines.append(f"> **{tr('Options')}**")
-        lines += [f"> {o['label']}. {clean(o['text'])} — {tr('Cost:')} {clean(o['cost'])}" for o in opts]
+        lines += [f"> {o['label']}. {clean(o['text'])} — {tr('Cost: {c}', c=clean(o['cost']))}" for o in opts]
         rr = paren(clean(a["recommend_reason"])) if a.get("recommend_reason") else ""
         lines.append(f"> **{tr('Recommended')}** {a['recommend']}{rr}")
     lines.append(f"> **{tr('Your call')}** {clean(a['ask'])}")
@@ -1693,6 +1744,9 @@ def cmd_context(args):
     inbox = (p / "inbox.md").read_text("utf-8") if (p / "inbox.md").exists() else ""
     pending = len(re.findall(r"^- \[ \]", inbox, re.M))
     print(tr("📥 Inbox: {n} pending", n=pending))
+    n_done = sum(1 for path in v.goal_paths(archive=True) if Goal.load(path).status == "done")
+    if n_done:
+        print(tr("✅ Completed goals: {n} (look back with `done`)", n=n_done))
     if not v.goal_paths(archive=True):
         print(tr("🆕 The vault is empty → onboard the first batch of goals (workflows/setup.md, step 4)."))
     print(tr("✅ Data valid") if errors == 0 else tr("✗ {n} validation problems → run validate first", n=errors))
@@ -1825,9 +1879,9 @@ def cmd_add_goal(args):
         return
     v.goals_dir.mkdir(parents=True, exist_ok=True)
     v.save_goal(g, "add-goal", f"created {g.title} ({g.status})")
-    if args.inbox:
-        _inbox_mark(v, args.inbox, gid)
+    rest = _inbox_mark(v, args.inbox, gid) if args.inbox else None
     print("\n" + tr("✅ Created {gid}: {path} — board updated", gid=gid, path=g.path.relative_to(v.root)))
+    print_inbox_rest(rest)
 
 
 def cmd_set(args):
@@ -1876,6 +1930,11 @@ def cmd_set(args):
     else:
         old = g.meta.get(field)
         g.meta[field] = val
+    if field == "status":
+        if val == "done" and old_status != "done":
+            g.meta["completed"] = today().isoformat()
+        elif val != "done":
+            g.meta.pop("completed", None)
     if field == "status" and val == "active" and old_status != "active":
         cp, _, _ = capacity_problems(v, g, exclude=g.gid)
         if cp:
@@ -2075,7 +2134,7 @@ def cmd_funnel(args):
     st = next((s for s in funnel if s.get("stage") == args.stage), None)
     if not st:
         raise MishuError(tr("Unknown funnel stage: {s} (options: {v})", s=args.stage,
-                            v=", ".join(s["stage"] for s in funnel)))
+                            v=comma().join(s["stage"] for s in funnel)))
     ev = _evidence_arg(args.evidence)
     m = re.fullmatch(r"([+=])(\d+)", args.change)
     if not m:
@@ -2137,6 +2196,13 @@ def _inbox_mark(v: Vault, n, gid=None):
     lines[i] = "- [x] " + lines[i][6:] + (f" → {gid}" if gid else "")
     p.write_text("\n".join(lines) + "\n", "utf-8")
     v.log_change("inbox-done", "inbox", lines[i])
+    return [ln[6:] for ln in lines if ln.startswith("- [ ] ")]
+
+
+def print_inbox_rest(rest):
+    if rest:
+        print(tr("📥 Inbox renumbered — pending items are now:") + "\n"
+              + "\n".join(f"  {k}. {txt}" for k, txt in enumerate(rest, 1)))
 
 
 def cmd_inbox(args):
@@ -2151,8 +2217,9 @@ def cmd_inbox(args):
         items = [ln for ln in p.read_text("utf-8").splitlines() if ln.startswith("- [ ] ")]
         print("\n".join(f"{i}. {ln[6:]}" for i, ln in enumerate(items, 1)) or paren(tr("inbox is empty")).strip())
     else:
-        _inbox_mark(v, args.n, args.to)
+        rest = _inbox_mark(v, args.n, args.to)
         print(tr("✅ Inbox item #{n} processed", n=args.n) + (f" → {args.to}" if args.to else ""))
+        print_inbox_rest(rest)
     if args.action != "list":
         render_html(v)
 
@@ -2202,6 +2269,25 @@ def cmd_status(args):
             print(f"     ⚠ {r}")
     if not rows:
         print(paren(tr("no goals yet")).strip())
+
+
+def cmd_done(args):
+    v = open_vault(args)
+    done = completed_summaries(v)
+    if args.json:
+        print(json.dumps(done, ensure_ascii=False, indent=2))
+        return
+    if not done:
+        print(paren(tr("no completed goals yet")).strip())
+        return
+    print(tr("✅ Completed goals: {n}", n=len(done)))
+    for c in done[: args.limit or None]:
+        print(f"\n✅ {c['gid']} {c['icon']} {c['title']} · {c['type_label']} · {c['area']}")
+        print("   " + completed_line(c))
+        if c["done_when"]:
+            print("   " + tr("Definition of done: {v}", v=c["done_when"]))
+        if c["closing_note"]:
+            print("   " + tr("Closing note: {v}", v=c["closing_note"]))
 
 
 def _mt_json(g, m):
@@ -2350,7 +2436,7 @@ def build_candidates(v: Vault, hours, energy):
             if not x.open:
                 continue
             item = {"ref": ref, "title": x.title, "est": x.est or 30, "min": x.fields.get("min"),
-                    "goal": g.title, "type": g.type}
+                    "goal": g.title, "type": g.type, "seq": f"{g.gid}/{x.phase or '-'}", "order": g.tasks.index(x)}
             if x.tid in rec:
                 every = x.fields.get("every")
                 if every:
@@ -2374,30 +2460,50 @@ def build_candidates(v: Vault, hours, energy):
             (errands if g.type == "errand" or item["est"] <= 15 else main).append(item)
     for lst in (habits, main, errands):
         lst.sort(key=lambda i: -i["score"])
+    # Actions in the same goal and phase run in file order: an action is only suggested once every
+    # earlier open action of that goal/phase is suggested too (no "place the order" before "compare").
+    sequenced = [it for it in main + errands if "seq" in it]
+
+    def blocker(it):
+        return next((o for o in sorted(sequenced, key=lambda o: o["order"])
+                     if o["seq"] == it["seq"] and o["order"] < it["order"] and not o.get("pick")), None)
+
+    def cost_of(it):
+        return parse_minutes(it["min"]) if energy <= 2 and it["min"] else it["est"]
+
     used = 0
     for it in habits:
-        cost = parse_minutes(it["min"]) if energy <= 2 and it["min"] else it["est"]
-        if used + cost <= cap:
+        if used + cost_of(it) <= cap:
             it["pick"] = True
-            used += cost
+            used += cost_of(it)
     picked_goals, picked = set(), 0
-    for rnd in (0, 1):
-        for it in main:
-            if picked >= 3 or it.get("pick"):
+    changed = True
+    while changed:
+        changed = False
+        for rnd in (0, 1):
+            for it in main:
+                if picked >= 3 or it.get("pick") or ("seq" in it and blocker(it)):
+                    continue
+                g_id = it["ref"].split(".")[0]
+                if rnd == 0 and g_id in picked_goals:
+                    continue
+                if used + cost_of(it) <= cap:
+                    it["pick"] = True
+                    used += cost_of(it)
+                    picked += 1
+                    picked_goals.add(g_id)
+                    changed = True
+        for it in errands:
+            if it.get("pick") or ("seq" in it and blocker(it)):
                 continue
-            g_id = it["ref"].split(".")[0]
-            if rnd == 0 and g_id in picked_goals:
-                continue
-            cost = parse_minutes(it["min"]) if energy <= 2 and it["min"] else it["est"]
-            if used + cost <= cap:
+            if used + it["est"] <= cap:
                 it["pick"] = True
-                used += cost
-                picked += 1
-                picked_goals.add(g_id)
-    for it in errands:
-        if used + it["est"] <= cap:
-            it["pick"] = True
-            used += it["est"]
+                used += it["est"]
+                changed = True
+    for it in sequenced:
+        b = None if it.get("pick") else blocker(it)
+        if b:
+            it["why"].append(tr("after {ref}", ref=b["ref"]))
     return {"hours": hours, "energy": energy, "cap": cap, "used": used, "habit": habits, "main": main,
             "errand": errands, "waiting": waiting, "breakdown": breakdown}
 
@@ -2418,7 +2524,7 @@ def cmd_candidates(args):
         for it in c[key][:12]:
             mark = "✔" if it.get("pick") else " "
             mn = " · " + tr("min {m}", m=it["min"]) if it.get("min") else ""
-            why = ", ".join(w for w in it["why"] if w) or "—"
+            why = comma().join(w for w in it["why"] if w) or "—"
             print(f"  {mark} {it['ref']} {it['title']} · {it['est']}m{mn} · {tr('score')} {it['score']} · {why}")
         if not c[key]:
             print("  " + none_line())
@@ -2573,7 +2679,7 @@ def cmd_checkin(args):
     missing = [r for r, _ in plan if r not in given]
     if missing and not args.allow_missing:
         raise MishuError(tr("These planned items haven't been reviewed — ask the user about each: {v}",
-                            v=", ".join(missing)))
+                            v=comma().join(missing)))
     cache, summaries, hints, rows = {}, [], [], []
     for ref, result, time, reason, evidence, note, qty in parsed:
         gid, tid = split_ref(ref)
@@ -2660,6 +2766,11 @@ def build_parser():
     p.add_argument("--all", action="store_true", help="include archived goals")
     p.add_argument("--logs", type=int, default=8)
     p.set_defaults(func=cmd_status)
+
+    p = sp.add_parser("done", help="look back at completed goals")
+    p.add_argument("--json", action="store_true")
+    p.add_argument("--limit", type=int, help="show only the N most recent")
+    p.set_defaults(func=cmd_done)
 
     p = sp.add_parser("board", help="regenerate the board")
     p.add_argument("--print", action="store_true")

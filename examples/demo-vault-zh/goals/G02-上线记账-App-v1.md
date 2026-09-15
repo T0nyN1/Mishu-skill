@@ -1,5 +1,5 @@
 ---
-id: G01
+id: G02
 title: 上线记账 App v1
 type: project
 area: 事业

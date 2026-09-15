@@ -245,6 +245,18 @@ h2{font:600 17px/1.3 var(--serif);letter-spacing:.03em}
 .minor .lbl{font-size:11.5px;color:var(--muted);margin-left:6px}
 .foot{margin-top:40px;padding-top:14px;border-top:1px solid var(--rule);font-size:12px;color:var(--faint)}
 
+/* completed goals */
+.completed ul{margin-top:4px}
+.completed li{padding:10px 0;border-bottom:1px solid var(--rule)}
+.completed li:last-child{border-bottom:0;padding-bottom:0}
+.c-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.c-check{color:var(--ok);font-weight:700}
+.c-head .t{font-weight:500}
+.c-head .type{margin-left:auto;font-size:11.5px;color:var(--muted);border:1px solid var(--rule-strong);border-radius:4px;padding:0 5px;line-height:18px}
+.c-meta{margin:3px 0 0;font-size:12px;color:var(--muted)}
+.c-dw{margin:3px 0 0;font-size:12.5px;color:var(--faint)}
+.c-more{margin:10px 0 0;font-size:12px;color:var(--muted)}
+
 /* English typography */
 html[lang="en"]{--serif:"Source Serif 4",Georgia,"Times New Roman",serif;--sans:"IBM Plex Sans",-apple-system,"Segoe UI",system-ui,sans-serif}
 html[lang="en"] .advice dl div{grid-template-columns:72px minmax(0,1fr)}
@@ -267,7 +279,7 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
   /* narrow: welcome → today → attention → advice → goals → inbox */
   .layout{display:flex;flex-direction:column;gap:20px}
   .primary,.side{display:contents}
-  .welcome{order:0} .today{order:1} .attention{order:2} .advice-list{order:3} .goals{order:4} .minor{order:5}
+  .welcome{order:0} .today{order:1} .attention{order:2} .advice-list{order:3} .goals{order:4} .minor{order:5} .completed{order:6}
   .side{position:static;max-height:none}
 }
 @media (max-width: 560px){
@@ -306,53 +318,53 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
   <div class="groups">
     <div class="grp g-main"><h3>Main<small>max 3</small></h3><ul><li class="item has-r ok">
   <span class="box ok" aria-label="✓">✓</span>
-  <div class="it"><div class="line"><span class="id mono">G03.T02</span><span class="t">Build a target company list (20)</span></div>
+  <div class="it"><div class="line"><span class="id mono">G04.T02</span><span class="t">Build a target company list (20)</span></div>
   <div class="sub">22 companies saved in Notion</div></div>
   <span class="time mono">50m</span>
 </li><li class="item has-r crit">
   <span class="box crit" aria-label="✗">✗</span>
-  <div class="it"><div class="line"><span class="id mono">G01.T04</span><span class="t">Compare 3 iCloud sync options in a table</span></div>
+  <div class="it"><div class="line"><span class="id mono">G02.T04</span><span class="t">Compare 3 iCloud sync options in a table</span></div>
   <div class="sub">reason U Unclear · still unsure how to compare</div></div>
   <span class="time mono">45m</span>
 </li></ul></div><div class="grp g-habit"><h3>Habits</h3><ul><li class="item has-r ok">
   <span class="box ok" aria-label="✓">✓</span>
-  <div class="it"><div class="line"><span class="id mono">G02.T01</span><span class="t">Strength session (A/B alternating)</span></div>
+  <div class="it"><div class="line"><span class="id mono">G03.T01</span><span class="t">Strength session (A/B alternating)</span></div>
   <div class="sub">last 7 days 2/4</div></div>
   <span class="time mono">35m</span>
 </li></ul></div><div class="grp g-errand"><h3>Errands</h3><ul><li class="item has-r ok">
   <span class="box ok" aria-label="✓">✓</span>
-  <div class="it"><div class="line"><span class="id mono">G05.T02</span><span class="t">Place the order</span></div>
+  <div class="it"><div class="line"><span class="id mono">G06.T02</span><span class="t">Place the order</span></div>
   <div class="sub">ordered, arrives Wednesday</div></div>
   <span class="time mono">10m</span>
 </li></ul></div>
-    <div class="grp g-wait"><h3>Waiting / follow-up</h3><ul class="wait"><li>G01.T06 Ask a designer friend for the app icon (waiting on Sam, 3 days) → follow up today</li></ul></div>
+    <div class="grp g-wait"><h3>Waiting / follow-up</h3><ul class="wait"><li>G02.T06 Ask a designer friend for the app icon (waiting on Sam, 3 days) → follow up today</li></ul></div>
   </div>
   <div class="review">
   <h3>Evening check-in</h3>
   <p class="stats mono">done 3/4 · main 1/2 · spent 2h35m</p>
-  <ul class="extra"><li><span class="box warn">◐</span><span class="id mono">G01.T03</span> sub-agent verified commit e19f55: list view wired, edit view missing<small class="tag-extra">unplanned</small></li></ul>
-  <dl><div><dt>Tomorrow</dt><dd class="mono">G01.T03 · G03.T03</dd></div>
+  <ul class="extra"><li><span class="box warn">◐</span><span class="id mono">G02.T03</span> sub-agent verified commit e19f55: list view wired, edit view missing<small class="tag-extra">unplanned</small></li></ul>
+  <dl><div><dt>Tomorrow</dt><dd class="mono">G02.T03 · G04.T03</dd></div>
   <div><dt>In one line</dt><dd>Good day — the application block finally cleared</dd></div></dl>
 </div>
 </section><section class="advice-list" aria-labelledby="adv-h"><h2 id="adv-h">Mishu’s advice</h2><article class="advice">
   <header><span class="aid mono">A0914-1</span><span class="cat">Adjust</span><span class="lvl mono">L2</span></header>
-  <h3><span class="goal-ref">G03 Land a new-grad offer</span>Applications are behind pace</h3>
-  <dl><div><dt>Facts</dt><dd>Last 7 days: 3/10 applications; G03.T02 deferred twice, both times reason U (unclear which companies)</dd></div><div><dt>Diagnosis</dt><dd>The bottleneck is the missing target list, not time</dd></div></dl>
+  <h3><span class="goal-ref">G04 Land a new-grad offer</span>Applications are behind pace</h3>
+  <dl><div><dt>Facts</dt><dd>Last 7 days: 3/10 applications; G04.T02 deferred twice, both times reason U (unclear which companies)</dd></div><div><dt>Diagnosis</dt><dd>The bottleneck is the missing target list, not time</dd></div></dl>
   <ol class="opts"><li class="rec"><b class="mono">A</b><div><p>Spend 45m on the list today; keep next week&#x27;s quota</p><p class="cost">Cost: 1–2 fewer applications this week</p></div></li><li class=""><b class="mono">B</b><div><p>Lower the quota to 6 per week</p><p class="cost">Cost: Offer likely ~2 weeks later</p></div></li></ol>
-  <p class="rec-line">Recommended <b class="mono">A</b>: already on today&#x27;s main list</p>
+  <p class="rec-line">Recommended <b class="mono">A</b> (already on today&#x27;s main list)</p>
   <p class="ask">Your call: Reply A or B</p>
 </article><article class="advice">
   <header><span class="aid mono">A0914-2</span><span class="cat">Coach</span><span class="lvl mono">L2</span></header>
-  <h3><span class="goal-ref">G01 Ship budgeting app v1</span>Stuck on the iCloud sync research</h3>
-  <dl><div><dt>Facts</dt><dd>G01.T04 deferred 3 times; 2 of them with reason U (unclear where to start)</dd></div><div><dt>Diagnosis</dt><dd>The task is too vague: “compare 3 options” has no concrete first step or output format</dd></div></dl>
+  <h3><span class="goal-ref">G02 Ship budgeting app v1</span>Stuck on the iCloud sync research</h3>
+  <dl><div><dt>Facts</dt><dd>G02.T04 deferred 3 times; 2 of them with reason U (unclear where to start)</dd></div><div><dt>Diagnosis</dt><dd>The task is too vague: “compare 3 options” has no concrete first step or output format</dd></div></dl>
   <ol class="opts"><li class="rec"><b class="mono">A</b><div><p>Split it: ① 25m list CloudKit / Core Data+CloudKit / a third-party SDK with doc links ② 30m fill a cost/complexity/offline table</p><p class="cost">Cost: One more breakdown step; no extra work today</p></div></li><li class=""><b class="mono">B</b><div><p>Skip sync in v1 and move it after M3</p><p class="cost">Cost: No multi-device sync at launch; may hurt early retention</p></div></li></ol>
-  <p class="rec-line">Recommended <b class="mono">A</b>: sync is core; only the task definition is unclear</p>
+  <p class="rec-line">Recommended <b class="mono">A</b> (sync is core; only the task definition is unclear)</p>
   <p class="ask">Your call: Reply A or B and I&#x27;ll update the plan</p>
 </article></section><section class="goals" aria-labelledby="goals-h">
         <div class="sec-head"><h2 id="goals-h">Goals</h2><span class="legend"><span class="expect-key"></span>expected progress by now</span></div>
-        <article class="goal s-crit" id="G03">
+        <article class="goal s-crit" id="G04">
   <header class="goal-head">
-    <div class="ident"><span class="gid mono">G03</span><span class="type">Pipeline</span><span class="pri mono">P0</span><span class="area">Career</span></div>
+    <div class="ident"><span class="gid mono">G04</span><span class="type">Pipeline</span><span class="pri mono">P0</span><span class="area">Career</span></div>
     <span class="pill crit"><i aria-hidden="true"></i>At risk</span>
   </header>
   <h3 class="goal-title">Land a new-grad offer</h3>
@@ -364,7 +376,7 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
       <div><dt>This week</dt><dd>Last 7 days 3/10 apps · spent 50m</dd></div>
     </dl>
   </div>
-  <div class="next"><span class="k">Next</span><span class="id mono">G03.T03</span><span class="t">Apply to 5 target companies</span><span class="mono est">45m</span></div>
+  <div class="next"><span class="k">Next</span><span class="id mono">G04.T03</span><span class="t">Apply to 5 target companies</span><span class="mono est">45m</span></div>
   
   <div class="activity"><div class="strip" role="img" aria-label="last 14 days: 2h20m"><span class="b zero" style="--h:0%" title="09-01 · no time logged"></span><span class="b zero" style="--h:0%" title="09-02 · no time logged"></span><span class="b zero" style="--h:0%" title="09-03 · no time logged"></span><span class="b zero" style="--h:0%" title="09-04 · no time logged"></span><span class="b" style="--h:90%" title="09-05 · 1h30m · 2 done"></span><span class="b zero" style="--h:0%" title="09-06 · no time logged"></span><span class="b zero" style="--h:0%" title="09-07 · no time logged"></span><span class="b zero" style="--h:0%" title="09-08 · no time logged"></span><span class="b zero" style="--h:0%" title="09-09 · no time logged"></span><span class="b zero" style="--h:0%" title="09-10 · no time logged"></span><span class="b zero" style="--h:0%" title="09-11 · no time logged"></span><span class="b zero" style="--h:0%" title="09-12 · no time logged"></span><span class="b zero" style="--h:0%" title="09-13 · no time logged"></span><span class="b" style="--h:50%" title="09-14 · 50m · 1 done"></span></div><span class="cap">last 14 days: 2h20m</span></div>
   <details class="more">
@@ -380,9 +392,9 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
     
   </div>
 </details>
-</article><article class="goal s-warn" id="G02">
+</article><article class="goal s-warn" id="G03">
   <header class="goal-head">
-    <div class="ident"><span class="gid mono">G02</span><span class="type">Habit</span><span class="pri mono">P1</span><span class="area">Health</span></div>
+    <div class="ident"><span class="gid mono">G03</span><span class="type">Habit</span><span class="pri mono">P1</span><span class="area">Health</span></div>
     <span class="pill warn"><i aria-hidden="true"></i>Watch</span>
   </header>
   <h3 class="goal-title">Get down to 70 kg</h3>
@@ -394,7 +406,7 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
       <div><dt>This week</dt><dd>Last 7 days 3/4 times · spent 35m</dd></div>
     </dl>
   </div>
-  <div class="next"><span class="k">Next</span><span class="id mono">G02.T01</span><span class="t">Strength session (A/B alternating)</span><span class="mono est">40m</span></div>
+  <div class="next"><span class="k">Next</span><span class="id mono">G03.T01</span><span class="t">Strength session (A/B alternating)</span><span class="mono est">40m</span></div>
   
   <div class="activity"><div class="strip" role="img" aria-label="last 14 days: 4h"><span class="b zero" style="--h:0%" title="09-01 · no time logged"></span><span class="b zero" style="--h:0%" title="09-02 · no time logged"></span><span class="b" style="--h:40%" title="09-03 · 40m · 1 done"></span><span class="b zero" style="--h:0%" title="09-04 · no time logged"></span><span class="b" style="--h:35%" title="09-05 · 35m · 1 done"></span><span class="b" style="--h:12%" title="09-06 · 5m · 1 done"></span><span class="b" style="--h:40%" title="09-07 · 40m · 1 done"></span><span class="b zero" style="--h:0%" title="09-08 · no time logged"></span><span class="b" style="--h:40%" title="09-09 · 40m · 1 done"></span><span class="b zero" style="--h:0%" title="09-10 · no time logged"></span><span class="b zero" style="--h:0%" title="09-11 · no time logged"></span><span class="b" style="--h:40%" title="09-12 · 40m · 1 done"></span><span class="b" style="--h:12%" title="09-13 · 5m · 1 done"></span><span class="b" style="--h:35%" title="09-14 · 35m · 1 done"></span></div><span class="cap">last 14 days: 4h</span></div>
   <details class="more">
@@ -410,9 +422,9 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
     
   </div>
 </details>
-</article><article class="goal s-warn" id="G04">
+</article><article class="goal s-warn" id="G05">
   <header class="goal-head">
-    <div class="ident"><span class="gid mono">G04</span><span class="type">Learning</span><span class="pri mono">P2</span><span class="area">Learning</span></div>
+    <div class="ident"><span class="gid mono">G05</span><span class="type">Learning</span><span class="pri mono">P2</span><span class="area">Learning</span></div>
     <span class="pill warn"><i aria-hidden="true"></i>Watch</span>
   </header>
   <h3 class="goal-title">Finish the Rust Book</h3>
@@ -424,7 +436,7 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
       <div><dt>This week</dt><dd>Spent 0m / budget 3.5h · 0 done</dd></div>
     </dl>
   </div>
-  <div class="next"><span class="k">Next</span><span class="id mono">G04.T02</span><span class="t">Read chapter 6 and do the exercises</span><span class="mono est">90m</span></div>
+  <div class="next"><span class="k">Next</span><span class="id mono">G05.T02</span><span class="t">Read chapter 6 and do the exercises</span><span class="mono est">90m</span></div>
   <ul class="risks"><li>8 days without progress</li></ul>
   <div class="activity"><div class="strip" role="img" aria-label="last 14 days: 1h40m"><span class="b zero" style="--h:0%" title="09-01 · no time logged"></span><span class="b zero" style="--h:0%" title="09-02 · no time logged"></span><span class="b zero" style="--h:0%" title="09-03 · no time logged"></span><span class="b zero" style="--h:0%" title="09-04 · no time logged"></span><span class="b zero" style="--h:0%" title="09-05 · no time logged"></span><span class="b" style="--h:100%" title="09-06 · 1h40m · 1 done"></span><span class="b zero" style="--h:0%" title="09-07 · no time logged"></span><span class="b zero" style="--h:0%" title="09-08 · no time logged"></span><span class="b zero" style="--h:0%" title="09-09 · no time logged"></span><span class="b zero" style="--h:0%" title="09-10 · no time logged"></span><span class="b zero" style="--h:0%" title="09-11 · no time logged"></span><span class="b zero" style="--h:0%" title="09-12 · no time logged"></span><span class="b zero" style="--h:0%" title="09-13 · no time logged"></span><span class="b zero" style="--h:0%" title="09-14 · no time logged"></span></div><span class="cap">last 14 days: 1h40m</span></div>
   <details class="more">
@@ -440,9 +452,9 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
     
   </div>
 </details>
-</article><article class="goal s-ok" id="G01">
+</article><article class="goal s-ok" id="G02">
   <header class="goal-head">
-    <div class="ident"><span class="gid mono">G01</span><span class="type">Project</span><span class="pri mono">P1</span><span class="area">Career</span></div>
+    <div class="ident"><span class="gid mono">G02</span><span class="type">Project</span><span class="pri mono">P1</span><span class="area">Career</span></div>
     <span class="pill ok"><i aria-hidden="true"></i>On track</span>
   </header>
   <h3 class="goal-title">Ship budgeting app v1</h3>
@@ -454,7 +466,7 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
       <div><dt>This week</dt><dd>Spent 1h / budget 8h · 0 done</dd></div>
     </dl>
   </div>
-  <div class="next"><span class="k">Next</span><span class="id mono">G01.T03</span><span class="t">Implement local expense CRUD</span><span class="mono est">120m</span></div>
+  <div class="next"><span class="k">Next</span><span class="id mono">G02.T03</span><span class="t">Implement local expense CRUD</span><span class="mono est">120m</span></div>
   <ul class="risks"><li>T04 deferred 3 times</li><li>T06 waiting on Sam for 3 days</li></ul>
   <div class="activity"><div class="strip" role="img" aria-label="last 14 days: 4h45m"><span class="b zero" style="--h:0%" title="09-01 · no time logged"></span><span class="b" style="--h:90%" title="09-02 · 1h30m · 1 done"></span><span class="b zero" style="--h:0%" title="09-03 · no time logged"></span><span class="b" style="--h:75%" title="09-04 · 1h15m · 2 done"></span><span class="b zero" style="--h:0%" title="09-05 · no time logged"></span><span class="b zero" style="--h:0%" title="09-06 · no time logged"></span><span class="b zero" style="--h:0%" title="09-07 · no time logged"></span><span class="b zero" style="--h:0%" title="09-08 · no time logged"></span><span class="b" style="--h:60%" title="09-09 · 1h"></span><span class="b zero" style="--h:0%" title="09-10 · no time logged"></span><span class="b zero" style="--h:0%" title="09-11 · no time logged"></span><span class="b zero" style="--h:0%" title="09-12 · no time logged"></span><span class="b zero" style="--h:0%" title="09-13 · no time logged"></span><span class="b" style="--h:60%" title="09-14 · 1h"></span></div><span class="cap">last 14 days: 4h45m</span></div>
   <details class="more">
@@ -470,9 +482,9 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
     <h4>Decisions</h4><ul class="decisions"><li><span class="mono">09-13 D01</span> Drop multi-currency support<small>Reason: keep v1 focused</small></li></ul>
   </div>
 </details>
-</article><article class="goal s-ok" id="G05">
+</article><article class="goal s-ok" id="G06">
   <header class="goal-head">
-    <div class="ident"><span class="gid mono">G05</span><span class="type">Errand</span><span class="pri mono">P3</span><span class="area">Life</span></div>
+    <div class="ident"><span class="gid mono">G06</span><span class="type">Errand</span><span class="pri mono">P3</span><span class="area">Life</span></div>
     <span class="pill ok"><i aria-hidden="true"></i>On track</span>
   </header>
   <h3 class="goal-title">Buy a monitor arm</h3>
@@ -507,14 +519,15 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
     <aside class="side">
       <section class="attention box-panel" aria-labelledby="att-h">
         <div class="panel-head"><h2 id="att-h">Needs attention</h2><span class="mono count">5</span></div>
-        <ul><li class="att crit"><span class="tag">Risk</span><div><a class="id mono" href="#G03">G03</a><span class="t">Land a new-grad offer</span><p>Last 7 days 3/10 apps</p></div></li><li class="att warn"><span class="tag">Watch</span><div><a class="id mono" href="#G02">G02</a><span class="t">Get down to 70 kg</span><p>Last 7 days 3/4 times</p></div></li><li class="att warn"><span class="tag">Watch</span><div><a class="id mono" href="#G04">G04</a><span class="t">Finish the Rust Book</span><p>Actual 25% / expected 11% (pace ratio 2.33); 8 days without progress</p></div></li><li class="att note"><span class="tag">Note</span><div><a class="id mono" href="#G01">G01</a><span class="t">Ship budgeting app v1</span><p>T04 deferred 3 times; T06 waiting on Sam for 3 days</p></div></li><li class="att done"><span class="tag">Close?</span><div><a class="id mono" href="#G05">G05</a><span class="t">Buy a monitor arm</span><p>All actions done — confirm whether to close the goal</p></div></li></ul>
+        <ul><li class="att crit"><span class="tag">Risk</span><div><a class="id mono" href="#G04">G04</a><span class="t">Land a new-grad offer</span><p>Last 7 days 3/10 apps</p></div></li><li class="att warn"><span class="tag">Watch</span><div><a class="id mono" href="#G03">G03</a><span class="t">Get down to 70 kg</span><p>Last 7 days 3/4 times</p></div></li><li class="att warn"><span class="tag">Watch</span><div><a class="id mono" href="#G05">G05</a><span class="t">Finish the Rust Book</span><p>Actual 25% / expected 11% (pace ratio 2.33); 8 days without progress</p></div></li><li class="att note"><span class="tag">Note</span><div><a class="id mono" href="#G02">G02</a><span class="t">Ship budgeting app v1</span><p>T04 deferred 3 times; T06 waiting on Sam for 3 days</p></div></li><li class="att done"><span class="tag">Close?</span><div><a class="id mono" href="#G06">G06</a><span class="t">Buy a monitor arm</span><p>All actions done — confirm whether to close the goal</p></div></li></ul>
       </section>
       <section class="minor box-panel"><div class="panel-head"><h2>Inbox</h2><span class="mono count">2</span></div><ul><li>2026-09-03 Build a personal website</li><li>2026-09-10 Get a driver&#x27;s license before year end?</li></ul></section>
       
+      <section class="completed box-panel" aria-labelledby="done-h"><div class="panel-head"><h2 id="done-h">Completed</h2><span class="mono count">1</span></div><ul><li><div class="c-head"><span class="c-check" aria-hidden="true">✓</span><span class="t">Launch a portfolio site</span><span class="type">Project</span></div><p class="c-meta mono">08-01 → 08-22 · 22 days · spent 3h30m · 2 actions done</p><p class="c-dw">Site live with 3 case studies</p></li></ul></section>
     </aside>
   </main>
 
-  <footer class="foot">Read-only view · generated by mishu.py at 2026-09-15 11:11 · to change anything, just talk to Mishu</footer>
+  <footer class="foot">Read-only view · generated by mishu.py at 2026-09-15 12:19 · to change anything, just talk to Mishu</footer>
 </div>
 </body>
 </html>

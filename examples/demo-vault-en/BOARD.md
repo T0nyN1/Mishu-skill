@@ -5,51 +5,51 @@ Updated 2026-09-14 Mon · week 38 · this week 2h35m / capacity 25h
 🟢 2　🟡 2　🔴 1　⏸ 0
 
 ## ⚠️ Needs attention
-- 🔴 G03 Land a new-grad offer — Last 7 days 3/10 apps
-- 🟡 G02 Get down to 70 kg — Last 7 days 3/4 times
-- 🟡 G04 Finish the Rust Book — Actual 25% / expected 11% (pace ratio 2.33); 8 days without progress
-- 🟢 G01 Ship budgeting app v1 — T04 deferred 3 times; T06 waiting on Sam for 3 days
-- 🎉 G05 Buy a monitor arm — All actions done — confirm whether to close the goal
+- 🔴 G04 Land a new-grad offer — Last 7 days 3/10 apps
+- 🟡 G03 Get down to 70 kg — Last 7 days 3/4 times
+- 🟡 G05 Finish the Rust Book — Actual 25% / expected 11% (pace ratio 2.33); 8 days without progress
+- 🟢 G02 Ship budgeting app v1 — T04 deferred 3 times; T06 waiting on Sam for 3 days
+- 🎉 G06 Buy a monitor arm — All actions done — confirm whether to close the goal
 
 ## 🎯 Goals overview
 | ID | Goal | Type | Progress | Pace | Due | This week | Next |
 |---|---|---|---|---|---|---|---|
-| G03 | Land a new-grad offer | 🎯 | ▓▓▓░░░░░░░ 33% | 🔴 | 11-15! | 3/10 apps | T03 Apply to 5 targ… |
-| G02 | Get down to 70 kg | 🔁 | ▓▓░░░░░░░░ 24% | 🟡 | — | 3/4 times | T01 Strength sessio… |
-| G04 | Finish the Rust Book | 📚 | ▓▓░░░░░░░░ 25% | 🟡 | 12-31 | 0h/3.5h | T02 Read chapter 6 … |
-| G01 | Ship budgeting app v1 | 🏗 | ▓▓░░░░░░░░ 25% | 🟢 | 11-30! | 1h/8h | T03 Implement local… |
-| G05 | Buy a monitor arm | 📦 | ▓▓▓▓▓▓▓▓▓▓ 100% | 🟢 | 09-20 | 0.2h/0.5h | — |
+| G04 | Land a new-grad offer | 🎯 | ▓▓▓░░░░░░░ 33% | 🔴 | 11-15! | 3/10 apps | T03 Apply to 5 targ… |
+| G03 | Get down to 70 kg | 🔁 | ▓▓░░░░░░░░ 24% | 🟡 | — | 3/4 times | T01 Strength sessio… |
+| G05 | Finish the Rust Book | 📚 | ▓▓░░░░░░░░ 25% | 🟡 | 12-31 | 0h/3.5h | T02 Read chapter 6 … |
+| G02 | Ship budgeting app v1 | 🏗 | ▓▓░░░░░░░░ 25% | 🟢 | 11-30! | 1h/8h | T03 Implement local… |
+| G06 | Buy a monitor arm | 📦 | ▓▓▓▓▓▓▓▓▓▓ 100% | 🟢 | 09-20 | 0.2h/0.5h | — |
 
 ## 🗂 Goal cards
-### 🎯 G03 Land a new-grad offer · P0 · Career
+### 🎯 G04 Land a new-grad offer · P0 · Career
 - **Progress** ▓▓▓░░░░░░░ 33% (M2 Apply in volume in progress; funnel: Applied 3 → Screened 1 → Interview 0 → Offer 0/1)
 - **Pace** 🔴 Last 7 days 3/10 apps
 - **This week** Last 7 days 3/10 apps · spent 50m
-- **Next** G03.T03 Apply to 5 target companies · 45m
+- **Next** G04.T03 Apply to 5 target companies · 45m
 - **Risks** —
 
-### 🔁 G02 Get down to 70 kg · P1 · Health
+### 🔁 G03 Get down to 70 kg · P1 · Health
 - **Progress** ▓▓░░░░░░░░ 24% (76.1kg, baseline 78 → target 70)
 - **Pace** 🟡 Last 7 days 3/4 times
 - **This week** Last 7 days 3/4 times · spent 35m
-- **Next** G02.T01 Strength session (A/B alternating) · 40m
+- **Next** G03.T01 Strength session (A/B alternating) · 40m
 - **Risks** —
 
-### 📚 G04 Finish the Rust Book · P2 · Learning
+### 📚 G05 Finish the Rust Book · P2 · Learning
 - **Progress** ▓▓░░░░░░░░ 25% (Mastered 5/20 chapters · studied 5)
 - **Pace** 🟡 Actual 25% / expected 11% (pace ratio 2.33)
 - **This week** Spent 0m / budget 3.5h · 0 done
-- **Next** G04.T02 Read chapter 6 and do the exercises · 90m
+- **Next** G05.T02 Read chapter 6 and do the exercises · 90m
 - **Risks** 8 days without progress
 
-### 🏗 G01 Ship budgeting app v1 · P1 · Career
+### 🏗 G02 Ship budgeting app v1 · P1 · Career
 - **Progress** ▓▓░░░░░░░░ 25% (M2 Core expense tracking in progress)
 - **Pace** 🟢 Actual 25% / expected 14% (pace ratio 1.73)
 - **This week** Spent 1h / budget 8h · 0 done
-- **Next** G01.T03 Implement local expense CRUD · 120m
+- **Next** G02.T03 Implement local expense CRUD · 120m
 - **Risks** T04 deferred 3 times; T06 waiting on Sam for 3 days
 
-### 📦 G05 Buy a monitor arm · P3 · Life
+### 📦 G06 Buy a monitor arm · P3 · Life
 - **Progress** ▓▓▓▓▓▓▓▓▓▓ 100% (2/2 items)
 - **Pace** 🟢 Done
 - **This week** Spent 10m / budget 0.5h · 1 done
@@ -61,3 +61,6 @@ Updated 2026-09-14 Mon · week 38 · this week 2h35m / capacity 25h
 
 ## ⏸ Paused / 💭 Someday / 📝 Drafts
 (none)
+
+## ✅ Completed
+- ✅ G01 🏗 Launch a portfolio site — 08-01 → 08-22 · 22 days · spent 3h30m · 2 actions done

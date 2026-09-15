@@ -1,5 +1,5 @@
 ---
-id: G05
+id: G06
 title: Buy a monitor arm
 type: errand
 area: Life

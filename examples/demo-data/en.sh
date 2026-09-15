@@ -1,5 +1,19 @@
 # English demo data — sourced by build_demo.sh (uses $CLI, $VAULT and on()).
-on 2026-09-01 $CLI init --vault "$VAULT" --lang en --name Alex --capacity 25h --daily 3h --weekend 5h --wip 5 --tone coach
+on 2026-08-01 $CLI init --vault "$VAULT" --lang en --name Alex --capacity 25h --daily 3h --weekend 5h --wip 5 --tone coach
+
+# ── a goal finished in August, so the "Completed" panel has something to show
+on 2026-08-01 $CLI add-goal --file - <<'JSON'
+{"title": "Launch a portfolio site", "type": "project", "area": "Career", "priority": "P2",
+ "start": "2026-08-01", "deadline": "2026-08-31", "budget": "4h/w",
+ "why": "Have one link to send with applications", "done_when": "Site live with 3 case studies",
+ "phases": [{"title": "Build and publish", "due": "2026-08-25"}],
+ "tasks": [{"title": "Pick a template and deploy it", "est": "90m", "phase": "M1"},
+           {"title": "Write 3 case studies", "est": "120m", "phase": "M1"}]}
+JSON
+on 2026-08-05 $CLI log G01.T01 --result done --time 90m --evidence link --note "deployed to alex.dev"
+on 2026-08-18 $CLI log G01.T02 --result done --time 2h --evidence link --note "3 case studies published"
+on 2026-08-18 $CLI phase done G01.M1 --evidence link
+on 2026-08-22 $CLI set G01 status done --confirmed --reason "Live at alex.dev with 3 case studies"
 
 on 2026-09-01 $CLI add-goal --file - <<'JSON'
 {"title": "Ship budgeting app v1", "type": "project", "area": "Career", "priority": "P1",
@@ -57,36 +71,36 @@ JSON
 on 2026-09-03 $CLI inbox add "Build a personal website"
 on 2026-09-10 $CLI inbox add "Get a driver's license before year end?"
 
-on 2026-09-02 $CLI log G01.T01 --result done --time 90m --evidence code --note "commit 3f2a1c wireframes in docs/"
-on 2026-09-03 $CLI log G02.T01 --result done --time 40m --evidence verbal
-on 2026-09-04 $CLI log G01.T02 --result done --time 75m --evidence code --note "commit 8b7d02 SwiftUI+SwiftData scaffold"
-on 2026-09-04 $CLI phase done G01.M1 --evidence code --note "wireframes and scaffold verified"
-on 2026-09-05 $CLI log G03.T01 --result done --time 90m --evidence link --note "résumé v3 uploaded"
-on 2026-09-05 $CLI phase done G03.M1 --evidence link
-on 2026-09-05 $CLI log G02.T01 --result done --time 35m --evidence verbal
-on 2026-09-06 $CLI log G04.T01 --result done --time 100m --evidence link --note "exercises in rust-book/ch05"
-on 2026-09-06 $CLI units G04 --done 5 --mastered 5 --evidence link
-on 2026-09-06 $CLI log G02.T02 --result done --time 5m --evidence photo
-on 2026-09-06 $CLI metric G02 77.2 --evidence photo --note "scale photo checked"
-on 2026-09-07 $CLI log G02.T01 --result done --time 40m --evidence verbal
-on 2026-09-08 $CLI log G03.T02 --result skip --reason U --note "no idea which companies to target"
-on 2026-09-09 $CLI log G01.T03 --result partial --time 60m --reason O --evidence code --note "commit c41e9a model layer done, UI not wired"
-on 2026-09-09 $CLI log G02.T01 --result done --time 40m --evidence verbal
-on 2026-09-10 $CLI log G03.T02 --result skip --reason U
-on 2026-09-10 $CLI funnel G03 Applied +3 --evidence link --note "application screenshots"
-on 2026-09-10 $CLI log G01.T04 --result moved --reason T
-on 2026-09-11 $CLI task set G01.T06 blocked --wait Sam
-on 2026-09-11 $CLI log G05.T01 --result done --time 20m --evidence verbal
-on 2026-09-12 $CLI log G01.T04 --result skip --reason U --note "not sure where to start comparing"
-on 2026-09-12 $CLI log G02.T01 --result done --time 40m --evidence verbal
-on 2026-09-13 $CLI log G02.T02 --result done --time 5m --evidence photo
-on 2026-09-13 $CLI metric G02 76.4 --evidence photo --note "scale photo checked, not stored"
-on 2026-09-13 $CLI funnel G03 Screened +1 --evidence link --note "recruiter email"
-on 2026-09-13 $CLI decide G01 "Drop multi-currency support" --reason "keep v1 focused" --revisit 2026-12-01
+on 2026-09-02 $CLI log G02.T01 --result done --time 90m --evidence code --note "commit 3f2a1c wireframes in docs/"
+on 2026-09-03 $CLI log G03.T01 --result done --time 40m --evidence verbal
+on 2026-09-04 $CLI log G02.T02 --result done --time 75m --evidence code --note "commit 8b7d02 SwiftUI+SwiftData scaffold"
+on 2026-09-04 $CLI phase done G02.M1 --evidence code --note "wireframes and scaffold verified"
+on 2026-09-05 $CLI log G04.T01 --result done --time 90m --evidence link --note "résumé v3 uploaded"
+on 2026-09-05 $CLI phase done G04.M1 --evidence link
+on 2026-09-05 $CLI log G03.T01 --result done --time 35m --evidence verbal
+on 2026-09-06 $CLI log G05.T01 --result done --time 100m --evidence link --note "exercises in rust-book/ch05"
+on 2026-09-06 $CLI units G05 --done 5 --mastered 5 --evidence link
+on 2026-09-06 $CLI log G03.T02 --result done --time 5m --evidence photo
+on 2026-09-06 $CLI metric G03 77.2 --evidence photo --note "scale photo checked"
+on 2026-09-07 $CLI log G03.T01 --result done --time 40m --evidence verbal
+on 2026-09-08 $CLI log G04.T02 --result skip --reason U --note "no idea which companies to target"
+on 2026-09-09 $CLI log G02.T03 --result partial --time 60m --reason O --evidence code --note "commit c41e9a model layer done, UI not wired"
+on 2026-09-09 $CLI log G03.T01 --result done --time 40m --evidence verbal
+on 2026-09-10 $CLI log G04.T02 --result skip --reason U
+on 2026-09-10 $CLI funnel G04 Applied +3 --evidence link --note "application screenshots"
+on 2026-09-10 $CLI log G02.T04 --result moved --reason T
+on 2026-09-11 $CLI task set G02.T06 blocked --wait Sam
+on 2026-09-11 $CLI log G06.T01 --result done --time 20m --evidence verbal
+on 2026-09-12 $CLI log G02.T04 --result skip --reason U --note "not sure where to start comparing"
+on 2026-09-12 $CLI log G03.T01 --result done --time 40m --evidence verbal
+on 2026-09-13 $CLI log G03.T02 --result done --time 5m --evidence photo
+on 2026-09-13 $CLI metric G03 76.4 --evidence photo --note "scale photo checked, not stored"
+on 2026-09-13 $CLI funnel G04 Screened +1 --evidence link --note "recruiter email"
+on 2026-09-13 $CLI decide G02 "Drop multi-currency support" --reason "keep v1 focused" --revisit 2026-12-01
 
-on 2026-09-14 $CLI plan --hours 4 --energy 3 --main G03.T02,G01.T04 --habit G02.T01 --errand G05.T02 --advice-file - <<'JSON' >/dev/null
-[{"category": "adjust", "goal": "G03", "title": "Applications are behind pace", "level": "L2",
-  "facts": "Last 7 days: 3/10 applications; G03.T02 deferred twice, both times reason U (unclear which companies)",
+on 2026-09-14 $CLI plan --hours 4 --energy 3 --main G04.T02,G02.T04 --habit G03.T01 --errand G06.T02 --advice-file - <<'JSON' >/dev/null
+[{"category": "adjust", "goal": "G04", "title": "Applications are behind pace", "level": "L2",
+  "facts": "Last 7 days: 3/10 applications; G04.T02 deferred twice, both times reason U (unclear which companies)",
   "judgment": "The bottleneck is the missing target list, not time",
   "options": [{"label": "A", "text": "Spend 45m on the list today; keep next week's quota", "cost": "1–2 fewer applications this week"},
               {"label": "B", "text": "Lower the quota to 6 per week", "cost": "Offer likely ~2 weeks later"}],
@@ -94,19 +108,19 @@ on 2026-09-14 $CLI plan --hours 4 --energy 3 --main G03.T02,G01.T04 --habit G02.
 JSON
 
 on 2026-09-14 $CLI checkin \
-  --item "G03.T02|done|50m||link|22 companies saved in Notion" \
-  --item "G01.T04|skip||U||still unsure how to compare" \
-  --item "G02.T01|done|35m||verbal|" \
-  --item "G05.T02|done|10m||verbal|ordered, arrives Wednesday" \
-  --item "G01.T03|partial|60m|O|code|sub-agent verified commit e19f55: list view wired, edit view missing" \
-  --tomorrow "G01.T03,G03.T03" \
+  --item "G04.T02|done|50m||link|22 companies saved in Notion" \
+  --item "G02.T04|skip||U||still unsure how to compare" \
+  --item "G03.T01|done|35m||verbal|" \
+  --item "G06.T02|done|10m||verbal|ordered, arrives Wednesday" \
+  --item "G02.T03|partial|60m|O|code|sub-agent verified commit e19f55: list view wired, edit view missing" \
+  --tomorrow "G02.T03,G04.T03" \
   --summary "Good day — the application block finally cleared" \
   --advice-file - <<'JSON' >/dev/null
-{"category": "coach", "goal": "G01", "title": "Stuck on the iCloud sync research", "level": "L2",
- "facts": "G01.T04 deferred 3 times; 2 of them with reason U (unclear where to start)",
+{"category": "coach", "goal": "G02", "title": "Stuck on the iCloud sync research", "level": "L2",
+ "facts": "G02.T04 deferred 3 times; 2 of them with reason U (unclear where to start)",
  "judgment": "The task is too vague: “compare 3 options” has no concrete first step or output format",
  "options": [{"label": "A", "text": "Split it: ① 25m list CloudKit / Core Data+CloudKit / a third-party SDK with doc links ② 30m fill a cost/complexity/offline table", "cost": "One more breakdown step; no extra work today"},
              {"label": "B", "text": "Skip sync in v1 and move it after M3", "cost": "No multi-device sync at launch; may hurt early retention"}],
  "recommend": "A", "recommend_reason": "sync is core; only the task definition is unclear", "ask": "Reply A or B and I'll update the plan"}
 JSON
-on 2026-09-14 $CLI metric G02 76.1 --evidence verbal --note "no photo today; verbal report" >/dev/null
+on 2026-09-14 $CLI metric G03 76.1 --evidence verbal --note "no photo today; verbal report" >/dev/null

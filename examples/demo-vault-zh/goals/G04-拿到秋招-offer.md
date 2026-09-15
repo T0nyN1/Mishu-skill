@@ -1,5 +1,5 @@
 ---
-id: G03
+id: G04
 title: 拿到秋招 offer
 type: pipeline
 area: 事业

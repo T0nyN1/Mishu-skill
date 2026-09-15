@@ -146,7 +146,7 @@ ZH = {
     "Every option needs label, text and cost": "每个选项都需要 label、text、cost（代价）",
     "With options, recommend is required and must be one of the option labels": "有选项时必须给出 recommend，且必须是某个选项的 label",
     "{lvl} advice needs a user decision, so it must include options": "{lvl} 级建议需要用户决定，必须提供选项",
-    "Facts": "事实", "Diagnosis": "判断", "Options": "选项", "Cost:": "代价：", "Recommended": "推荐",
+    "Facts": "事实", "Diagnosis": "判断", "Options": "选项", "Cost: {c}": "代价：{c}", "Recommended": "推荐",
     "Your call": "需要你",
     "At most {n} advice cards here (keep the highest levels)": "此处最多 {n} 张建议卡（按级别保留最重要的）",
 
@@ -352,6 +352,21 @@ ZH = {
     "Tomorrow": "明日预排",
     "In one line": "一句话",
     "✅ Check-in written to daily/{f}; goal files and board updated": "✅ 晚间回顾已写入 daily/{f}，目标文件与看板已更新",
+
+    # ── completed goals
+    "Completed": "已完成",
+    "{span} · {d} days · spent {t} · {n} actions done": "{span} · 用时 {d} 天 · 投入 {t} · 完成 {n} 项行动",
+    "{n} in total — run `mishu.py done` to see all": "共 {n} 个，运行 `mishu.py done` 查看全部",
+    "✅ Completed goals: {n} (look back with `done`)": "✅ 已完成目标 {n} 个（可用 `done` 回溯）",
+    "✅ Completed goals: {n}": "✅ 已完成目标 {n} 个",
+    "no completed goals yet": "暂无已完成的目标",
+    "Closing note: {v}": "结项说明：{v}",
+    "{n} more — ask Mishu to look back at completed goals": "还有 {n} 个，对秘书说「看看已完成的目标」",
+    "after {ref}": "需先完成 {ref}",
+    "📥 Inbox renumbered — pending items are now:": "📥 收件箱已重新编号，当前待处理：",
+    "Your call: {a}": "需要你：{a}",
+    "Reason: {r}": "原因：{r}",
+    "({r})": "（{r}）",
 
     # ── dashboard
     "{name}’s Mishu desk": "{name}的秘书台",

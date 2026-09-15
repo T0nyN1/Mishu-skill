@@ -1,5 +1,5 @@
 ---
-id: G04
+id: G05
 title: 学完 Rust Book
 type: learning
 area: 学习

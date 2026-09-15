@@ -119,7 +119,7 @@ def goal_details(g):
                     f'<td title="{e(_t(EVIDENCE_NAME[lg["evidence"]])) if lg["evidence"] in EVIDENCE_NAME else ""}">{e(lg["evidence"])}</td>'
                     f'<td>{reason}{e(note)}</td></tr>')
     decisions = "".join(f'<li><span class="mono">{e(d["date"][5:])} {e(d["did"])}</span> {e(d["text"])}'
-                        + (f'<small>{e(_t("Reason"))}: {e(d["reason"])}</small>' if d["reason"] else "") + "</li>"
+                        + (f'<small>{e(_t("Reason: {r}", r=d["reason"]))}</small>' if d["reason"] else "") + "</li>"
                         for d in g["decisions"])
     phases = "".join(f'<li class="ph {e(p.get("status"))}"><span class="mono">{e(p.get("id"))}</span> {e(p.get("title"))}'
                      f'<small class="mono">{e((p.get("due") or "")[5:])}</small></li>' for p in g["phases"])
@@ -240,21 +240,37 @@ def advice_block(advice):
     cards = []
     for a in advice:
         opts = "".join(f'<li class="{"rec" if o["label"] == a.get("recommend") else ""}"><b class="mono">{e(o["label"])}</b>'
-                       f'<div><p>{e(o["text"])}</p><p class="cost">{e(_t("Cost:"))} {e(o["cost"])}</p></div></li>'
+                       f'<div><p>{e(o["text"])}</p><p class="cost">{e(_t("Cost: {c}", c=o["cost"]))}</p></div></li>'
                        for o in a.get("options") or [])
         rec = ""
         if a.get("recommend"):
-            reason = (": " + e(a["recommend_reason"])) if a.get("recommend_reason") else ""
-            rec = f'<p class="rec-line">{e(_t("Recommended"))} <b class="mono">{e(a["recommend"])}</b>{reason}</p>'
+            reason = e(_t("({r})", r=a["recommend_reason"])) if a.get("recommend_reason") else ""
+            rec = f'<p class="rec-line">{e(_t("Recommended"))} <b class="mono">{e(a["recommend"])}</b> {reason}</p>'
         cards.append(f"""<article class="advice">
   <header><span class="aid mono">{e(a["id"])}</span><span class="cat">{e(a.get("category_label") or a["category"])}</span><span class="lvl mono">{e(a["level"])}</span></header>
   <h3><span class="goal-ref">{e(a.get("goal_label") or a["goal"])}</span>{e(a["title"])}</h3>
   <dl><div><dt>{e(_t("Facts"))}</dt><dd>{e(a["facts"])}</dd></div><div><dt>{e(_t("Diagnosis"))}</dt><dd>{e(a["judgment"])}</dd></div></dl>
   {f'<ol class="opts">{opts}</ol>' if opts else ""}
   {rec}
-  <p class="ask">{e(_t("Your call"))}: {e(a["ask"])}</p>
+  <p class="ask">{e(_t("Your call: {a}", a=a["ask"]))}</p>
 </article>""")
     return f'<section class="advice-list" aria-labelledby="adv-h"><h2 id="adv-h">{e(_t("Mishu’s advice"))}</h2>{"".join(cards)}</section>'
+
+
+def completed_block(done, limit=6):
+    if not done:
+        return ""
+    items = "".join(
+        f'<li><div class="c-head"><span class="c-check" aria-hidden="true">✓</span>'
+        f'<span class="t">{e(c["title"])}</span><span class="type">{e(c["type_label"])}</span></div>'
+        f'<p class="c-meta mono">{e(c["line"])}</p>'
+        + (f'<p class="c-dw">{e(c["done_when"])}</p>' if c["done_when"] else "") + "</li>"
+        for c in done[:limit])
+    more = (f'<p class="c-more">{e(_t("{n} more — ask Mishu to look back at completed goals", n=len(done) - limit))}</p>'
+            if len(done) > limit else "")
+    return (f'<section class="completed box-panel" aria-labelledby="done-h"><div class="panel-head">'
+            f'<h2 id="done-h">{e(_t("Completed"))}</h2><span class="mono count">{len(done)}</span></div>'
+            f'<ul>{items}</ul>{more}</section>')
 
 
 def welcome_block():
@@ -339,6 +355,7 @@ def render(v, tr):
       </section>
       {f'<section class="minor box-panel"><div class="panel-head"><h2>{e(_t("Inbox"))}</h2><span class="mono count">{len(v["inbox"])}</span></div><ul>{inbox}</ul></section>' if inbox else ""}
       {f'<section class="minor box-panel"><div class="panel-head"><h2>{e(_t("Paused · Someday · Drafts"))}</h2></div><ul>{others}</ul></section>' if others else ""}
+      {completed_block(v.get("completed") or [])}
     </aside>
   </main>
 
@@ -588,6 +605,18 @@ h2{font:600 17px/1.3 var(--serif);letter-spacing:.03em}
 .minor .lbl{font-size:11.5px;color:var(--muted);margin-left:6px}
 .foot{margin-top:40px;padding-top:14px;border-top:1px solid var(--rule);font-size:12px;color:var(--faint)}
 
+/* completed goals */
+.completed ul{margin-top:4px}
+.completed li{padding:10px 0;border-bottom:1px solid var(--rule)}
+.completed li:last-child{border-bottom:0;padding-bottom:0}
+.c-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.c-check{color:var(--ok);font-weight:700}
+.c-head .t{font-weight:500}
+.c-head .type{margin-left:auto;font-size:11.5px;color:var(--muted);border:1px solid var(--rule-strong);border-radius:4px;padding:0 5px;line-height:18px}
+.c-meta{margin:3px 0 0;font-size:12px;color:var(--muted)}
+.c-dw{margin:3px 0 0;font-size:12.5px;color:var(--faint)}
+.c-more{margin:10px 0 0;font-size:12px;color:var(--muted)}
+
 /* English typography */
 html[lang="en"]{--serif:"Source Serif 4",Georgia,"Times New Roman",serif;--sans:"IBM Plex Sans",-apple-system,"Segoe UI",system-ui,sans-serif}
 html[lang="en"] .advice dl div{grid-template-columns:72px minmax(0,1fr)}
@@ -610,7 +639,7 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
   /* narrow: welcome → today → attention → advice → goals → inbox */
   .layout{display:flex;flex-direction:column;gap:20px}
   .primary,.side{display:contents}
-  .welcome{order:0} .today{order:1} .attention{order:2} .advice-list{order:3} .goals{order:4} .minor{order:5}
+  .welcome{order:0} .today{order:1} .attention{order:2} .advice-list{order:3} .goals{order:4} .minor{order:5} .completed{order:6}
   .side{position:static;max-height:none}
 }
 @media (max-width: 560px){

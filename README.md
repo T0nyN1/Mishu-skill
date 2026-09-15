@@ -43,6 +43,7 @@ Existing AI planners either auto-schedule your calendar or track a single habit.
 | **Coach mode** | Works out where you're stuck (unclear, avoiding, blocked, doubting, overloaded), then offers ≤3 routes, each with its cost and a recommendation. |
 | **Anti-drift rules** | After 3 deferrals, a task stops being scheduled and gets broken down instead. Idle goals turn yellow, then red. New goals can't exceed your capacity. |
 | **Web dashboard** | A read-only, single-file HTML page with an expected-progress marker and a 14-day activity strip. Light and dark themes, works on mobile. |
+| **Completed history** | Finished goals are archived with their completion date. The dashboard lists a short brief for each (dates, days taken, time spent, definition of done), and `done` lets you look back at all of them. |
 | **Bilingual** | Set `lang: en` or `zh` per vault. Files written in either language keep working after you switch. |
 
 ## Quick start
@@ -88,6 +89,7 @@ Talk naturally in English or Chinese, or use `/mishu <subcommand>`:
 | "Let's review today" | goes item by item for results, evidence and reasons; writes back; pre-plans tomorrow |
 | "I keep avoiding this research task" | coach mode: diagnosis, then an advice card |
 | "Open the dashboard" | opens `dashboard.html` in your browser |
+| "What have I finished so far?" | lists completed goals with dates, duration and time spent |
 
 ## How it works
 

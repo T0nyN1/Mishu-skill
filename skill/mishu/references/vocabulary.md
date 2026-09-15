@@ -114,6 +114,7 @@ Section headers follow the vault language (`## Actions` / `## 行动`, …). mis
 Field notes:
 - **`status`:** optional; defaults to `active` (`someday` and `draft` also work).
 - **`start`:** defaults to today. **`review`:** defaults to `weekly`.
+- **`completed`:** never set in a draft. mishu.py stamps it when the goal is set to `done` and removes it if the goal is reopened.
 - **`phases`:** numbered M1, M2… in order; the first is `active`.
 - **`tasks`:** numbered T01, T02… in order; `phase` refers to `"M1"`-style IDs.
 - **`verify`:** optional; the type's default is used. If only `repo` is given, it becomes `method=repo, when=every`.

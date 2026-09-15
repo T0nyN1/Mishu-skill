@@ -245,6 +245,18 @@ h2{font:600 17px/1.3 var(--serif);letter-spacing:.03em}
 .minor .lbl{font-size:11.5px;color:var(--muted);margin-left:6px}
 .foot{margin-top:40px;padding-top:14px;border-top:1px solid var(--rule);font-size:12px;color:var(--faint)}
 
+/* completed goals */
+.completed ul{margin-top:4px}
+.completed li{padding:10px 0;border-bottom:1px solid var(--rule)}
+.completed li:last-child{border-bottom:0;padding-bottom:0}
+.c-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.c-check{color:var(--ok);font-weight:700}
+.c-head .t{font-weight:500}
+.c-head .type{margin-left:auto;font-size:11.5px;color:var(--muted);border:1px solid var(--rule-strong);border-radius:4px;padding:0 5px;line-height:18px}
+.c-meta{margin:3px 0 0;font-size:12px;color:var(--muted)}
+.c-dw{margin:3px 0 0;font-size:12.5px;color:var(--faint)}
+.c-more{margin:10px 0 0;font-size:12px;color:var(--muted)}
+
 /* English typography */
 html[lang="en"]{--serif:"Source Serif 4",Georgia,"Times New Roman",serif;--sans:"IBM Plex Sans",-apple-system,"Segoe UI",system-ui,sans-serif}
 html[lang="en"] .advice dl div{grid-template-columns:72px minmax(0,1fr)}
@@ -267,7 +279,7 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
   /* narrow: welcome → today → attention → advice → goals → inbox */
   .layout{display:flex;flex-direction:column;gap:20px}
   .primary,.side{display:contents}
-  .welcome{order:0} .today{order:1} .attention{order:2} .advice-list{order:3} .goals{order:4} .minor{order:5}
+  .welcome{order:0} .today{order:1} .attention{order:2} .advice-list{order:3} .goals{order:4} .minor{order:5} .completed{order:6}
   .side{position:static;max-height:none}
 }
 @media (max-width: 560px){
@@ -306,53 +318,53 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
   <div class="groups">
     <div class="grp g-main"><h3>主线<small>最多 3 项</small></h3><ul><li class="item has-r ok">
   <span class="box ok" aria-label="✓">✓</span>
-  <div class="it"><div class="line"><span class="id mono">G03.T02</span><span class="t">整理目标公司清单（20 家）</span></div>
+  <div class="it"><div class="line"><span class="id mono">G04.T02</span><span class="t">整理目标公司清单（20 家）</span></div>
   <div class="sub">清单 22 家已存到 Notion</div></div>
   <span class="time mono">50m</span>
 </li><li class="item has-r crit">
   <span class="box crit" aria-label="✗">✗</span>
-  <div class="it"><div class="line"><span class="id mono">G01.T04</span><span class="t">调研 3 种 iCloud 同步方案并写对比表</span></div>
+  <div class="it"><div class="line"><span class="id mono">G02.T04</span><span class="t">调研 3 种 iCloud 同步方案并写对比表</span></div>
   <div class="sub">原因 U 不清楚 · 还是不知道从哪比较</div></div>
   <span class="time mono">45m</span>
 </li></ul></div><div class="grp g-habit"><h3>习惯</h3><ul><li class="item has-r ok">
   <span class="box ok" aria-label="✓">✓</span>
-  <div class="it"><div class="line"><span class="id mono">G02.T01</span><span class="t">力量训练 A/B 组交替</span></div>
+  <div class="it"><div class="line"><span class="id mono">G03.T01</span><span class="t">力量训练 A/B 组交替</span></div>
   <div class="sub">近7天 2/4</div></div>
   <span class="time mono">35m</span>
 </li></ul></div><div class="grp g-errand"><h3>事务</h3><ul><li class="item has-r ok">
   <span class="box ok" aria-label="✓">✓</span>
-  <div class="it"><div class="line"><span class="id mono">G05.T02</span><span class="t">下单</span></div>
+  <div class="it"><div class="line"><span class="id mono">G06.T02</span><span class="t">下单</span></div>
   <div class="sub">已下单，周三到货</div></div>
   <span class="time mono">10m</span>
 </li></ul></div>
-    <div class="grp g-wait"><h3>等待 / 跟进</h3><ul class="wait"><li>G01.T06 请设计朋友出 App 图标（等小王，已 3 天） → 建议今天跟进</li></ul></div>
+    <div class="grp g-wait"><h3>等待 / 跟进</h3><ul class="wait"><li>G02.T06 请设计朋友出 App 图标（等小王，已 3 天） → 建议今天跟进</li></ul></div>
   </div>
   <div class="review">
   <h3>晚间回顾</h3>
   <p class="stats mono">完成 3/4 · 主线 1/2 · 投入 2h35m</p>
-  <ul class="extra"><li><span class="box warn">◐</span><span class="id mono">G01.T03</span> 子代理核验 commit e19f55：列表页已接数据，编辑页未做<small class="tag-extra">计划外</small></li></ul>
-  <dl><div><dt>明日预排</dt><dd class="mono">G01.T03 · G03.T03</dd></div>
+  <ul class="extra"><li><span class="box warn">◐</span><span class="id mono">G02.T03</span> 子代理核验 commit e19f55：列表页已接数据，编辑页未做<small class="tag-extra">计划外</small></li></ul>
+  <dl><div><dt>明日预排</dt><dd class="mono">G02.T03 · G04.T03</dd></div>
   <div><dt>一句话</dt><dd>今天效率不错，投递的心结解开了</dd></div></dl>
 </div>
 </section><section class="advice-list" aria-labelledby="adv-h"><h2 id="adv-h">秘书建议</h2><article class="advice">
   <header><span class="aid mono">A0914-1</span><span class="cat">调整</span><span class="lvl mono">L2</span></header>
-  <h3><span class="goal-ref">G03 拿到秋招 offer</span>投递节奏落后</h3>
-  <dl><div><dt>事实</dt><dd>近7天投递 3/10 家；G03.T02 推迟 2 次，原因都是 U（不清楚投哪家）</dd></div><div><dt>判断</dt><dd>瓶颈是缺少目标公司清单，不是时间不够</dd></div></dl>
-  <ol class="opts"><li class="rec"><b class="mono">A</b><div><p>今天先花 45m 建清单，下周配额不变</p><p class="cost">代价： 本周投递数再少 1-2 家</p></div></li><li class=""><b class="mono">B</b><div><p>配额降到 6 家/周</p><p class="cost">代价： 预计拿到 offer 的时间推迟约 2 周</p></div></li></ol>
-  <p class="rec-line">推荐 <b class="mono">A</b>: 已排进今日主线</p>
-  <p class="ask">需要你: 回复 A 或 B</p>
+  <h3><span class="goal-ref">G04 拿到秋招 offer</span>投递节奏落后</h3>
+  <dl><div><dt>事实</dt><dd>近7天投递 3/10 家；G04.T02 推迟 2 次，原因都是 U（不清楚投哪家）</dd></div><div><dt>判断</dt><dd>瓶颈是缺少目标公司清单，不是时间不够</dd></div></dl>
+  <ol class="opts"><li class="rec"><b class="mono">A</b><div><p>今天先花 45m 建清单，下周配额不变</p><p class="cost">代价：本周投递数再少 1-2 家</p></div></li><li class=""><b class="mono">B</b><div><p>配额降到 6 家/周</p><p class="cost">代价：预计拿到 offer 的时间推迟约 2 周</p></div></li></ol>
+  <p class="rec-line">推荐 <b class="mono">A</b> （已排进今日主线）</p>
+  <p class="ask">需要你：回复 A 或 B</p>
 </article><article class="advice">
   <header><span class="aid mono">A0914-2</span><span class="cat">教练</span><span class="lvl mono">L2</span></header>
-  <h3><span class="goal-ref">G01 上线记账 App v1</span>iCloud 同步调研卡住了</h3>
-  <dl><div><dt>事实</dt><dd>G01.T04 已推迟 3 次，其中 2 次原因是 U（不清楚从哪开始）</dd></div><div><dt>判断</dt><dd>任务太模糊：「调研 3 种方案」没有明确的第一步和产出格式</dd></div></dl>
-  <ol class="opts"><li class="rec"><b class="mono">A</b><div><p>拆成两步：① 25m 列出 CloudKit/Core Data+CloudKit/第三方 3 个候选及官方文档链接 ② 30m 按“成本/复杂度/离线支持”填对比表</p><p class="cost">代价： 多一次拆解，今天不增加工作量</p></div></li><li class=""><b class="mono">B</b><div><p>v1 先不做同步，挪到 M3 之后</p><p class="cost">代价： 上架时没有多设备同步，可能影响前 10 个用户的留存</p></div></li></ol>
-  <p class="rec-line">推荐 <b class="mono">A</b>: 同步是核心体验，只是任务定义不清</p>
-  <p class="ask">需要你: 回复 A 或 B，我来更新计划</p>
+  <h3><span class="goal-ref">G02 上线记账 App v1</span>iCloud 同步调研卡住了</h3>
+  <dl><div><dt>事实</dt><dd>G02.T04 已推迟 3 次，其中 2 次原因是 U（不清楚从哪开始）</dd></div><div><dt>判断</dt><dd>任务太模糊：「调研 3 种方案」没有明确的第一步和产出格式</dd></div></dl>
+  <ol class="opts"><li class="rec"><b class="mono">A</b><div><p>拆成两步：① 25m 列出 CloudKit/Core Data+CloudKit/第三方 3 个候选及官方文档链接 ② 30m 按“成本/复杂度/离线支持”填对比表</p><p class="cost">代价：多一次拆解，今天不增加工作量</p></div></li><li class=""><b class="mono">B</b><div><p>v1 先不做同步，挪到 M3 之后</p><p class="cost">代价：上架时没有多设备同步，可能影响前 10 个用户的留存</p></div></li></ol>
+  <p class="rec-line">推荐 <b class="mono">A</b> （同步是核心体验，只是任务定义不清）</p>
+  <p class="ask">需要你：回复 A 或 B，我来更新计划</p>
 </article></section><section class="goals" aria-labelledby="goals-h">
         <div class="sec-head"><h2 id="goals-h">目标</h2><span class="legend"><span class="expect-key"></span>按时间应有的进度</span></div>
-        <article class="goal s-crit" id="G03">
+        <article class="goal s-crit" id="G04">
   <header class="goal-head">
-    <div class="ident"><span class="gid mono">G03</span><span class="type">漏斗型</span><span class="pri mono">P0</span><span class="area">事业</span></div>
+    <div class="ident"><span class="gid mono">G04</span><span class="type">漏斗型</span><span class="pri mono">P0</span><span class="area">事业</span></div>
     <span class="pill crit"><i aria-hidden="true"></i>风险</span>
   </header>
   <h3 class="goal-title">拿到秋招 offer</h3>
@@ -364,7 +376,7 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
       <div><dt>本周</dt><dd>近7天 3/10 家 · 投入 50m</dd></div>
     </dl>
   </div>
-  <div class="next"><span class="k">下一步</span><span class="id mono">G03.T03</span><span class="t">投递 5 家目标公司</span><span class="mono est">45m</span></div>
+  <div class="next"><span class="k">下一步</span><span class="id mono">G04.T03</span><span class="t">投递 5 家目标公司</span><span class="mono est">45m</span></div>
   
   <div class="activity"><div class="strip" role="img" aria-label="近 14 天 · 2h20m"><span class="b zero" style="--h:0%" title="09-01 · 无投入"></span><span class="b zero" style="--h:0%" title="09-02 · 无投入"></span><span class="b zero" style="--h:0%" title="09-03 · 无投入"></span><span class="b zero" style="--h:0%" title="09-04 · 无投入"></span><span class="b" style="--h:90%" title="09-05 · 1h30m · 完成 2"></span><span class="b zero" style="--h:0%" title="09-06 · 无投入"></span><span class="b zero" style="--h:0%" title="09-07 · 无投入"></span><span class="b zero" style="--h:0%" title="09-08 · 无投入"></span><span class="b zero" style="--h:0%" title="09-09 · 无投入"></span><span class="b zero" style="--h:0%" title="09-10 · 无投入"></span><span class="b zero" style="--h:0%" title="09-11 · 无投入"></span><span class="b zero" style="--h:0%" title="09-12 · 无投入"></span><span class="b zero" style="--h:0%" title="09-13 · 无投入"></span><span class="b" style="--h:50%" title="09-14 · 50m · 完成 1"></span></div><span class="cap">近 14 天 · 2h20m</span></div>
   <details class="more">
@@ -380,9 +392,9 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
     
   </div>
 </details>
-</article><article class="goal s-warn" id="G02">
+</article><article class="goal s-warn" id="G03">
   <header class="goal-head">
-    <div class="ident"><span class="gid mono">G02</span><span class="type">习惯型</span><span class="pri mono">P1</span><span class="area">健康</span></div>
+    <div class="ident"><span class="gid mono">G03</span><span class="type">习惯型</span><span class="pri mono">P1</span><span class="area">健康</span></div>
     <span class="pill warn"><i aria-hidden="true"></i>注意</span>
   </header>
   <h3 class="goal-title">减到 70kg</h3>
@@ -394,7 +406,7 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
       <div><dt>本周</dt><dd>近7天 3/4 次 · 投入 35m</dd></div>
     </dl>
   </div>
-  <div class="next"><span class="k">下一步</span><span class="id mono">G02.T01</span><span class="t">力量训练 A/B 组交替</span><span class="mono est">40m</span></div>
+  <div class="next"><span class="k">下一步</span><span class="id mono">G03.T01</span><span class="t">力量训练 A/B 组交替</span><span class="mono est">40m</span></div>
   
   <div class="activity"><div class="strip" role="img" aria-label="近 14 天 · 4h"><span class="b zero" style="--h:0%" title="09-01 · 无投入"></span><span class="b zero" style="--h:0%" title="09-02 · 无投入"></span><span class="b" style="--h:40%" title="09-03 · 40m · 完成 1"></span><span class="b zero" style="--h:0%" title="09-04 · 无投入"></span><span class="b" style="--h:35%" title="09-05 · 35m · 完成 1"></span><span class="b" style="--h:12%" title="09-06 · 5m · 完成 1"></span><span class="b" style="--h:40%" title="09-07 · 40m · 完成 1"></span><span class="b zero" style="--h:0%" title="09-08 · 无投入"></span><span class="b" style="--h:40%" title="09-09 · 40m · 完成 1"></span><span class="b zero" style="--h:0%" title="09-10 · 无投入"></span><span class="b zero" style="--h:0%" title="09-11 · 无投入"></span><span class="b" style="--h:40%" title="09-12 · 40m · 完成 1"></span><span class="b" style="--h:12%" title="09-13 · 5m · 完成 1"></span><span class="b" style="--h:35%" title="09-14 · 35m · 完成 1"></span></div><span class="cap">近 14 天 · 4h</span></div>
   <details class="more">
@@ -410,9 +422,9 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
     
   </div>
 </details>
-</article><article class="goal s-warn" id="G04">
+</article><article class="goal s-warn" id="G05">
   <header class="goal-head">
-    <div class="ident"><span class="gid mono">G04</span><span class="type">学习型</span><span class="pri mono">P2</span><span class="area">学习</span></div>
+    <div class="ident"><span class="gid mono">G05</span><span class="type">学习型</span><span class="pri mono">P2</span><span class="area">学习</span></div>
     <span class="pill warn"><i aria-hidden="true"></i>注意</span>
   </header>
   <h3 class="goal-title">学完 Rust Book</h3>
@@ -424,7 +436,7 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
       <div><dt>本周</dt><dd>投入 0m / 预算 3.5h · 完成 0 项</dd></div>
     </dl>
   </div>
-  <div class="next"><span class="k">下一步</span><span class="id mono">G04.T02</span><span class="t">读第 6 章并完成练习</span><span class="mono est">90m</span></div>
+  <div class="next"><span class="k">下一步</span><span class="id mono">G05.T02</span><span class="t">读第 6 章并完成练习</span><span class="mono est">90m</span></div>
   <ul class="risks"><li>已 8 天未推进</li></ul>
   <div class="activity"><div class="strip" role="img" aria-label="近 14 天 · 1h40m"><span class="b zero" style="--h:0%" title="09-01 · 无投入"></span><span class="b zero" style="--h:0%" title="09-02 · 无投入"></span><span class="b zero" style="--h:0%" title="09-03 · 无投入"></span><span class="b zero" style="--h:0%" title="09-04 · 无投入"></span><span class="b zero" style="--h:0%" title="09-05 · 无投入"></span><span class="b" style="--h:100%" title="09-06 · 1h40m · 完成 1"></span><span class="b zero" style="--h:0%" title="09-07 · 无投入"></span><span class="b zero" style="--h:0%" title="09-08 · 无投入"></span><span class="b zero" style="--h:0%" title="09-09 · 无投入"></span><span class="b zero" style="--h:0%" title="09-10 · 无投入"></span><span class="b zero" style="--h:0%" title="09-11 · 无投入"></span><span class="b zero" style="--h:0%" title="09-12 · 无投入"></span><span class="b zero" style="--h:0%" title="09-13 · 无投入"></span><span class="b zero" style="--h:0%" title="09-14 · 无投入"></span></div><span class="cap">近 14 天 · 1h40m</span></div>
   <details class="more">
@@ -440,9 +452,9 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
     
   </div>
 </details>
-</article><article class="goal s-ok" id="G01">
+</article><article class="goal s-ok" id="G02">
   <header class="goal-head">
-    <div class="ident"><span class="gid mono">G01</span><span class="type">项目型</span><span class="pri mono">P1</span><span class="area">事业</span></div>
+    <div class="ident"><span class="gid mono">G02</span><span class="type">项目型</span><span class="pri mono">P1</span><span class="area">事业</span></div>
     <span class="pill ok"><i aria-hidden="true"></i>正常</span>
   </header>
   <h3 class="goal-title">上线记账 App v1</h3>
@@ -454,7 +466,7 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
       <div><dt>本周</dt><dd>投入 1h / 预算 8h · 完成 0 项</dd></div>
     </dl>
   </div>
-  <div class="next"><span class="k">下一步</span><span class="id mono">G01.T03</span><span class="t">实现账目 CRUD 本地存储</span><span class="mono est">120m</span></div>
+  <div class="next"><span class="k">下一步</span><span class="id mono">G02.T03</span><span class="t">实现账目 CRUD 本地存储</span><span class="mono est">120m</span></div>
   <ul class="risks"><li>T04 已推迟 3 次</li><li>T06 等待小王 3 天</li></ul>
   <div class="activity"><div class="strip" role="img" aria-label="近 14 天 · 4h45m"><span class="b zero" style="--h:0%" title="09-01 · 无投入"></span><span class="b" style="--h:90%" title="09-02 · 1h30m · 完成 1"></span><span class="b zero" style="--h:0%" title="09-03 · 无投入"></span><span class="b" style="--h:75%" title="09-04 · 1h15m · 完成 2"></span><span class="b zero" style="--h:0%" title="09-05 · 无投入"></span><span class="b zero" style="--h:0%" title="09-06 · 无投入"></span><span class="b zero" style="--h:0%" title="09-07 · 无投入"></span><span class="b zero" style="--h:0%" title="09-08 · 无投入"></span><span class="b" style="--h:60%" title="09-09 · 1h"></span><span class="b zero" style="--h:0%" title="09-10 · 无投入"></span><span class="b zero" style="--h:0%" title="09-11 · 无投入"></span><span class="b zero" style="--h:0%" title="09-12 · 无投入"></span><span class="b zero" style="--h:0%" title="09-13 · 无投入"></span><span class="b" style="--h:60%" title="09-14 · 1h"></span></div><span class="cap">近 14 天 · 4h45m</span></div>
   <details class="more">
@@ -467,12 +479,12 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
     <h4>最近日志</h4>
     <div class="table-wrap"><table class="logs"><thead><tr><th>日期</th><th>事项</th><th>结果</th><th>用时/数值</th><th>证据</th><th>备注</th></tr></thead>
     <tbody><tr><td class="mono">09-14</td><td class="mono">T03</td><td class="r warn">◐</td><td class="mono">1h</td><td title="代码核验">🔍</td><td><span class="rc" title="低估工作量">O</span>子代理核验 commit e19f55：列表页已接数据，编辑页未做</td></tr><tr><td class="mono">09-14</td><td class="mono">T04</td><td class="r crit">✗</td><td class="mono"></td><td title=""></td><td><span class="rc" title="不清楚">U</span>还是不知道从哪比较</td></tr><tr><td class="mono">09-12</td><td class="mono">T04</td><td class="r crit">✗</td><td class="mono"></td><td title=""></td><td><span class="rc" title="不清楚">U</span>不知道从哪开始比较</td></tr><tr><td class="mono">09-10</td><td class="mono">T04</td><td class="r idle">➜</td><td class="mono"></td><td title=""></td><td><span class="rc" title="没时间">T</span></td></tr><tr><td class="mono">09-09</td><td class="mono">T03</td><td class="r warn">◐</td><td class="mono">1h</td><td title="代码核验">🔍</td><td><span class="rc" title="低估工作量">O</span>commit c41e9a 模型层完成，UI 未接</td></tr><tr><td class="mono">09-04</td><td class="mono">M1</td><td class="r ok">✓</td><td class="mono"></td><td title="代码核验">🔍</td><td>线框图与骨架均已核验</td></tr><tr><td class="mono">09-04</td><td class="mono">T02</td><td class="r ok">✓</td><td class="mono">1h15m</td><td title="代码核验">🔍</td><td>commit 8b7d02 SwiftUI+SwiftData 骨架</td></tr><tr><td class="mono">09-02</td><td class="mono">T01</td><td class="r ok">✓</td><td class="mono">1h30m</td><td title="代码核验">🔍</td><td>commit 3f2a1c 线框图提交到 docs/</td></tr><tr><td class="mono">09-01</td><td class="mono">创建</td><td class="r ">=</td><td class="mono"></td><td title="系统">⚙️</td><td>目标创建（active）</td></tr></tbody></table></div>
-    <h4>决策</h4><ul class="decisions"><li><span class="mono">09-13 D01</span> 砍掉多币种支持<small>原因: v1 聚焦核心记账</small></li></ul>
+    <h4>决策</h4><ul class="decisions"><li><span class="mono">09-13 D01</span> 砍掉多币种支持<small>原因：v1 聚焦核心记账</small></li></ul>
   </div>
 </details>
-</article><article class="goal s-ok" id="G05">
+</article><article class="goal s-ok" id="G06">
   <header class="goal-head">
-    <div class="ident"><span class="gid mono">G05</span><span class="type">事务型</span><span class="pri mono">P3</span><span class="area">生活</span></div>
+    <div class="ident"><span class="gid mono">G06</span><span class="type">事务型</span><span class="pri mono">P3</span><span class="area">生活</span></div>
     <span class="pill ok"><i aria-hidden="true"></i>正常</span>
   </header>
   <h3 class="goal-title">买显示器支架</h3>
@@ -507,14 +519,15 @@ html[lang="en"] .att{grid-template-columns:56px minmax(0,1fr)}
     <aside class="side">
       <section class="attention box-panel" aria-labelledby="att-h">
         <div class="panel-head"><h2 id="att-h">需要关注</h2><span class="mono count">5</span></div>
-        <ul><li class="att crit"><span class="tag">风险</span><div><a class="id mono" href="#G03">G03</a><span class="t">拿到秋招 offer</span><p>近7天 3/10 家</p></div></li><li class="att warn"><span class="tag">注意</span><div><a class="id mono" href="#G02">G02</a><span class="t">减到 70kg</span><p>近7天 3/4 次</p></div></li><li class="att warn"><span class="tag">注意</span><div><a class="id mono" href="#G04">G04</a><span class="t">学完 Rust Book</span><p>实际 25% / 应有 11%（节奏比 2.33）；已 8 天未推进</p></div></li><li class="att note"><span class="tag">备注</span><div><a class="id mono" href="#G01">G01</a><span class="t">上线记账 App v1</span><p>T04 已推迟 3 次；T06 等待小王 3 天</p></div></li><li class="att done"><span class="tag">待结束</span><div><a class="id mono" href="#G05">G05</a><span class="t">买显示器支架</span><p>行动已全部完成，待确认是否结束目标</p></div></li></ul>
+        <ul><li class="att crit"><span class="tag">风险</span><div><a class="id mono" href="#G04">G04</a><span class="t">拿到秋招 offer</span><p>近7天 3/10 家</p></div></li><li class="att warn"><span class="tag">注意</span><div><a class="id mono" href="#G03">G03</a><span class="t">减到 70kg</span><p>近7天 3/4 次</p></div></li><li class="att warn"><span class="tag">注意</span><div><a class="id mono" href="#G05">G05</a><span class="t">学完 Rust Book</span><p>实际 25% / 应有 11%（节奏比 2.33）；已 8 天未推进</p></div></li><li class="att note"><span class="tag">备注</span><div><a class="id mono" href="#G02">G02</a><span class="t">上线记账 App v1</span><p>T04 已推迟 3 次；T06 等待小王 3 天</p></div></li><li class="att done"><span class="tag">待结束</span><div><a class="id mono" href="#G06">G06</a><span class="t">买显示器支架</span><p>行动已全部完成，待确认是否结束目标</p></div></li></ul>
       </section>
       <section class="minor box-panel"><div class="panel-head"><h2>收件箱</h2><span class="mono count">2</span></div><ul><li>2026-09-03 想做一个个人网站</li><li>2026-09-10 年底前考个驾照？</li></ul></section>
       
+      <section class="completed box-panel" aria-labelledby="done-h"><div class="panel-head"><h2 id="done-h">已完成</h2><span class="mono count">1</span></div><ul><li><div class="c-head"><span class="c-check" aria-hidden="true">✓</span><span class="t">上线个人作品集网站</span><span class="type">项目型</span></div><p class="c-meta mono">08-01 → 08-22 · 用时 22 天 · 投入 3h30m · 完成 2 项行动</p><p class="c-dw">网站上线，并包含 3 个项目案例</p></li></ul></section>
     </aside>
   </main>
 
-  <footer class="foot">只读视图 · 由 mishu.py 于 2026-09-15 11:11 生成 · 修改数据请直接和秘书对话</footer>
+  <footer class="foot">只读视图 · 由 mishu.py 于 2026-09-15 12:19 生成 · 修改数据请直接和秘书对话</footer>
 </div>
 </body>
 </html>

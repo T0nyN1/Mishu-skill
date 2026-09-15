@@ -1,5 +1,5 @@
 ---
-id: G04
+id: G05
 title: Finish the Rust Book
 type: learning
 area: Learning

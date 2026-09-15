@@ -48,7 +48,7 @@ Decide the intent from the user's input and the situation above. **Read the matc
 | Evening check-in | "done for today"; "let's review" | `~/.claude/skills/mishu/workflows/checkin.md` |
 | Report progress | "T05 is done"; uploads a photo of a scale; "applied to 3" | `~/.claude/skills/mishu/workflows/log.md` |
 | Stuck or unsure | "I don't want to do it"; "no idea how"; "should I quit" | `~/.claude/skills/mishu/workflows/stuck.md` |
-| View or manage | board, progress, inbox, pause or finish a goal | `~/.claude/skills/mishu/workflows/status.md` |
+| View or manage | board, progress, inbox, pause or finish a goal, look back at completed goals | `~/.claude/skills/mishu/workflows/status.md` |
 
 Additional rules:
 - **Empty vault:** if the situation shows NOT CONFIGURED or an empty vault, run setup first. Never pre-fill goals, and never copy anything from the repo's examples.
@@ -150,6 +150,7 @@ Full protocol: `references/evidence.md`. The essentials:
 | `context` | Situation summary (injected above) |
 | `status [GID] [--json]` | All goals, or one goal in detail (actions, log, decisions) |
 | `board [--print] [--open]` | Regenerate BOARD.md + dashboard.html; `--open` opens it in a browser |
+| `done [--limit N] [--json]` | Look back at completed goals (dates, duration, time spent, closing note) |
 | `validate` | Validate the vault |
 | `stats [--days N] [--gid GID]` | Results, reason codes, evidence mix, plan completion |
 | `init --vault PATH --lang en\|zh --set-default …` | Create an empty vault (setup only) |

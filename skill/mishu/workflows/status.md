@@ -9,6 +9,7 @@
 | Everything | `status` |
 | Recent performance | `stats --days 7` or `stats --days 14` |
 | The inbox | `inbox list` |
+| Completed goals ("what have I finished?") | `done` (add `--limit 5` for the latest). The dashboard's "Completed" panel shows the same briefs |
 
 Show mishu.py output as-is. You may add 1–3 sentences of interpretation, but **never rewrite the numbers**.
 
@@ -18,7 +19,7 @@ Show mishu.py output as-is. You may add 1–3 sentences of interpretation, but *
 |---|---|
 | Pause | `set G06 status paused --confirmed --reason "…" --revisit 2026-10-15` |
 | Resume | `set G06 status active --confirmed --reason "…"` (capacity is re-checked) |
-| Finish | `set G05 status done --confirmed --reason "definition of done met: …"` (archived automatically) |
+| Finish | `set G05 status done --confirmed --reason "definition of done met: …"` (archived automatically; the completion date is stamped and the reason becomes the closing note shown in `done` and on the dashboard) |
 | Drop | `set G07 status dropped --confirmed --reason "…"` (archived, decision kept) |
 | Change deadline or budget | `set G01 deadline 2026-12-15! --confirmed --reason "…"` |
 | Change priority | `set G04 priority P1 --confirmed --reason "…"` |

@@ -35,6 +35,13 @@ HABIT = {
 }
 
 
+ERRAND = {
+    "title": "Buy a keyboard", "type": "errand", "area": "Life", "priority": "P3", "start": "2026-09-01",
+    "deadline": "2026-09-25", "budget": "0.5h/w", "done_when": "Keyboard on my desk",
+    "tasks": [{"title": "Compare 3 keyboards", "est": "30m"}, {"title": "Place the order", "est": "10m"}],
+}
+
+
 class Base(unittest.TestCase):
     LANG = "en"
 
@@ -211,8 +218,70 @@ class TestMetricsAndPlan(Base):
         self.assertIn("A0910-1 [Adjust] global", self.run_cli("advice", "--file", "-", stdin=json.dumps(card)).stdout)
 
 
+class TestFixes(Base):
+    def test_candidates_keep_action_order_within_a_goal(self):
+        self.add(ERRAND)
+        c = json.loads(self.run_cli("candidates", "--hours", "0.5", "--energy", "3", "--json").stdout)
+        picks = {i["ref"]: bool(i.get("pick")) for i in c["errand"]}
+        self.assertFalse(picks["G01.T01"])          # 30m doesn't fit into the 21m cap…
+        self.assertFalse(picks["G01.T02"])          # …so "place the order" must not jump ahead of it
+        later = next(i for i in c["errand"] if i["ref"] == "G01.T02")
+        self.assertIn("after G01.T01", later["why"])
+        c = json.loads(self.run_cli("candidates", "--hours", "1", "--energy", "3", "--json").stdout)
+        self.assertTrue(all(i.get("pick") for i in c["errand"]))
+
+    def test_inbox_renumbering_is_shown(self):
+        self.run_cli("inbox", "add", "first")
+        self.run_cli("inbox", "add", "second")
+        out = self.run_cli("inbox", "done", "--n", "1").stdout
+        self.assertIn("1. ", out)
+        self.assertIn("second", out)
+
+
+class TestCompleted(Base):
+    def finish_errand(self):
+        self.add(ERRAND)
+        self.run_cli("log", "G01.T01", "--result", "done", "--time", "30m", "--evidence", "verbal", today="2026-09-05")
+        self.run_cli("log", "G01.T02", "--result", "done", "--time", "10m", "--evidence", "verbal", today="2026-09-06")
+        self.run_cli("set", "G01", "status", "done", "--confirmed", "--reason", "keyboard arrived", today="2026-09-08")
+
+    def test_done_goal_is_stamped_archived_and_listed(self):
+        self.finish_errand()
+        archived = next((self.vault / "goals" / "_archive").glob("G01-*.md")).read_text("utf-8")
+        self.assertIn("completed: 2026-09-08", archived)
+        out = self.run_cli("done").stdout
+        self.assertIn("G01", out)
+        self.assertIn("09-01 → 09-08 · 8 days · spent 40m · 2 actions done", out)
+        self.assertIn("Closing note: keyboard arrived", out)
+        data = json.loads(self.run_cli("done", "--json").stdout)
+        self.assertEqual(data[0]["completed"], "2026-09-08")
+
+    def test_completed_goals_on_board_and_dashboard(self):
+        self.finish_errand()
+        self.run_cli("board")
+        board = (self.vault / "BOARD.md").read_text("utf-8")
+        self.assertIn("## ✅ Completed", board)
+        self.assertIn("✅ G01 📦 Buy a keyboard", board)
+        html = (self.vault / "dashboard.html").read_text("utf-8")
+        self.assertIn('class="completed box-panel"', html)
+        self.assertIn("Keyboard on my desk", html)
+
+    def test_reopening_clears_completion_date(self):
+        self.finish_errand()
+        self.run_cli("task", "add", "G01", "Buy a wrist rest", "--est", "15m", today="2026-09-09")
+        self.run_cli("set", "G01", "status", "active", "--confirmed", "--reason", "one more thing", today="2026-09-09")
+        self.assertNotIn("completed:", self.goal_file("G01").read_text("utf-8"))
+
+
 class TestChinese(Base):
     LANG = "zh"
+
+    def test_chinese_advice_card_has_no_stray_space(self):
+        card = {"category": "adjust", "goal": "全局", "title": "测试", "level": "L2", "facts": "f", "judgment": "j",
+                "options": [{"label": "A", "text": "方案", "cost": "少一点"}], "recommend": "A", "ask": "回复 A"}
+        out = self.run_cli("advice", "--file", "-", stdin=json.dumps(card, ensure_ascii=False)).stdout
+        self.assertIn("代价：少一点", out)
+        self.assertIn("需要你", out)
 
     def test_outputs_follow_vault_language(self):
         self.add(dict(PROJECT, title="测试项目", area="事业"))
