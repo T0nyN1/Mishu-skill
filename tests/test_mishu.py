@@ -238,6 +238,51 @@ class TestFixes(Base):
         self.assertIn("second", out)
 
 
+class TestDashboardUI(Base):
+    """The dashboard is a view: it shows today's main items, and its ticks never reach the vault."""
+
+    def html(self):
+        return (self.vault / "dashboard.html").read_text("utf-8")
+
+    def test_today_shows_main_items_only_with_checkboxes(self):
+        self.add(PROJECT)
+        self.add(HABIT)
+        self.run_cli("plan", "--hours", "4", "--energy", "3", "--main", "G01.T01", "--habit", "G02.T01")
+        html = self.html()
+        today = html[html.index('class="today'):html.index('<section class="goals')]
+        self.assertIn('data-scope="day" data-ref="G01.T01"', today)
+        self.assertNotIn("G02.T01", today)            # habits stay in the daily file
+        self.assertNotIn("Evening check-in", today)
+        self.assertIn("Run", (self.vault / "daily" / "2026-09-10.md").read_text("utf-8"))
+
+    def test_goal_details_drop_evidence_and_number_actions(self):
+        self.add(PROJECT)
+        html = self.html()
+        self.assertNotIn("Evidence", html)
+        self.assertNotIn(">T01<", html)               # actions are numbered, not called T01
+        self.assertIn('<span class="n mono">1.</span>', html)
+        self.assertIn('data-scope="task" data-ref="G01.T01"', html)
+
+    def test_advice_options_are_selectable(self):
+        self.add(PROJECT)
+        card = {"category": "adjust", "goal": "G01", "title": "Behind pace", "level": "L2", "facts": "f",
+                "judgment": "j", "options": [{"label": "A", "text": "Cut scope", "cost": "less"},
+                                             {"label": "B", "text": "Extend", "cost": "later"}],
+                "recommend": "A", "ask": "Reply A or B"}
+        self.run_cli("plan", "--hours", "4", "--energy", "3", "--main", "G01.T01",
+                     "--advice-file", "-", stdin=json.dumps([card]))
+        html = self.html()
+        self.assertIn('class="pick"', html)
+        self.assertIn("I pick A — Cut scope", html)
+        self.assertIn('class="adv-reply"', html)
+
+    def test_dashboard_is_the_only_place_ticks_live(self):
+        self.add(PROJECT)
+        self.run_cli("plan", "--hours", "4", "--energy", "3", "--main", "G01.T01")
+        self.assertIn("localStorage", self.html())
+        self.assertNotIn("checked", (self.vault / "goals" / "G01-test-project.md").read_text("utf-8"))
+
+
 class TestCompleted(Base):
     def finish_errand(self):
         self.add(ERRAND)

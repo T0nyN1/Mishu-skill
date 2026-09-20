@@ -13,6 +13,11 @@
 
 Show mishu.py output as-is. You may add 1–3 sentences of interpretation, but **never rewrite the numbers**.
 
+### About the dashboard
+- It holds today's **main** items and the goal cards; habits, errands and the evening check-in live in `daily/YYYY-MM-DD.md` only. If the user misses them there, say so and read them from the daily file.
+- Clicking a goal card opens its phases, actions, activity, log and decisions. Actions are numbered 1. 2. 3.; the full ID (`G01.T05`) is what you cite in chat.
+- Its checkboxes and advice-card options are **read-only conveniences**: ticks stay in the user's browser. The page's "reply to Mishu" button copies a message for them to paste here; only then do you write anything (`workflows/checkin.md` step 2, or `references/advice-card.md` §6).
+
 ## Managing (all structural: explain and get explicit confirmation first)
 
 | Action | Command |

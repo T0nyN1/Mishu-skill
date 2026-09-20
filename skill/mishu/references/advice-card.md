@@ -66,7 +66,23 @@ Chinese aliases (提醒/调整/教练/洞察) are also accepted.
 - **Too many candidates:** keep the highest levels.
 - **One card per issue per day.** If the user ignores a card, raise the issue again only after the state changes (another deferral, or it escalates a level).
 
-## 6. Example
+## 6. When the user picks an option
+
+The user may answer in chat ("A", "选 B"), or paste the dashboard's one-click reply:
+
+> Mishu, about “Applications are behind pace” (A0914-1): I pick A — Spend 45m on the list today; keep next week's quota
+
+Either way:
+1. **Read back the choice in one line** with its cost, so a mis-click is caught before anything is written.
+2. **Apply it**, citing the card ID:
+   - structural (budget, quota, deadline, pause, drop): `set … --confirmed --reason "…" --advice A0914-1`
+   - a breakdown or a new/changed action: `task add` / `task edit`, then `decide GID "…" --advice A0914-1`
+   - nothing to change in the vault (the option is just "do it today"): plan or log it as usual; record `decide` only if it changes how the goal will run.
+3. **Confirm in one sentence**, quoting mishu.py's output. If the option they picked needs information you don't have, ask **one** question first.
+
+A pick is a confirmation for that card only. Don't carry it over to other goals or later cards.
+
+## 7. Example
 
 ```json
 {"category": "coach", "goal": "G01", "title": "Stuck on the iCloud sync research", "level": "L2",
