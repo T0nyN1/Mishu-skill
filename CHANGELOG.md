@@ -5,10 +5,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versio
 ## [Unreleased]
 
 ### Changed
-- **Quieter web dashboard.** Today's list shows the task alone with a toggle for the details; habits, errands and the evening check-in are no longer shown there (they stay in the Markdown daily file). Advice cards moved to the sidebar, the inbox panel is now "Needs your input", goal cards keep five short lines with everything else behind a "Details" toggle, actions are numbered 1. 2. 3. instead of T01, and the evidence method is no longer printed on the card.
+- **Quieter web dashboard.** Today's list shows the task alone with a toggle for the details; habits, errands and the evening check-in are no longer shown there (they stay in the Markdown daily file). Advice cards moved to the sidebar, the inbox panel is now "Needs your input", goal cards keep five short lines and open everything else when you click them, actions are numbered 1. 2. 3. instead of T01, and neither the evidence method nor the funnel breakdown is printed on the card any more.
 
 ### Added
-- **Checkboxes on the dashboard.** Actions and today's items can be ticked off while you work. The state lives in the browser only; a tray offers "reply to Mishu", which copies a ready-made message to paste into the conversation. `mishu.py` is still the only writer.
+- **Checkboxes on the dashboard.** Actions, today's items and the waiting list can be ticked off while you work; ticks are day-scoped, deduplicated per action and kept in the browser only. When at least one is ticked, a tray offers "reply to Mishu", which copies a ready-made message to paste into the conversation.
+- **Selectable advice options.** Pick A, B or C on an advice card and it offers the same one-click reply. `mishu.py` is still the only writer of the vault.
 - **Completed history.** Setting a goal to `done` now stamps a completion date. The board and web dashboard get a "Completed" block with a short brief per goal (dates, days taken, time spent, actions done, definition of done), and the new `done` command lists every completed goal with its closing note. Reopening a goal clears the date.
 - Both demo vaults include a goal completed in August.
 

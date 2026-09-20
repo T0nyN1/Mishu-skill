@@ -5,6 +5,7 @@ Markdown in the vault stays the single source of truth; this module only present
 Checkboxes are a convenience for the reader: they live in the browser's localStorage and are copied back to
 Mishu as text. Nothing here writes to the vault.
 """
+import re
 from html import escape
 
 TASK_GLYPH = {" ": ("○", "todo"), "/": ("◐", "doing"), "x": ("✓", "done"), "!": ("‖", "waiting"), "-": ("✕", "cancelled")}
@@ -81,7 +82,7 @@ def activity_block(act, vmax):
             f'{"".join(bars)}</div><span class="cap">{e(_t("last 14 days: {t}", t=total))}</span></div>')
 
 
-def goal_details(g, vmax):
+def goal_body(g, vmax):
     nums, tasks = {}, []
     for i, t in enumerate(g["tasks"], 1):
         nums[t["tid"]] = i
@@ -113,9 +114,7 @@ def goal_details(g, vmax):
     phases = "".join(f'<li class="ph {e(p.get("status"))}"><span class="mono">{e(p.get("id"))}</span> {e(p.get("title"))}'
                      f'<small class="mono">{e((p.get("due") or "")[5:])}</small></li>' for p in g["phases"])
     heads = "".join(f"<th>{e(_t(h))}</th>" for h in ("Date", "Item", "Result", "Time/value", "Note"))
-    return f"""<details class="more">
-  <summary>{e(_t("Details"))}</summary>
-  <div class="more-body">
+    return f"""<div class="more-body">
     <p class="dw"><span class="k">{e(_t("Definition of done"))}</span>{e(g["done_when"])}</p>
     {f'<ol class="phases">{phases}</ol>' if phases else ""}
     <h4>{e(_t("Actions"))}</h4><ul class="tasks">{"".join(tasks)}</ul>
@@ -124,8 +123,7 @@ def goal_details(g, vmax):
     <div class="table-wrap"><table class="logs"><thead><tr>{heads}</tr></thead>
     <tbody>{"".join(logs)}</tbody></table></div>
     {f'<h4>{e(_t("Decisions"))}</h4><ul class="decisions">{decisions}</ul>' if decisions else ""}
-  </div>
-</details>"""
+  </div>"""
 
 
 def goal_card(g, vmax):
@@ -143,16 +141,27 @@ def goal_card(g, vmax):
     if pace and week.startswith(pace):      # frequency goals: the pace phrase opens the week line too
         week = week[len(pace):].lstrip(" ·")
     facts = sep([pace, dl, week])
-    return f"""<article class="goal s-{g["cls"]}" id="{e(g["gid"])}">
-  <header class="goal-head">
-    <h3 class="goal-title">{e(g["title"])}</h3>
-    {pill(g["cls"], g["label"])}
-  </header>
-  {progress_block(g)}
-  <p class="facts">{e(facts)}</p>
-  <div class="next"><span class="k">{e(_t("Next"))}</span>{nxt}</div>
-  {goal_details(g, vmax)}
-</article>"""
+    return f"""<details class="goal s-{g["cls"]}" id="{e(g["gid"])}">
+  <summary class="goal-face">
+    <div class="goal-head">
+      <h3 class="goal-title">{e(g["title"])}</h3>
+      {pill(g["cls"], g["label"])}<span class="caret" aria-hidden="true">▾</span>
+    </div>
+    {progress_block(g)}
+    <p class="facts">{e(facts)}</p>
+    <div class="next"><span class="k">{e(_t("Next"))}</span>{nxt}</div>
+  </summary>
+  {goal_body(g, vmax)}
+</details>"""
+
+
+def plan_meta(text):
+    """'Available 4h · energy 3/5 · planned 2h20m (cap 2h48m)' → 'planned 2h20m · available 4h'."""
+    parts = [x.strip() for x in text.split(" · ")]
+    if len(parts) != 3:
+        return text
+    planned = parts[2].split("（")[0].split(" (")[0].strip()
+    return sep([parts[0], planned])
 
 
 def daily_block(v, titles):
@@ -184,10 +193,20 @@ def daily_block(v, titles):
   <div class="row-body">{"".join(sub)}</div></details>
 </li>""")
     body = "".join(rows) if rows else f'<li class="none">{e(_t("none"))}</li>'
-    waiting = "".join(f"<li>{e(w)}</li>" for w in d["waiting"] if w.strip("（）() ") not in ("无", "none"))
+    waits = []
+    for w in d["waiting"]:
+        if w.strip("（）() ") in ("无", "none"):
+            continue
+        m = re.match(r"(G\d+\.T\d+)\s+(.*)", w)
+        if m:
+            waits.append(f'<li class="item">{checkbox(m.group(1), m.group(2), False, "wait")}'
+                         f'<span class="t">{e(m.group(2))}</span></li>')
+        else:
+            waits.append(f'<li class="item plain"><span class="t">{e(w)}</span></li>')
+    waiting = "".join(waits)
     return f"""<section class="today box-panel" aria-labelledby="today-h">
   {head}
-  <p class="today-meta mono">{e(d["meta"])}</p>
+  <p class="today-meta mono">{e(plan_meta(d["meta"]))}</p>
   <ul class="items">{body}</ul>
   {f'<div class="wait"><h3>{e(_t("Waiting / follow-up"))}</h3><ul>{waiting}</ul></div>' if waiting else ""}
 </section>"""
@@ -198,9 +217,13 @@ def advice_block(advice):
         return ""
     cards = []
     for a in advice:
-        opts = "".join(f'<li class="{"rec" if o["label"] == a.get("recommend") else ""}"><b class="mono">{e(o["label"])}</b>'
-                       f'<div><p>{e(o["text"])}</p><p class="cost">{e(_t("Cost: {c}", c=o["cost"]))}</p></div></li>'
-                       for o in a.get("options") or [])
+        opts = "".join(
+            f'<li class="{"rec" if o["label"] == a.get("recommend") else ""}"><label>'
+            f'<input type="radio" class="pick" name="pick-{e(a["id"])}" data-card="{e(a["id"])}"'
+            f' data-msg="{e(_t("Mishu, about “{t}” ({id}): I pick {l} — {x}", t=a["title"], id=a["id"], l=o["label"], x=o["text"]))}">'
+            f'<b class="mono">{e(o["label"])}</b>'
+            f'<div><p>{e(o["text"])}</p><p class="cost">{e(_t("Cost: {c}", c=o["cost"]))}</p></div></label></li>'
+            for o in a.get("options") or [])
         rec = ""
         if a.get("recommend"):
             reason = e(_t("({r})", r=a["recommend_reason"])) if a.get("recommend_reason") else ""
@@ -211,6 +234,7 @@ def advice_block(advice):
   {f'<ol class="opts">{opts}</ol>' if opts else ""}
   {rec}
   <p class="ask">{e(_t("Your call: {a}", a=a["ask"]))}</p>
+  {f'<button type="button" class="adv-reply" id="reply-{e(a["id"])}" hidden data-done="{e(_t("Copied"))}">{e(_t("Reply to Mishu"))}</button>' if opts else ""}
   <details class="more"><summary>{e(_t("Facts & diagnosis"))}</summary>
     <div class="more-body"><p>{e(a["facts"])}</p><p>{e(a["judgment"])}</p></div>
   </details>
@@ -348,7 +372,6 @@ JS = r"""
   var tray = document.getElementById("tray");
   var num = document.getElementById("tray-n");
   var btn = document.getElementById("tray-copy");
-  var label = btn ? btn.textContent : "";
   var touched = false;
   function ref(b) { return b.getAttribute("data-ref"); }
   function key(b) { return "mishu:" + date + ":" + ref(b); }          // ticks are a report about today
@@ -369,6 +392,41 @@ JS = r"""
     if (tray) tray.hidden = !touched || n === 0;   // nothing ticked, nothing to report
   }
   function line(b) { return (b.checked ? "✓" : "✗") + " " + ref(b) + " " + (b.getAttribute("data-title") || ""); }
+  function copy(text, button) {
+    var was = button.textContent;
+    function ok() {
+      button.textContent = button.getAttribute("data-done");
+      setTimeout(function () { button.textContent = was; }, 1500);
+    }
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); ok(); } catch (err) {}
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(ok, fallback);
+    } else { fallback(); }
+  }
+  // advice cards: pick an option, then hand the choice back to Mishu
+  [].slice.call(document.querySelectorAll("input.pick")).forEach(function (r) {
+    r.addEventListener("change", function () {
+      var card = r.closest(".advice");
+      [].slice.call(card.querySelectorAll(".opts li")).forEach(function (li) {
+        li.classList.toggle("on", li.contains(r));
+      });
+      var b = document.getElementById("reply-" + r.getAttribute("data-card"));
+      if (b) b.hidden = false;
+    });
+  });
+  [].slice.call(document.querySelectorAll("button.adv-reply")).forEach(function (b) {
+    b.addEventListener("click", function () {
+      var r = b.closest(".advice").querySelector("input.pick:checked");
+      if (r) copy(r.getAttribute("data-msg"), b);
+    });
+  });
   try {   // ticks stored by older versions of this page were never day-scoped
     for (var i = localStorage.length - 1; i >= 0; i--) {
       var k = localStorage.key(i);
@@ -400,22 +458,7 @@ JS = r"""
       day.forEach(function (b) { lines.push(line(b)); });
       picked().forEach(function (b) { if (!planned(ref(b))) lines.push(line(b)); });
       lines.push(tray.getAttribute("data-foot"));
-      var text = lines.join("\n");
-      function ok() {
-        btn.textContent = btn.getAttribute("data-done");
-        setTimeout(function () { btn.textContent = label; }, 1500);
-      }
-      function fallback() {
-        var ta = document.createElement("textarea");
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        try { document.execCommand("copy"); ok(); } catch (err) {}
-        document.body.removeChild(ta);
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(ok, fallback);
-      } else { fallback(); }
+      copy(lines.join("\n"), btn);
     });
   }
 })();
@@ -514,9 +557,16 @@ input.chk:disabled{opacity:.4;cursor:default}
 .goals{display:flex;flex-direction:column;gap:12px}
 .legend{font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
 .expect-key{display:inline-block;width:2px;height:12px;background:var(--ink)}
-.goal{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:16px 18px 10px}
+.goal{background:var(--surface);border:1px solid var(--rule);border-radius:12px}
+.goal-face{display:block;cursor:pointer;list-style:none;padding:16px 18px 14px}
+.goal-face::-webkit-details-marker{display:none}
+.goal[open] .goal-face{padding-bottom:6px}
+.goal .more-body{padding:0 18px 12px}
+.caret{color:var(--faint);font-size:11px;transition:transform .15s}
+.goal[open] .caret{transform:rotate(180deg)}
 .goal.s-crit{border-color:color-mix(in srgb,var(--crit) 45%,var(--rule))}
-.goal-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.goal-head{display:flex;align-items:baseline;gap:10px}
+.goal-title{flex:1;min-width:0}
 .goal-title{font:600 17px/1.4 var(--serif)}
 .measure{margin-top:12px}
 .measure-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
@@ -595,6 +645,8 @@ input.chk:disabled{opacity:.4;cursor:default}
 .row .t{font-weight:500}
 .has-r.ok .row .t{color:var(--muted)}
 .row .time{font-size:12px;color:var(--faint);white-space:nowrap}
+.item.plain{grid-template-columns:minmax(0,1fr)}
+.wait .item .t{font-size:12.5px;color:var(--muted);font-weight:400}
 .row .res{font-size:12px;font-weight:700}
 .row .res.warn{color:var(--warn)} .row .res.crit{color:var(--crit)} .row .res.idle{color:var(--idle)}
 .row-body{padding:6px 0 2px;display:flex;flex-direction:column;gap:3px}
@@ -610,13 +662,18 @@ input.chk:disabled{opacity:.4;cursor:default}
 .advice h3{font:600 14px/1.45 var(--serif)}
 .goal-ref{margin:2px 0 0;font-size:11.5px;color:var(--muted)}
 .opts{display:flex;flex-direction:column;gap:6px;margin-top:8px}
-.opts li{display:grid;grid-template-columns:18px minmax(0,1fr);gap:8px;padding:7px 9px;border:1px solid var(--rule);border-radius:6px;font-size:12.5px}
-.opts li.rec{border-color:var(--accent);background:var(--accent-soft)}
+.opts li{border:1px solid var(--rule);border-radius:6px;font-size:12.5px}
+.opts label{display:grid;grid-template-columns:14px 16px minmax(0,1fr);gap:8px;align-items:start;padding:7px 9px;cursor:pointer}
+.opts input.pick{margin:3px 0 0;accent-color:var(--accent)}
+.opts li.rec{border-color:color-mix(in srgb,var(--accent) 45%,var(--rule))}
+.opts li.on{border-color:var(--accent);background:var(--accent-soft)}
 .opts b{color:var(--accent)}
 .opts p{margin:0}
 .opts .cost{font-size:11.5px;color:var(--muted);margin-top:2px}
 .rec-line{margin:8px 0 0;font-size:12.5px;color:var(--muted)}
 .ask{margin:6px 0 0;font-size:12.5px;font-weight:500}
+.adv-reply{margin-top:8px;font:500 12.5px/1 var(--sans);color:var(--surface);background:var(--accent);border:0;border-radius:8px;padding:8px 12px;cursor:pointer;width:100%}
+.adv-reply[hidden]{display:none}
 .advice .more{margin-top:6px;border-top:0}
 .advice .more-body p{margin:0;font-size:12.5px;color:var(--muted)}
 
@@ -672,7 +729,8 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
 }
 @media (max-width: 560px){
   .wrap{padding-inline:16px}
-  .goal{padding:14px 14px 8px}
+  .goal-face{padding:14px 14px 12px}
+  .goal .more-body{padding:0 14px 10px}
   .task{grid-template-columns:17px 22px minmax(0,1fr)}
   .task .meta{grid-column:3;text-align:left}
   .measure-head .detail{margin-left:0;text-align:left;flex-basis:100%}

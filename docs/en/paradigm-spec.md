@@ -447,9 +447,11 @@ Updated 2026-09-14 Mon · week 38 · this week 2h35m / capacity 25h
 
 **Every goal card has exactly five lines: Progress, Pace, This week, Next, Risks.** An empty line shows "—" rather than disappearing.
 
-The web dashboard `dashboard.html` shows the same data read-only, but deliberately quieter: the main column holds **today's main items and the goal cards**, the sidebar holds **what needs attention, the advice cards, what Mishu needs from you, and completed goals**. A goal card is five short lines (title, progress, pace/due/this week, next action); phases, the numbered action list, the 14-day activity strip, the log and the decisions live behind a **Details** toggle. Today's items show the title alone, with a toggle for the goal, the id and the notes. Habits, errands and the evening check-in stay in the Markdown daily file and are not shown on the dashboard; a reviewed item just carries its result next to the title. An empty vault shows an onboarding panel instead.
+The web dashboard `dashboard.html` shows the same data read-only, but deliberately quieter: the main column holds **today's main items and the goal cards**, the sidebar holds **what needs attention, the advice cards, what Mishu needs from you, and completed goals**. A goal card is five short lines (title, progress, pace/due/this week, next action); clicking the card opens phases, the numbered action list, the 14-day activity strip, the log and the decisions. Today's items show the title alone, with a toggle for the goal, the id and the notes. Habits, errands and the evening check-in stay in the Markdown daily file and are not shown on the dashboard; a reviewed item just carries its result next to the title. An empty vault shows an onboarding panel instead.
 
-Actions and today's items carry a **checkbox**. Ticking one changes nothing in the vault: the state lives in the browser's localStorage, and a small tray offers **"reply to Mishu"**, which copies a ready-made message ("Mishu, here's today (date): ✓ G02.T03 …") for you to paste into the conversation. The vault is still only written by `mishu.py`.
+An advice card's options are **selectable**: pick one and the card offers the same one-click reply, copying "Mishu, about “…” (A0914-1): I pick A — …".
+
+Actions, today's items and the waiting list carry a **checkbox**. Ticking one changes nothing in the vault: the state lives in the browser's localStorage, and a small tray offers **"reply to Mishu"**, which copies a ready-made message ("Mishu, here's today (date): ✓ G02.T03 …") for you to paste into the conversation. The vault is still only written by `mishu.py`.
 
 ### 5.2 📅 Daily plan `daily/YYYY-MM-DD.md`
 

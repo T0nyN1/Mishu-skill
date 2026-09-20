@@ -99,9 +99,16 @@ input.chk:disabled{opacity:.4;cursor:default}
 .goals{display:flex;flex-direction:column;gap:12px}
 .legend{font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
 .expect-key{display:inline-block;width:2px;height:12px;background:var(--ink)}
-.goal{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:16px 18px 10px}
+.goal{background:var(--surface);border:1px solid var(--rule);border-radius:12px}
+.goal-face{display:block;cursor:pointer;list-style:none;padding:16px 18px 14px}
+.goal-face::-webkit-details-marker{display:none}
+.goal[open] .goal-face{padding-bottom:6px}
+.goal .more-body{padding:0 18px 12px}
+.caret{color:var(--faint);font-size:11px;transition:transform .15s}
+.goal[open] .caret{transform:rotate(180deg)}
 .goal.s-crit{border-color:color-mix(in srgb,var(--crit) 45%,var(--rule))}
-.goal-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.goal-head{display:flex;align-items:baseline;gap:10px}
+.goal-title{flex:1;min-width:0}
 .goal-title{font:600 17px/1.4 var(--serif)}
 .measure{margin-top:12px}
 .measure-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
@@ -180,6 +187,8 @@ input.chk:disabled{opacity:.4;cursor:default}
 .row .t{font-weight:500}
 .has-r.ok .row .t{color:var(--muted)}
 .row .time{font-size:12px;color:var(--faint);white-space:nowrap}
+.item.plain{grid-template-columns:minmax(0,1fr)}
+.wait .item .t{font-size:12.5px;color:var(--muted);font-weight:400}
 .row .res{font-size:12px;font-weight:700}
 .row .res.warn{color:var(--warn)} .row .res.crit{color:var(--crit)} .row .res.idle{color:var(--idle)}
 .row-body{padding:6px 0 2px;display:flex;flex-direction:column;gap:3px}
@@ -195,13 +204,18 @@ input.chk:disabled{opacity:.4;cursor:default}
 .advice h3{font:600 14px/1.45 var(--serif)}
 .goal-ref{margin:2px 0 0;font-size:11.5px;color:var(--muted)}
 .opts{display:flex;flex-direction:column;gap:6px;margin-top:8px}
-.opts li{display:grid;grid-template-columns:18px minmax(0,1fr);gap:8px;padding:7px 9px;border:1px solid var(--rule);border-radius:6px;font-size:12.5px}
-.opts li.rec{border-color:var(--accent);background:var(--accent-soft)}
+.opts li{border:1px solid var(--rule);border-radius:6px;font-size:12.5px}
+.opts label{display:grid;grid-template-columns:14px 16px minmax(0,1fr);gap:8px;align-items:start;padding:7px 9px;cursor:pointer}
+.opts input.pick{margin:3px 0 0;accent-color:var(--accent)}
+.opts li.rec{border-color:color-mix(in srgb,var(--accent) 45%,var(--rule))}
+.opts li.on{border-color:var(--accent);background:var(--accent-soft)}
 .opts b{color:var(--accent)}
 .opts p{margin:0}
 .opts .cost{font-size:11.5px;color:var(--muted);margin-top:2px}
 .rec-line{margin:8px 0 0;font-size:12.5px;color:var(--muted)}
 .ask{margin:6px 0 0;font-size:12.5px;font-weight:500}
+.adv-reply{margin-top:8px;font:500 12.5px/1 var(--sans);color:var(--surface);background:var(--accent);border:0;border-radius:8px;padding:8px 12px;cursor:pointer;width:100%}
+.adv-reply[hidden]{display:none}
 .advice .more{margin-top:6px;border-top:0}
 .advice .more-body p{margin:0;font-size:12.5px;color:var(--muted)}
 
@@ -257,7 +271,8 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
 }
 @media (max-width: 560px){
   .wrap{padding-inline:16px}
-  .goal{padding:14px 14px 8px}
+  .goal-face{padding:14px 14px 12px}
+  .goal .more-body{padding:0 14px 10px}
   .task{grid-template-columns:17px 22px minmax(0,1fr)}
   .task .meta{grid-column:3;text-align:left}
   .measure-head .detail{margin-left:0;text-align:left;flex-basis:100%}
@@ -287,7 +302,7 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
     <div class="primary">
       <section class="today box-panel" aria-labelledby="today-h">
   <div class="panel-head"><h2 id="today-h">Today</h2><span class="mono date">09-14 Mon</span></div>
-  <p class="today-meta mono">Available 4h · energy 3/5 · planned 2h20m (cap 2h48m)</p>
+  <p class="today-meta mono">Available 4h · planned 2h20m</p>
   <ul class="items"><li class="item has-r ok">
   <input type="checkbox" class="chk" data-scope="day" data-ref="G04.T02" data-title="Build a target company list (20)" data-init="1" checked aria-label="Build a target company list (20)">
   <details class="row"><summary><span class="t">Build a target company list (20)</span>
@@ -299,19 +314,19 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
   <span class="time mono">45m</span></summary>
   <div class="row-body"><p class="mono">G02.T04 · Ship budgeting app v1 · 45m</p><p>reason U Unclear</p><p>still unsure how to compare</p></div></details>
 </li></ul>
-  <div class="wait"><h3>Waiting / follow-up</h3><ul><li>G02.T06 Ask a designer friend for the app icon (waiting on Sam, 3 days) → follow up today</li></ul></div>
+  <div class="wait"><h3>Waiting / follow-up</h3><ul><li class="item"><input type="checkbox" class="chk" data-scope="wait" data-ref="G02.T06" data-title="Ask a designer friend for the app icon (waiting on Sam, 3 days) → follow up today" data-init="0" aria-label="Ask a designer friend for the app icon (waiting on Sam, 3 days) → follow up today"><span class="t">Ask a designer friend for the app icon (waiting on Sam, 3 days) → follow up today</span></li></ul></div>
 </section><section class="goals" aria-labelledby="goals-h">
         <div class="sec-head"><h2 id="goals-h">Goals</h2><span class="legend"><span class="expect-key"></span>expected progress by now</span></div>
-        <article class="goal s-crit" id="G04">
-  <header class="goal-head">
-    <h3 class="goal-title">Land a new-grad offer</h3>
-    <span class="pill crit"><i aria-hidden="true"></i>At risk</span>
-  </header>
-  <div class="measure"><div class="measure-head"><span class="num">33%</span><span class="sub detail">M2 Apply in volume in progress</span></div><div class="bar" role="img" aria-label="Progress 33%"><span class="fill crit" style="width:33.3%"></span></div></div>
-  <p class="facts">Last 7 days 3/10 apps · Due 11-15 hard · spent 50m</p>
-  <div class="next"><span class="k">Next</span><span class="t">Apply to 5 target companies</span><span class="mono est">45m</span></div>
-  <details class="more">
-  <summary>Details</summary>
+        <details class="goal s-crit" id="G04">
+  <summary class="goal-face">
+    <div class="goal-head">
+      <h3 class="goal-title">Land a new-grad offer</h3>
+      <span class="pill crit"><i aria-hidden="true"></i>At risk</span><span class="caret" aria-hidden="true">▾</span>
+    </div>
+    <div class="measure"><div class="measure-head"><span class="num">33%</span><span class="sub detail">M2 Apply in volume in progress</span></div><div class="bar" role="img" aria-label="Progress 33%"><span class="fill crit" style="width:33.3%"></span></div></div>
+    <p class="facts">Last 7 days 3/10 apps · Due 11-15 hard · spent 50m</p>
+    <div class="next"><span class="k">Next</span><span class="t">Apply to 5 target companies</span><span class="mono est">45m</span></div>
+  </summary>
   <div class="more-body">
     <p class="dw"><span class="k">Definition of done</span>Signed at least one mobile engineering offer</p>
     <ol class="phases"><li class="ph done"><span class="mono">M1</span> Polish the résumé<small class="mono">09-07</small></li><li class="ph active"><span class="mono">M2</span> Apply in volume<small class="mono">10-15</small></li><li class="ph todo"><span class="mono">M3</span> Interviews<small class="mono">11-10</small></li><li class="ph todo"><span class="mono">M4</span> Choose an offer<small class="mono">11-15</small></li></ol>
@@ -322,17 +337,16 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
     <tbody><tr><td class="mono">09-14</td><td class="mono">#2</td><td class="r ok">✓</td><td class="mono">50m</td><td>22 companies saved in Notion</td></tr><tr><td class="mono">09-13</td><td class="mono">funnel:Screened</td><td class="r ">=</td><td class="mono">+1</td><td>recruiter email</td></tr><tr><td class="mono">09-10</td><td class="mono">funnel:Applied</td><td class="r ">=</td><td class="mono">+3</td><td>application screenshots</td></tr><tr><td class="mono">09-10</td><td class="mono">#2</td><td class="r crit">✗</td><td class="mono"></td><td><span class="rc" title="Unclear">U</span></td></tr><tr><td class="mono">09-08</td><td class="mono">#2</td><td class="r crit">✗</td><td class="mono"></td><td><span class="rc" title="Unclear">U</span>no idea which companies to target</td></tr><tr><td class="mono">09-05</td><td class="mono">M1</td><td class="r ok">✓</td><td class="mono"></td><td>phase completed</td></tr><tr><td class="mono">09-05</td><td class="mono">#1</td><td class="r ok">✓</td><td class="mono">1h30m</td><td>résumé v3 uploaded</td></tr><tr><td class="mono">09-01</td><td class="mono">created</td><td class="r ">=</td><td class="mono"></td><td>goal created (active)</td></tr></tbody></table></div>
     
   </div>
-</details>
-</article><article class="goal s-warn" id="G03">
-  <header class="goal-head">
-    <h3 class="goal-title">Get down to 70 kg</h3>
-    <span class="pill warn"><i aria-hidden="true"></i>Watch</span>
-  </header>
-  <div class="measure"><div class="measure-head"><span class="num">24%</span><span class="sub detail">76.1kg, baseline 78 → target 70</span></div><div class="bar" role="img" aria-label="Progress 24%"><span class="fill warn" style="width:23.8%"></span></div></div>
-  <p class="facts">Last 7 days 3/4 times · spent 35m</p>
-  <div class="next"><span class="k">Next</span><span class="t">Strength session (A/B alternating)</span><span class="mono est">40m</span></div>
-  <details class="more">
-  <summary>Details</summary>
+</details><details class="goal s-warn" id="G03">
+  <summary class="goal-face">
+    <div class="goal-head">
+      <h3 class="goal-title">Get down to 70 kg</h3>
+      <span class="pill warn"><i aria-hidden="true"></i>Watch</span><span class="caret" aria-hidden="true">▾</span>
+    </div>
+    <div class="measure"><div class="measure-head"><span class="num">24%</span><span class="sub detail">76.1kg, baseline 78 → target 70</span></div><div class="bar" role="img" aria-label="Progress 24%"><span class="fill warn" style="width:23.8%"></span></div></div>
+    <p class="facts">Last 7 days 3/4 times · spent 35m</p>
+    <div class="next"><span class="k">Next</span><span class="t">Strength session (A/B alternating)</span><span class="mono est">40m</span></div>
+  </summary>
   <div class="more-body">
     <p class="dw"><span class="k">Definition of done</span>Two consecutive weeks at or below 70 kg</p>
     
@@ -343,17 +357,16 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
     <tbody><tr><td class="mono">09-14</td><td class="mono">Weight</td><td class="r ">=</td><td class="mono">76.1kg</td><td>no photo today; verbal report</td></tr><tr><td class="mono">09-14</td><td class="mono">#1</td><td class="r ok">✓</td><td class="mono">35m</td><td></td></tr><tr><td class="mono">09-13</td><td class="mono">Weight</td><td class="r ">=</td><td class="mono">76.4kg</td><td>scale photo checked, not stored</td></tr><tr><td class="mono">09-13</td><td class="mono">#2</td><td class="r ok">✓</td><td class="mono">5m</td><td></td></tr><tr><td class="mono">09-12</td><td class="mono">#1</td><td class="r ok">✓</td><td class="mono">40m</td><td></td></tr><tr><td class="mono">09-09</td><td class="mono">#1</td><td class="r ok">✓</td><td class="mono">40m</td><td></td></tr><tr><td class="mono">09-07</td><td class="mono">#1</td><td class="r ok">✓</td><td class="mono">40m</td><td></td></tr><tr><td class="mono">09-06</td><td class="mono">Weight</td><td class="r ">=</td><td class="mono">77.2kg</td><td>scale photo checked</td></tr><tr><td class="mono">09-06</td><td class="mono">#2</td><td class="r ok">✓</td><td class="mono">5m</td><td></td></tr><tr><td class="mono">09-05</td><td class="mono">#1</td><td class="r ok">✓</td><td class="mono">35m</td><td></td></tr></tbody></table></div>
     
   </div>
-</details>
-</article><article class="goal s-warn" id="G05">
-  <header class="goal-head">
-    <h3 class="goal-title">Finish the Rust Book</h3>
-    <span class="pill warn"><i aria-hidden="true"></i>Watch</span>
-  </header>
-  <div class="measure"><div class="measure-head"><span class="num">25%</span><span class="sub">expected 11%</span><span class="sub detail">Mastered 5/20 chapters · studied 5</span></div><div class="bar" role="img" aria-label="Progress 25%"><span class="fill warn" style="width:25.0%"></span><span class="expect" style="left:10.7%" title="expected by now: 11%"></span></div></div>
-  <p class="facts">Actual 25% / expected 11% (pace ratio 2.33) · Due 12-31 · Spent 0m / budget 3.5h · 0 done</p>
-  <div class="next"><span class="k">Next</span><span class="t">Read chapter 6 and do the exercises</span><span class="mono est">90m</span></div>
-  <details class="more">
-  <summary>Details</summary>
+</details><details class="goal s-warn" id="G05">
+  <summary class="goal-face">
+    <div class="goal-head">
+      <h3 class="goal-title">Finish the Rust Book</h3>
+      <span class="pill warn"><i aria-hidden="true"></i>Watch</span><span class="caret" aria-hidden="true">▾</span>
+    </div>
+    <div class="measure"><div class="measure-head"><span class="num">25%</span><span class="sub">expected 11%</span><span class="sub detail">Mastered 5/20 chapters · studied 5</span></div><div class="bar" role="img" aria-label="Progress 25%"><span class="fill warn" style="width:25.0%"></span><span class="expect" style="left:10.7%" title="expected by now: 11%"></span></div></div>
+    <p class="facts">Actual 25% / expected 11% (pace ratio 2.33) · Due 12-31 · Spent 0m / budget 3.5h · 0 done</p>
+    <div class="next"><span class="k">Next</span><span class="t">Read chapter 6 and do the exercises</span><span class="mono est">90m</span></div>
+  </summary>
   <div class="more-body">
     <p class="dw"><span class="k">Definition of done</span>All 20 chapters&#x27; exercises done, plus a small Rust CLI budget tool</p>
     
@@ -364,17 +377,16 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
     <tbody><tr><td class="mono">09-06</td><td class="mono">chapters</td><td class="r ">=</td><td class="mono">studied 5/mastered 5</td><td></td></tr><tr><td class="mono">09-06</td><td class="mono">#1</td><td class="r ok">✓</td><td class="mono">1h40m</td><td>exercises in rust-book/ch05</td></tr><tr><td class="mono">09-01</td><td class="mono">created</td><td class="r ">=</td><td class="mono"></td><td>goal created (active)</td></tr></tbody></table></div>
     
   </div>
-</details>
-</article><article class="goal s-ok" id="G02">
-  <header class="goal-head">
-    <h3 class="goal-title">Ship budgeting app v1</h3>
-    <span class="pill ok"><i aria-hidden="true"></i>On track</span>
-  </header>
-  <div class="measure"><div class="measure-head"><span class="num">25%</span><span class="sub">expected 14%</span><span class="sub detail">M2 Core expense tracking in progress</span></div><div class="bar" role="img" aria-label="Progress 25%"><span class="fill ok" style="width:25.0%"></span><span class="expect" style="left:14.4%" title="expected by now: 14%"></span></div></div>
-  <p class="facts">Actual 25% / expected 14% (pace ratio 1.73) · Due 11-30 hard · Spent 1h / budget 8h · 0 done</p>
-  <div class="next"><span class="k">Next</span><span class="t">Implement local expense CRUD</span><span class="mono est">120m</span></div>
-  <details class="more">
-  <summary>Details</summary>
+</details><details class="goal s-ok" id="G02">
+  <summary class="goal-face">
+    <div class="goal-head">
+      <h3 class="goal-title">Ship budgeting app v1</h3>
+      <span class="pill ok"><i aria-hidden="true"></i>On track</span><span class="caret" aria-hidden="true">▾</span>
+    </div>
+    <div class="measure"><div class="measure-head"><span class="num">25%</span><span class="sub">expected 14%</span><span class="sub detail">M2 Core expense tracking in progress</span></div><div class="bar" role="img" aria-label="Progress 25%"><span class="fill ok" style="width:25.0%"></span><span class="expect" style="left:14.4%" title="expected by now: 14%"></span></div></div>
+    <p class="facts">Actual 25% / expected 14% (pace ratio 1.73) · Due 11-30 hard · Spent 1h / budget 8h · 0 done</p>
+    <div class="next"><span class="k">Next</span><span class="t">Implement local expense CRUD</span><span class="mono est">120m</span></div>
+  </summary>
   <div class="more-body">
     <p class="dw"><span class="k">Definition of done</span>Live on the App Store with 10 real users</p>
     <ol class="phases"><li class="ph done"><span class="mono">M1</span> Requirements &amp; prototype<small class="mono">09-10</small></li><li class="ph active"><span class="mono">M2</span> Core expense tracking<small class="mono">10-20</small></li><li class="ph todo"><span class="mono">M3</span> Polish &amp; launch<small class="mono">11-30</small></li></ol>
@@ -385,17 +397,16 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
     <tbody><tr><td class="mono">09-14</td><td class="mono">#3</td><td class="r warn">◐</td><td class="mono">1h</td><td><span class="rc" title="Underestimated">O</span>sub-agent verified commit e19f55: list view wired, edit view missing</td></tr><tr><td class="mono">09-14</td><td class="mono">#4</td><td class="r crit">✗</td><td class="mono"></td><td><span class="rc" title="Unclear">U</span>still unsure how to compare</td></tr><tr><td class="mono">09-12</td><td class="mono">#4</td><td class="r crit">✗</td><td class="mono"></td><td><span class="rc" title="Unclear">U</span>not sure where to start comparing</td></tr><tr><td class="mono">09-10</td><td class="mono">#4</td><td class="r idle">➜</td><td class="mono"></td><td><span class="rc" title="No time">T</span></td></tr><tr><td class="mono">09-09</td><td class="mono">#3</td><td class="r warn">◐</td><td class="mono">1h</td><td><span class="rc" title="Underestimated">O</span>commit c41e9a model layer done, UI not wired</td></tr><tr><td class="mono">09-04</td><td class="mono">M1</td><td class="r ok">✓</td><td class="mono"></td><td>wireframes and scaffold verified</td></tr><tr><td class="mono">09-04</td><td class="mono">#2</td><td class="r ok">✓</td><td class="mono">1h15m</td><td>commit 8b7d02 SwiftUI+SwiftData scaffold</td></tr><tr><td class="mono">09-02</td><td class="mono">#1</td><td class="r ok">✓</td><td class="mono">1h30m</td><td>commit 3f2a1c wireframes in docs/</td></tr><tr><td class="mono">09-01</td><td class="mono">created</td><td class="r ">=</td><td class="mono"></td><td>goal created (active)</td></tr></tbody></table></div>
     <h4>Decisions</h4><ul class="decisions"><li><span class="mono">09-13 D01</span> Drop multi-currency support<small>Reason: keep v1 focused</small></li></ul>
   </div>
-</details>
-</article><article class="goal s-ok" id="G06">
-  <header class="goal-head">
-    <h3 class="goal-title">Buy a monitor arm</h3>
-    <span class="pill ok"><i aria-hidden="true"></i>On track</span>
-  </header>
-  <div class="measure"><div class="measure-head"><span class="num">100%</span><span class="sub detail">2/2 items</span></div><div class="bar" role="img" aria-label="Progress 100%"><span class="fill ok" style="width:100.0%"></span></div></div>
-  <p class="facts">Done · Due 09-20 · Spent 10m / budget 0.5h · 1 done</p>
-  <div class="next"><span class="k">Next</span><span class="none">All actions done</span></div>
-  <details class="more">
-  <summary>Details</summary>
+</details><details class="goal s-ok" id="G06">
+  <summary class="goal-face">
+    <div class="goal-head">
+      <h3 class="goal-title">Buy a monitor arm</h3>
+      <span class="pill ok"><i aria-hidden="true"></i>On track</span><span class="caret" aria-hidden="true">▾</span>
+    </div>
+    <div class="measure"><div class="measure-head"><span class="num">100%</span><span class="sub detail">2/2 items</span></div><div class="bar" role="img" aria-label="Progress 100%"><span class="fill ok" style="width:100.0%"></span></div></div>
+    <p class="facts">Done · Due 09-20 · Spent 10m / budget 0.5h · 1 done</p>
+    <div class="next"><span class="k">Next</span><span class="none">All actions done</span></div>
+  </summary>
   <div class="more-body">
     <p class="dw"><span class="k">Definition of done</span>Arm delivered and mounted</p>
     
@@ -407,7 +418,6 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
     
   </div>
 </details>
-</article>
       </section>
     </div>
 
@@ -419,18 +429,20 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
       <section class="advice-panel box-panel" aria-labelledby="adv-h"><div class="panel-head"><h2 id="adv-h">Mishu’s advice</h2><span class="mono count">2</span></div><article class="advice">
   <h3>Applications are behind pace</h3>
   <p class="goal-ref">G04 Land a new-grad offer · Adjust</p>
-  <ol class="opts"><li class="rec"><b class="mono">A</b><div><p>Spend 45m on the list today; keep next week&#x27;s quota</p><p class="cost">Cost: 1–2 fewer applications this week</p></div></li><li class=""><b class="mono">B</b><div><p>Lower the quota to 6 per week</p><p class="cost">Cost: Offer likely ~2 weeks later</p></div></li></ol>
+  <ol class="opts"><li class="rec"><label><input type="radio" class="pick" name="pick-A0914-1" data-card="A0914-1" data-msg="Mishu, about “Applications are behind pace” (A0914-1): I pick A — Spend 45m on the list today; keep next week&#x27;s quota"><b class="mono">A</b><div><p>Spend 45m on the list today; keep next week&#x27;s quota</p><p class="cost">Cost: 1–2 fewer applications this week</p></div></label></li><li class=""><label><input type="radio" class="pick" name="pick-A0914-1" data-card="A0914-1" data-msg="Mishu, about “Applications are behind pace” (A0914-1): I pick B — Lower the quota to 6 per week"><b class="mono">B</b><div><p>Lower the quota to 6 per week</p><p class="cost">Cost: Offer likely ~2 weeks later</p></div></label></li></ol>
   <p class="rec-line">Recommended <b class="mono">A</b> (already on today&#x27;s main list)</p>
   <p class="ask">Your call: Reply A or B</p>
+  <button type="button" class="adv-reply" id="reply-A0914-1" hidden data-done="Copied">Reply to Mishu</button>
   <details class="more"><summary>Facts &amp; diagnosis</summary>
     <div class="more-body"><p>Last 7 days: 3/10 applications; G04.T02 deferred twice, both times reason U (unclear which companies)</p><p>The bottleneck is the missing target list, not time</p></div>
   </details>
 </article><article class="advice">
   <h3>Stuck on the iCloud sync research</h3>
   <p class="goal-ref">G02 Ship budgeting app v1 · Coach</p>
-  <ol class="opts"><li class="rec"><b class="mono">A</b><div><p>Split it: ① 25m list CloudKit / Core Data+CloudKit / a third-party SDK with doc links ② 30m fill a cost/complexity/offline table</p><p class="cost">Cost: One more breakdown step; no extra work today</p></div></li><li class=""><b class="mono">B</b><div><p>Skip sync in v1 and move it after M3</p><p class="cost">Cost: No multi-device sync at launch; may hurt early retention</p></div></li></ol>
+  <ol class="opts"><li class="rec"><label><input type="radio" class="pick" name="pick-A0914-2" data-card="A0914-2" data-msg="Mishu, about “Stuck on the iCloud sync research” (A0914-2): I pick A — Split it: ① 25m list CloudKit / Core Data+CloudKit / a third-party SDK with doc links ② 30m fill a cost/complexity/offline table"><b class="mono">A</b><div><p>Split it: ① 25m list CloudKit / Core Data+CloudKit / a third-party SDK with doc links ② 30m fill a cost/complexity/offline table</p><p class="cost">Cost: One more breakdown step; no extra work today</p></div></label></li><li class=""><label><input type="radio" class="pick" name="pick-A0914-2" data-card="A0914-2" data-msg="Mishu, about “Stuck on the iCloud sync research” (A0914-2): I pick B — Skip sync in v1 and move it after M3"><b class="mono">B</b><div><p>Skip sync in v1 and move it after M3</p><p class="cost">Cost: No multi-device sync at launch; may hurt early retention</p></div></label></li></ol>
   <p class="rec-line">Recommended <b class="mono">A</b> (sync is core; only the task definition is unclear)</p>
   <p class="ask">Your call: Reply A or B and I&#x27;ll update the plan</p>
+  <button type="button" class="adv-reply" id="reply-A0914-2" hidden data-done="Copied">Reply to Mishu</button>
   <details class="more"><summary>Facts &amp; diagnosis</summary>
     <div class="more-body"><p>G02.T04 deferred 3 times; 2 of them with reason U (unclear where to start)</p><p>The task is too vague: “compare 3 options” has no concrete first step or output format</p></div>
   </details>
@@ -441,7 +453,7 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
     </aside>
   </main>
 
-  <footer class="foot">Read-only view · generated by mishu.py at 2026-09-20 13:16 · to change anything, just talk to Mishu</footer>
+  <footer class="foot">Read-only view · generated by mishu.py at 2026-09-20 13:31 · to change anything, just talk to Mishu</footer>
 </div>
 <div id="tray" hidden data-head="Mishu, here’s today (2026-09-14):"
      data-foot="Please record this.">
@@ -457,7 +469,6 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
   var tray = document.getElementById("tray");
   var num = document.getElementById("tray-n");
   var btn = document.getElementById("tray-copy");
-  var label = btn ? btn.textContent : "";
   var touched = false;
   function ref(b) { return b.getAttribute("data-ref"); }
   function key(b) { return "mishu:" + date + ":" + ref(b); }          // ticks are a report about today
@@ -478,6 +489,41 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
     if (tray) tray.hidden = !touched || n === 0;   // nothing ticked, nothing to report
   }
   function line(b) { return (b.checked ? "✓" : "✗") + " " + ref(b) + " " + (b.getAttribute("data-title") || ""); }
+  function copy(text, button) {
+    var was = button.textContent;
+    function ok() {
+      button.textContent = button.getAttribute("data-done");
+      setTimeout(function () { button.textContent = was; }, 1500);
+    }
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); ok(); } catch (err) {}
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(ok, fallback);
+    } else { fallback(); }
+  }
+  // advice cards: pick an option, then hand the choice back to Mishu
+  [].slice.call(document.querySelectorAll("input.pick")).forEach(function (r) {
+    r.addEventListener("change", function () {
+      var card = r.closest(".advice");
+      [].slice.call(card.querySelectorAll(".opts li")).forEach(function (li) {
+        li.classList.toggle("on", li.contains(r));
+      });
+      var b = document.getElementById("reply-" + r.getAttribute("data-card"));
+      if (b) b.hidden = false;
+    });
+  });
+  [].slice.call(document.querySelectorAll("button.adv-reply")).forEach(function (b) {
+    b.addEventListener("click", function () {
+      var r = b.closest(".advice").querySelector("input.pick:checked");
+      if (r) copy(r.getAttribute("data-msg"), b);
+    });
+  });
   try {   // ticks stored by older versions of this page were never day-scoped
     for (var i = localStorage.length - 1; i >= 0; i--) {
       var k = localStorage.key(i);
@@ -509,22 +555,7 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
       day.forEach(function (b) { lines.push(line(b)); });
       picked().forEach(function (b) { if (!planned(ref(b))) lines.push(line(b)); });
       lines.push(tray.getAttribute("data-foot"));
-      var text = lines.join("\n");
-      function ok() {
-        btn.textContent = btn.getAttribute("data-done");
-        setTimeout(function () { btn.textContent = label; }, 1500);
-      }
-      function fallback() {
-        var ta = document.createElement("textarea");
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        try { document.execCommand("copy"); ok(); } catch (err) {}
-        document.body.removeChild(ta);
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(ok, fallback);
-      } else { fallback(); }
+      copy(lines.join("\n"), btn);
     });
   }
 })();

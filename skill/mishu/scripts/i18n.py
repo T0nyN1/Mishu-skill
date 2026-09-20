@@ -399,6 +399,7 @@ ZH = {
     "Needs your input": "需要补充",
     "ticked": "项已勾选",
     "Reply to Mishu": "一键回复秘书",
+    "Mishu, about “{t}” ({id}): I pick {l} — {x}": "秘书，关于「{t}」（{id}）：我选 {l} —— {x}",
     "Mishu, here’s today ({d}):": "秘书，今天（{d}）的情况：",
     "Please record this.": "请据此更新记录。",
     "recorded": "已记录",

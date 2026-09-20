@@ -1,46 +1,46 @@
-{"ts": "2026-09-20T13:16:13", "today": "2026-08-01", "cmd": "init", "target": "vault", "detail": "vault created"}
-{"ts": "2026-09-20T13:16:13", "today": "2026-08-01", "cmd": "add-goal", "target": "G01", "detail": "created Launch a portfolio site (active)"}
-{"ts": "2026-09-20T13:16:13", "today": "2026-08-05", "cmd": "log", "target": "G01", "detail": "G01.T01 → done"}
-{"ts": "2026-09-20T13:16:13", "today": "2026-08-18", "cmd": "log", "target": "G01", "detail": "G01.T02 → done"}
-{"ts": "2026-09-20T13:16:13", "today": "2026-08-18", "cmd": "phase", "target": "G01", "detail": "G01.M1 → done"}
-{"ts": "2026-09-20T13:16:13", "today": "2026-08-22", "cmd": "set", "target": "G01", "detail": "status: active → done; reason: Live at alex.dev with 3 case studies"}
-{"ts": "2026-09-20T13:16:13", "today": "2026-09-01", "cmd": "add-goal", "target": "G02", "detail": "created Ship budgeting app v1 (active)"}
-{"ts": "2026-09-20T13:16:13", "today": "2026-09-01", "cmd": "add-goal", "target": "G03", "detail": "created Get down to 70 kg (active)"}
-{"ts": "2026-09-20T13:16:13", "today": "2026-09-01", "cmd": "add-goal", "target": "G04", "detail": "created Land a new-grad offer (active)"}
-{"ts": "2026-09-20T13:16:13", "today": "2026-09-01", "cmd": "add-goal", "target": "G05", "detail": "created Finish the Rust Book (active)"}
-{"ts": "2026-09-20T13:16:13", "today": "2026-09-08", "cmd": "add-goal", "target": "G06", "detail": "created Buy a monitor arm (active)"}
-{"ts": "2026-09-20T13:16:13", "today": "2026-09-03", "cmd": "inbox-add", "target": "inbox", "detail": "Build a personal website"}
-{"ts": "2026-09-20T13:16:14", "today": "2026-09-10", "cmd": "inbox-add", "target": "inbox", "detail": "Get a driver's license before year end?"}
-{"ts": "2026-09-20T13:16:14", "today": "2026-09-02", "cmd": "log", "target": "G02", "detail": "G02.T01 → done"}
-{"ts": "2026-09-20T13:16:14", "today": "2026-09-03", "cmd": "log", "target": "G03", "detail": "G03.T01 logged once"}
-{"ts": "2026-09-20T13:16:14", "today": "2026-09-04", "cmd": "log", "target": "G02", "detail": "G02.T02 → done"}
-{"ts": "2026-09-20T13:16:14", "today": "2026-09-04", "cmd": "phase", "target": "G02", "detail": "G02.M1 → done; M2 Core expense tracking → in progress"}
-{"ts": "2026-09-20T13:16:14", "today": "2026-09-05", "cmd": "log", "target": "G04", "detail": "G04.T01 → done"}
-{"ts": "2026-09-20T13:16:14", "today": "2026-09-05", "cmd": "phase", "target": "G04", "detail": "G04.M1 → done; M2 Apply in volume → in progress"}
-{"ts": "2026-09-20T13:16:14", "today": "2026-09-05", "cmd": "log", "target": "G03", "detail": "G03.T01 logged once"}
-{"ts": "2026-09-20T13:16:14", "today": "2026-09-06", "cmd": "log", "target": "G05", "detail": "G05.T01 → done"}
-{"ts": "2026-09-20T13:16:14", "today": "2026-09-06", "cmd": "units", "target": "G05", "detail": "done/mastered (4, 4) → (5, 5)"}
-{"ts": "2026-09-20T13:16:14", "today": "2026-09-06", "cmd": "log", "target": "G03", "detail": "G03.T02 logged once"}
-{"ts": "2026-09-20T13:16:14", "today": "2026-09-06", "cmd": "metric", "target": "G03", "detail": "Weight 78 → 77.2"}
-{"ts": "2026-09-20T13:16:14", "today": "2026-09-07", "cmd": "log", "target": "G03", "detail": "G03.T01 logged once"}
-{"ts": "2026-09-20T13:16:14", "today": "2026-09-08", "cmd": "log", "target": "G04", "detail": "G04.T02 deferred +1 (1 total)"}
-{"ts": "2026-09-20T13:16:14", "today": "2026-09-09", "cmd": "log", "target": "G02", "detail": "G02.T03 → in progress"}
-{"ts": "2026-09-20T13:16:14", "today": "2026-09-09", "cmd": "log", "target": "G03", "detail": "G03.T01 logged once"}
-{"ts": "2026-09-20T13:16:14", "today": "2026-09-10", "cmd": "log", "target": "G04", "detail": "G04.T02 deferred +1 (2 total)"}
-{"ts": "2026-09-20T13:16:15", "today": "2026-09-10", "cmd": "funnel", "target": "G04", "detail": "Applied 0 → 3"}
-{"ts": "2026-09-20T13:16:15", "today": "2026-09-10", "cmd": "log", "target": "G02", "detail": "G02.T04 deferred +1 (1 total)"}
-{"ts": "2026-09-20T13:16:15", "today": "2026-09-11", "cmd": "task-set", "target": "G02", "detail": "T06 → blocked"}
-{"ts": "2026-09-20T13:16:15", "today": "2026-09-11", "cmd": "log", "target": "G06", "detail": "G06.T01 → done"}
-{"ts": "2026-09-20T13:16:15", "today": "2026-09-12", "cmd": "log", "target": "G02", "detail": "G02.T04 deferred +1 (2 total)"}
-{"ts": "2026-09-20T13:16:15", "today": "2026-09-12", "cmd": "log", "target": "G03", "detail": "G03.T01 logged once"}
-{"ts": "2026-09-20T13:16:15", "today": "2026-09-13", "cmd": "log", "target": "G03", "detail": "G03.T02 logged once"}
-{"ts": "2026-09-20T13:16:15", "today": "2026-09-13", "cmd": "metric", "target": "G03", "detail": "Weight 77.2 → 76.4"}
-{"ts": "2026-09-20T13:16:15", "today": "2026-09-13", "cmd": "funnel", "target": "G04", "detail": "Screened 0 → 1"}
-{"ts": "2026-09-20T13:16:15", "today": "2026-09-13", "cmd": "decide", "target": "G02", "detail": "D01 Drop multi-currency support"}
-{"ts": "2026-09-20T13:16:15", "today": "2026-09-14", "cmd": "plan", "target": "2026-09-14", "detail": "main 2 · habit 1 · errand 1 · 2h20m"}
-{"ts": "2026-09-20T13:16:15", "today": "2026-09-14", "cmd": "checkin", "target": "G04", "detail": "2026-09-14 check-in"}
-{"ts": "2026-09-20T13:16:15", "today": "2026-09-14", "cmd": "checkin", "target": "G02", "detail": "2026-09-14 check-in"}
-{"ts": "2026-09-20T13:16:15", "today": "2026-09-14", "cmd": "checkin", "target": "G03", "detail": "2026-09-14 check-in"}
-{"ts": "2026-09-20T13:16:15", "today": "2026-09-14", "cmd": "checkin", "target": "G06", "detail": "2026-09-14 check-in"}
-{"ts": "2026-09-20T13:16:15", "today": "2026-09-14", "cmd": "checkin", "target": "2026-09-14", "detail": "done 3/4"}
-{"ts": "2026-09-20T13:16:15", "today": "2026-09-14", "cmd": "metric", "target": "G03", "detail": "Weight 76.4 → 76.1"}
+{"ts": "2026-09-20T13:31:31", "today": "2026-08-01", "cmd": "init", "target": "vault", "detail": "vault created"}
+{"ts": "2026-09-20T13:31:31", "today": "2026-08-01", "cmd": "add-goal", "target": "G01", "detail": "created Launch a portfolio site (active)"}
+{"ts": "2026-09-20T13:31:31", "today": "2026-08-05", "cmd": "log", "target": "G01", "detail": "G01.T01 → done"}
+{"ts": "2026-09-20T13:31:31", "today": "2026-08-18", "cmd": "log", "target": "G01", "detail": "G01.T02 → done"}
+{"ts": "2026-09-20T13:31:31", "today": "2026-08-18", "cmd": "phase", "target": "G01", "detail": "G01.M1 → done"}
+{"ts": "2026-09-20T13:31:31", "today": "2026-08-22", "cmd": "set", "target": "G01", "detail": "status: active → done; reason: Live at alex.dev with 3 case studies"}
+{"ts": "2026-09-20T13:31:31", "today": "2026-09-01", "cmd": "add-goal", "target": "G02", "detail": "created Ship budgeting app v1 (active)"}
+{"ts": "2026-09-20T13:31:31", "today": "2026-09-01", "cmd": "add-goal", "target": "G03", "detail": "created Get down to 70 kg (active)"}
+{"ts": "2026-09-20T13:31:31", "today": "2026-09-01", "cmd": "add-goal", "target": "G04", "detail": "created Land a new-grad offer (active)"}
+{"ts": "2026-09-20T13:31:32", "today": "2026-09-01", "cmd": "add-goal", "target": "G05", "detail": "created Finish the Rust Book (active)"}
+{"ts": "2026-09-20T13:31:32", "today": "2026-09-08", "cmd": "add-goal", "target": "G06", "detail": "created Buy a monitor arm (active)"}
+{"ts": "2026-09-20T13:31:32", "today": "2026-09-03", "cmd": "inbox-add", "target": "inbox", "detail": "Build a personal website"}
+{"ts": "2026-09-20T13:31:32", "today": "2026-09-10", "cmd": "inbox-add", "target": "inbox", "detail": "Get a driver's license before year end?"}
+{"ts": "2026-09-20T13:31:32", "today": "2026-09-02", "cmd": "log", "target": "G02", "detail": "G02.T01 → done"}
+{"ts": "2026-09-20T13:31:32", "today": "2026-09-03", "cmd": "log", "target": "G03", "detail": "G03.T01 logged once"}
+{"ts": "2026-09-20T13:31:32", "today": "2026-09-04", "cmd": "log", "target": "G02", "detail": "G02.T02 → done"}
+{"ts": "2026-09-20T13:31:32", "today": "2026-09-04", "cmd": "phase", "target": "G02", "detail": "G02.M1 → done; M2 Core expense tracking → in progress"}
+{"ts": "2026-09-20T13:31:32", "today": "2026-09-05", "cmd": "log", "target": "G04", "detail": "G04.T01 → done"}
+{"ts": "2026-09-20T13:31:32", "today": "2026-09-05", "cmd": "phase", "target": "G04", "detail": "G04.M1 → done; M2 Apply in volume → in progress"}
+{"ts": "2026-09-20T13:31:32", "today": "2026-09-05", "cmd": "log", "target": "G03", "detail": "G03.T01 logged once"}
+{"ts": "2026-09-20T13:31:32", "today": "2026-09-06", "cmd": "log", "target": "G05", "detail": "G05.T01 → done"}
+{"ts": "2026-09-20T13:31:32", "today": "2026-09-06", "cmd": "units", "target": "G05", "detail": "done/mastered (4, 4) → (5, 5)"}
+{"ts": "2026-09-20T13:31:32", "today": "2026-09-06", "cmd": "log", "target": "G03", "detail": "G03.T02 logged once"}
+{"ts": "2026-09-20T13:31:32", "today": "2026-09-06", "cmd": "metric", "target": "G03", "detail": "Weight 78 → 77.2"}
+{"ts": "2026-09-20T13:31:32", "today": "2026-09-07", "cmd": "log", "target": "G03", "detail": "G03.T01 logged once"}
+{"ts": "2026-09-20T13:31:33", "today": "2026-09-08", "cmd": "log", "target": "G04", "detail": "G04.T02 deferred +1 (1 total)"}
+{"ts": "2026-09-20T13:31:33", "today": "2026-09-09", "cmd": "log", "target": "G02", "detail": "G02.T03 → in progress"}
+{"ts": "2026-09-20T13:31:33", "today": "2026-09-09", "cmd": "log", "target": "G03", "detail": "G03.T01 logged once"}
+{"ts": "2026-09-20T13:31:33", "today": "2026-09-10", "cmd": "log", "target": "G04", "detail": "G04.T02 deferred +1 (2 total)"}
+{"ts": "2026-09-20T13:31:33", "today": "2026-09-10", "cmd": "funnel", "target": "G04", "detail": "Applied 0 → 3"}
+{"ts": "2026-09-20T13:31:33", "today": "2026-09-10", "cmd": "log", "target": "G02", "detail": "G02.T04 deferred +1 (1 total)"}
+{"ts": "2026-09-20T13:31:33", "today": "2026-09-11", "cmd": "task-set", "target": "G02", "detail": "T06 → blocked"}
+{"ts": "2026-09-20T13:31:33", "today": "2026-09-11", "cmd": "log", "target": "G06", "detail": "G06.T01 → done"}
+{"ts": "2026-09-20T13:31:33", "today": "2026-09-12", "cmd": "log", "target": "G02", "detail": "G02.T04 deferred +1 (2 total)"}
+{"ts": "2026-09-20T13:31:33", "today": "2026-09-12", "cmd": "log", "target": "G03", "detail": "G03.T01 logged once"}
+{"ts": "2026-09-20T13:31:33", "today": "2026-09-13", "cmd": "log", "target": "G03", "detail": "G03.T02 logged once"}
+{"ts": "2026-09-20T13:31:33", "today": "2026-09-13", "cmd": "metric", "target": "G03", "detail": "Weight 77.2 → 76.4"}
+{"ts": "2026-09-20T13:31:33", "today": "2026-09-13", "cmd": "funnel", "target": "G04", "detail": "Screened 0 → 1"}
+{"ts": "2026-09-20T13:31:33", "today": "2026-09-13", "cmd": "decide", "target": "G02", "detail": "D01 Drop multi-currency support"}
+{"ts": "2026-09-20T13:31:33", "today": "2026-09-14", "cmd": "plan", "target": "2026-09-14", "detail": "main 2 · habit 1 · errand 1 · 2h20m"}
+{"ts": "2026-09-20T13:31:33", "today": "2026-09-14", "cmd": "checkin", "target": "G04", "detail": "2026-09-14 check-in"}
+{"ts": "2026-09-20T13:31:33", "today": "2026-09-14", "cmd": "checkin", "target": "G02", "detail": "2026-09-14 check-in"}
+{"ts": "2026-09-20T13:31:33", "today": "2026-09-14", "cmd": "checkin", "target": "G03", "detail": "2026-09-14 check-in"}
+{"ts": "2026-09-20T13:31:33", "today": "2026-09-14", "cmd": "checkin", "target": "G06", "detail": "2026-09-14 check-in"}
+{"ts": "2026-09-20T13:31:33", "today": "2026-09-14", "cmd": "checkin", "target": "2026-09-14", "detail": "done 3/4"}
+{"ts": "2026-09-20T13:31:34", "today": "2026-09-14", "cmd": "metric", "target": "G03", "detail": "Weight 76.4 → 76.1"}

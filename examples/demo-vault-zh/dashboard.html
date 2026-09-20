@@ -99,9 +99,16 @@ input.chk:disabled{opacity:.4;cursor:default}
 .goals{display:flex;flex-direction:column;gap:12px}
 .legend{font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
 .expect-key{display:inline-block;width:2px;height:12px;background:var(--ink)}
-.goal{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:16px 18px 10px}
+.goal{background:var(--surface);border:1px solid var(--rule);border-radius:12px}
+.goal-face{display:block;cursor:pointer;list-style:none;padding:16px 18px 14px}
+.goal-face::-webkit-details-marker{display:none}
+.goal[open] .goal-face{padding-bottom:6px}
+.goal .more-body{padding:0 18px 12px}
+.caret{color:var(--faint);font-size:11px;transition:transform .15s}
+.goal[open] .caret{transform:rotate(180deg)}
 .goal.s-crit{border-color:color-mix(in srgb,var(--crit) 45%,var(--rule))}
-.goal-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.goal-head{display:flex;align-items:baseline;gap:10px}
+.goal-title{flex:1;min-width:0}
 .goal-title{font:600 17px/1.4 var(--serif)}
 .measure{margin-top:12px}
 .measure-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
@@ -180,6 +187,8 @@ input.chk:disabled{opacity:.4;cursor:default}
 .row .t{font-weight:500}
 .has-r.ok .row .t{color:var(--muted)}
 .row .time{font-size:12px;color:var(--faint);white-space:nowrap}
+.item.plain{grid-template-columns:minmax(0,1fr)}
+.wait .item .t{font-size:12.5px;color:var(--muted);font-weight:400}
 .row .res{font-size:12px;font-weight:700}
 .row .res.warn{color:var(--warn)} .row .res.crit{color:var(--crit)} .row .res.idle{color:var(--idle)}
 .row-body{padding:6px 0 2px;display:flex;flex-direction:column;gap:3px}
@@ -195,13 +204,18 @@ input.chk:disabled{opacity:.4;cursor:default}
 .advice h3{font:600 14px/1.45 var(--serif)}
 .goal-ref{margin:2px 0 0;font-size:11.5px;color:var(--muted)}
 .opts{display:flex;flex-direction:column;gap:6px;margin-top:8px}
-.opts li{display:grid;grid-template-columns:18px minmax(0,1fr);gap:8px;padding:7px 9px;border:1px solid var(--rule);border-radius:6px;font-size:12.5px}
-.opts li.rec{border-color:var(--accent);background:var(--accent-soft)}
+.opts li{border:1px solid var(--rule);border-radius:6px;font-size:12.5px}
+.opts label{display:grid;grid-template-columns:14px 16px minmax(0,1fr);gap:8px;align-items:start;padding:7px 9px;cursor:pointer}
+.opts input.pick{margin:3px 0 0;accent-color:var(--accent)}
+.opts li.rec{border-color:color-mix(in srgb,var(--accent) 45%,var(--rule))}
+.opts li.on{border-color:var(--accent);background:var(--accent-soft)}
 .opts b{color:var(--accent)}
 .opts p{margin:0}
 .opts .cost{font-size:11.5px;color:var(--muted);margin-top:2px}
 .rec-line{margin:8px 0 0;font-size:12.5px;color:var(--muted)}
 .ask{margin:6px 0 0;font-size:12.5px;font-weight:500}
+.adv-reply{margin-top:8px;font:500 12.5px/1 var(--sans);color:var(--surface);background:var(--accent);border:0;border-radius:8px;padding:8px 12px;cursor:pointer;width:100%}
+.adv-reply[hidden]{display:none}
 .advice .more{margin-top:6px;border-top:0}
 .advice .more-body p{margin:0;font-size:12.5px;color:var(--muted)}
 
@@ -257,7 +271,8 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
 }
 @media (max-width: 560px){
   .wrap{padding-inline:16px}
-  .goal{padding:14px 14px 8px}
+  .goal-face{padding:14px 14px 12px}
+  .goal .more-body{padding:0 14px 10px}
   .task{grid-template-columns:17px 22px minmax(0,1fr)}
   .task .meta{grid-column:3;text-align:left}
   .measure-head .detail{margin-left:0;text-align:left;flex-basis:100%}
@@ -287,7 +302,7 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
     <div class="primary">
       <section class="today box-panel" aria-labelledby="today-h">
   <div class="panel-head"><h2 id="today-h">今日清单</h2><span class="mono date">09-14 周一</span></div>
-  <p class="today-meta mono">可用 4h · 精力 3/5 · 计划 2h20m（上限 2h48m）</p>
+  <p class="today-meta mono">可用 4h · 计划 2h20m</p>
   <ul class="items"><li class="item has-r ok">
   <input type="checkbox" class="chk" data-scope="day" data-ref="G04.T02" data-title="整理目标公司清单（20 家）" data-init="1" checked aria-label="整理目标公司清单（20 家）">
   <details class="row"><summary><span class="t">整理目标公司清单（20 家）</span>
@@ -299,19 +314,19 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
   <span class="time mono">45m</span></summary>
   <div class="row-body"><p class="mono">G02.T04 · 上线记账 App v1 · 45m</p><p>原因 U 不清楚</p><p>还是不知道从哪比较</p></div></details>
 </li></ul>
-  <div class="wait"><h3>等待 / 跟进</h3><ul><li>G02.T06 请设计朋友出 App 图标（等小王，已 3 天） → 建议今天跟进</li></ul></div>
+  <div class="wait"><h3>等待 / 跟进</h3><ul><li class="item"><input type="checkbox" class="chk" data-scope="wait" data-ref="G02.T06" data-title="请设计朋友出 App 图标（等小王，已 3 天） → 建议今天跟进" data-init="0" aria-label="请设计朋友出 App 图标（等小王，已 3 天） → 建议今天跟进"><span class="t">请设计朋友出 App 图标（等小王，已 3 天） → 建议今天跟进</span></li></ul></div>
 </section><section class="goals" aria-labelledby="goals-h">
         <div class="sec-head"><h2 id="goals-h">目标</h2><span class="legend"><span class="expect-key"></span>按时间应有的进度</span></div>
-        <article class="goal s-crit" id="G04">
-  <header class="goal-head">
-    <h3 class="goal-title">拿到秋招 offer</h3>
-    <span class="pill crit"><i aria-hidden="true"></i>风险</span>
-  </header>
-  <div class="measure"><div class="measure-head"><span class="num">33%</span><span class="sub detail">M2 集中投递 进行中</span></div><div class="bar" role="img" aria-label="进度 33%"><span class="fill crit" style="width:33.3%"></span></div></div>
-  <p class="facts">近7天 3/10 家 · 截止 11-15 硬 · 投入 50m</p>
-  <div class="next"><span class="k">下一步</span><span class="t">投递 5 家目标公司</span><span class="mono est">45m</span></div>
-  <details class="more">
-  <summary>详情</summary>
+        <details class="goal s-crit" id="G04">
+  <summary class="goal-face">
+    <div class="goal-head">
+      <h3 class="goal-title">拿到秋招 offer</h3>
+      <span class="pill crit"><i aria-hidden="true"></i>风险</span><span class="caret" aria-hidden="true">▾</span>
+    </div>
+    <div class="measure"><div class="measure-head"><span class="num">33%</span><span class="sub detail">M2 集中投递 进行中</span></div><div class="bar" role="img" aria-label="进度 33%"><span class="fill crit" style="width:33.3%"></span></div></div>
+    <p class="facts">近7天 3/10 家 · 截止 11-15 硬 · 投入 50m</p>
+    <div class="next"><span class="k">下一步</span><span class="t">投递 5 家目标公司</span><span class="mono est">45m</span></div>
+  </summary>
   <div class="more-body">
     <p class="dw"><span class="k">完成标准</span>拿到至少 1 个客户端开发 offer 并签约</p>
     <ol class="phases"><li class="ph done"><span class="mono">M1</span> 简历打磨<small class="mono">09-07</small></li><li class="ph active"><span class="mono">M2</span> 集中投递<small class="mono">10-15</small></li><li class="ph todo"><span class="mono">M3</span> 面试<small class="mono">11-10</small></li><li class="ph todo"><span class="mono">M4</span> 选择 offer<small class="mono">11-15</small></li></ol>
@@ -322,17 +337,16 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
     <tbody><tr><td class="mono">09-14</td><td class="mono">#2</td><td class="r ok">✓</td><td class="mono">50m</td><td>清单 22 家已存到 Notion</td></tr><tr><td class="mono">09-13</td><td class="mono">漏斗:初筛通过</td><td class="r ">=</td><td class="mono">+1</td><td>邮件通知</td></tr><tr><td class="mono">09-10</td><td class="mono">漏斗:投递</td><td class="r ">=</td><td class="mono">+3</td><td>官网投递截图</td></tr><tr><td class="mono">09-10</td><td class="mono">#2</td><td class="r crit">✗</td><td class="mono"></td><td><span class="rc" title="不清楚">U</span></td></tr><tr><td class="mono">09-08</td><td class="mono">#2</td><td class="r crit">✗</td><td class="mono"></td><td><span class="rc" title="不清楚">U</span>不知道该投哪些公司</td></tr><tr><td class="mono">09-05</td><td class="mono">M1</td><td class="r ok">✓</td><td class="mono"></td><td>阶段完成</td></tr><tr><td class="mono">09-05</td><td class="mono">#1</td><td class="r ok">✓</td><td class="mono">1h30m</td><td>简历 v3 已上传云盘</td></tr><tr><td class="mono">09-01</td><td class="mono">创建</td><td class="r ">=</td><td class="mono"></td><td>目标创建（active）</td></tr></tbody></table></div>
     
   </div>
-</details>
-</article><article class="goal s-warn" id="G03">
-  <header class="goal-head">
-    <h3 class="goal-title">减到 70kg</h3>
-    <span class="pill warn"><i aria-hidden="true"></i>注意</span>
-  </header>
-  <div class="measure"><div class="measure-head"><span class="num">24%</span><span class="sub detail">76.1kg，基线 78 → 目标 70</span></div><div class="bar" role="img" aria-label="进度 24%"><span class="fill warn" style="width:23.8%"></span></div></div>
-  <p class="facts">近7天 3/4 次 · 投入 35m</p>
-  <div class="next"><span class="k">下一步</span><span class="t">力量训练 A/B 组交替</span><span class="mono est">40m</span></div>
-  <details class="more">
-  <summary>详情</summary>
+</details><details class="goal s-warn" id="G03">
+  <summary class="goal-face">
+    <div class="goal-head">
+      <h3 class="goal-title">减到 70kg</h3>
+      <span class="pill warn"><i aria-hidden="true"></i>注意</span><span class="caret" aria-hidden="true">▾</span>
+    </div>
+    <div class="measure"><div class="measure-head"><span class="num">24%</span><span class="sub detail">76.1kg，基线 78 → 目标 70</span></div><div class="bar" role="img" aria-label="进度 24%"><span class="fill warn" style="width:23.8%"></span></div></div>
+    <p class="facts">近7天 3/4 次 · 投入 35m</p>
+    <div class="next"><span class="k">下一步</span><span class="t">力量训练 A/B 组交替</span><span class="mono est">40m</span></div>
+  </summary>
   <div class="more-body">
     <p class="dw"><span class="k">完成标准</span>连续两周体重 ≤ 70kg</p>
     
@@ -343,17 +357,16 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
     <tbody><tr><td class="mono">09-14</td><td class="mono">体重</td><td class="r ">=</td><td class="mono">76.1kg</td><td>用户不方便拍照，口头报告</td></tr><tr><td class="mono">09-14</td><td class="mono">#1</td><td class="r ok">✓</td><td class="mono">35m</td><td></td></tr><tr><td class="mono">09-13</td><td class="mono">体重</td><td class="r ">=</td><td class="mono">76.4kg</td><td>秤读数照片已查看，未保存照片</td></tr><tr><td class="mono">09-13</td><td class="mono">#2</td><td class="r ok">✓</td><td class="mono">5m</td><td></td></tr><tr><td class="mono">09-12</td><td class="mono">#1</td><td class="r ok">✓</td><td class="mono">40m</td><td></td></tr><tr><td class="mono">09-09</td><td class="mono">#1</td><td class="r ok">✓</td><td class="mono">40m</td><td></td></tr><tr><td class="mono">09-07</td><td class="mono">#1</td><td class="r ok">✓</td><td class="mono">40m</td><td></td></tr><tr><td class="mono">09-06</td><td class="mono">体重</td><td class="r ">=</td><td class="mono">77.2kg</td><td>秤读数照片已查看</td></tr><tr><td class="mono">09-06</td><td class="mono">#2</td><td class="r ok">✓</td><td class="mono">5m</td><td></td></tr><tr><td class="mono">09-05</td><td class="mono">#1</td><td class="r ok">✓</td><td class="mono">35m</td><td></td></tr></tbody></table></div>
     
   </div>
-</details>
-</article><article class="goal s-warn" id="G05">
-  <header class="goal-head">
-    <h3 class="goal-title">学完 Rust Book</h3>
-    <span class="pill warn"><i aria-hidden="true"></i>注意</span>
-  </header>
-  <div class="measure"><div class="measure-head"><span class="num">25%</span><span class="sub">应有 11%</span><span class="sub detail">已掌握 5/20 章 · 已学 5</span></div><div class="bar" role="img" aria-label="进度 25%"><span class="fill warn" style="width:25.0%"></span><span class="expect" style="left:10.7%" title="按时间应有 11%"></span></div></div>
-  <p class="facts">实际 25% / 应有 11%（节奏比 2.33） · 截止 12-31 · 投入 0m / 预算 3.5h · 完成 0 项</p>
-  <div class="next"><span class="k">下一步</span><span class="t">读第 6 章并完成练习</span><span class="mono est">90m</span></div>
-  <details class="more">
-  <summary>详情</summary>
+</details><details class="goal s-warn" id="G05">
+  <summary class="goal-face">
+    <div class="goal-head">
+      <h3 class="goal-title">学完 Rust Book</h3>
+      <span class="pill warn"><i aria-hidden="true"></i>注意</span><span class="caret" aria-hidden="true">▾</span>
+    </div>
+    <div class="measure"><div class="measure-head"><span class="num">25%</span><span class="sub">应有 11%</span><span class="sub detail">已掌握 5/20 章 · 已学 5</span></div><div class="bar" role="img" aria-label="进度 25%"><span class="fill warn" style="width:25.0%"></span><span class="expect" style="left:10.7%" title="按时间应有 11%"></span></div></div>
+    <p class="facts">实际 25% / 应有 11%（节奏比 2.33） · 截止 12-31 · 投入 0m / 预算 3.5h · 完成 0 项</p>
+    <div class="next"><span class="k">下一步</span><span class="t">读第 6 章并完成练习</span><span class="mono est">90m</span></div>
+  </summary>
   <div class="more-body">
     <p class="dw"><span class="k">完成标准</span>20 章全部完成课后练习，并用 Rust 写一个命令行记账小工具</p>
     
@@ -364,17 +377,16 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
     <tbody><tr><td class="mono">09-06</td><td class="mono">章</td><td class="r ">=</td><td class="mono">学5/掌握5</td><td></td></tr><tr><td class="mono">09-06</td><td class="mono">#1</td><td class="r ok">✓</td><td class="mono">1h40m</td><td>练习代码 rust-book/ch05</td></tr><tr><td class="mono">09-01</td><td class="mono">创建</td><td class="r ">=</td><td class="mono"></td><td>目标创建（active）</td></tr></tbody></table></div>
     
   </div>
-</details>
-</article><article class="goal s-ok" id="G02">
-  <header class="goal-head">
-    <h3 class="goal-title">上线记账 App v1</h3>
-    <span class="pill ok"><i aria-hidden="true"></i>正常</span>
-  </header>
-  <div class="measure"><div class="measure-head"><span class="num">25%</span><span class="sub">应有 14%</span><span class="sub detail">M2 核心记账功能 进行中</span></div><div class="bar" role="img" aria-label="进度 25%"><span class="fill ok" style="width:25.0%"></span><span class="expect" style="left:14.4%" title="按时间应有 14%"></span></div></div>
-  <p class="facts">实际 25% / 应有 14%（节奏比 1.73） · 截止 11-30 硬 · 投入 1h / 预算 8h · 完成 0 项</p>
-  <div class="next"><span class="k">下一步</span><span class="t">实现账目 CRUD 本地存储</span><span class="mono est">120m</span></div>
-  <details class="more">
-  <summary>详情</summary>
+</details><details class="goal s-ok" id="G02">
+  <summary class="goal-face">
+    <div class="goal-head">
+      <h3 class="goal-title">上线记账 App v1</h3>
+      <span class="pill ok"><i aria-hidden="true"></i>正常</span><span class="caret" aria-hidden="true">▾</span>
+    </div>
+    <div class="measure"><div class="measure-head"><span class="num">25%</span><span class="sub">应有 14%</span><span class="sub detail">M2 核心记账功能 进行中</span></div><div class="bar" role="img" aria-label="进度 25%"><span class="fill ok" style="width:25.0%"></span><span class="expect" style="left:14.4%" title="按时间应有 14%"></span></div></div>
+    <p class="facts">实际 25% / 应有 14%（节奏比 1.73） · 截止 11-30 硬 · 投入 1h / 预算 8h · 完成 0 项</p>
+    <div class="next"><span class="k">下一步</span><span class="t">实现账目 CRUD 本地存储</span><span class="mono est">120m</span></div>
+  </summary>
   <div class="more-body">
     <p class="dw"><span class="k">完成标准</span>App Store 上架，且有 10 个真实用户在用</p>
     <ol class="phases"><li class="ph done"><span class="mono">M1</span> 需求与原型<small class="mono">09-10</small></li><li class="ph active"><span class="mono">M2</span> 核心记账功能<small class="mono">10-20</small></li><li class="ph todo"><span class="mono">M3</span> 打磨与上架<small class="mono">11-30</small></li></ol>
@@ -385,17 +397,16 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
     <tbody><tr><td class="mono">09-14</td><td class="mono">#3</td><td class="r warn">◐</td><td class="mono">1h</td><td><span class="rc" title="低估工作量">O</span>子代理核验 commit e19f55：列表页已接数据，编辑页未做</td></tr><tr><td class="mono">09-14</td><td class="mono">#4</td><td class="r crit">✗</td><td class="mono"></td><td><span class="rc" title="不清楚">U</span>还是不知道从哪比较</td></tr><tr><td class="mono">09-12</td><td class="mono">#4</td><td class="r crit">✗</td><td class="mono"></td><td><span class="rc" title="不清楚">U</span>不知道从哪开始比较</td></tr><tr><td class="mono">09-10</td><td class="mono">#4</td><td class="r idle">➜</td><td class="mono"></td><td><span class="rc" title="没时间">T</span></td></tr><tr><td class="mono">09-09</td><td class="mono">#3</td><td class="r warn">◐</td><td class="mono">1h</td><td><span class="rc" title="低估工作量">O</span>commit c41e9a 模型层完成，UI 未接</td></tr><tr><td class="mono">09-04</td><td class="mono">M1</td><td class="r ok">✓</td><td class="mono"></td><td>线框图与骨架均已核验</td></tr><tr><td class="mono">09-04</td><td class="mono">#2</td><td class="r ok">✓</td><td class="mono">1h15m</td><td>commit 8b7d02 SwiftUI+SwiftData 骨架</td></tr><tr><td class="mono">09-02</td><td class="mono">#1</td><td class="r ok">✓</td><td class="mono">1h30m</td><td>commit 3f2a1c 线框图提交到 docs/</td></tr><tr><td class="mono">09-01</td><td class="mono">创建</td><td class="r ">=</td><td class="mono"></td><td>目标创建（active）</td></tr></tbody></table></div>
     <h4>决策</h4><ul class="decisions"><li><span class="mono">09-13 D01</span> 砍掉多币种支持<small>原因：v1 聚焦核心记账</small></li></ul>
   </div>
-</details>
-</article><article class="goal s-ok" id="G06">
-  <header class="goal-head">
-    <h3 class="goal-title">买显示器支架</h3>
-    <span class="pill ok"><i aria-hidden="true"></i>正常</span>
-  </header>
-  <div class="measure"><div class="measure-head"><span class="num">100%</span><span class="sub detail">2/2 项</span></div><div class="bar" role="img" aria-label="进度 100%"><span class="fill ok" style="width:100.0%"></span></div></div>
-  <p class="facts">完成 · 截止 09-20 · 投入 10m / 预算 0.5h · 完成 1 项</p>
-  <div class="next"><span class="k">下一步</span><span class="none">行动已全部完成</span></div>
-  <details class="more">
-  <summary>详情</summary>
+</details><details class="goal s-ok" id="G06">
+  <summary class="goal-face">
+    <div class="goal-head">
+      <h3 class="goal-title">买显示器支架</h3>
+      <span class="pill ok"><i aria-hidden="true"></i>正常</span><span class="caret" aria-hidden="true">▾</span>
+    </div>
+    <div class="measure"><div class="measure-head"><span class="num">100%</span><span class="sub detail">2/2 项</span></div><div class="bar" role="img" aria-label="进度 100%"><span class="fill ok" style="width:100.0%"></span></div></div>
+    <p class="facts">完成 · 截止 09-20 · 投入 10m / 预算 0.5h · 完成 1 项</p>
+    <div class="next"><span class="k">下一步</span><span class="none">行动已全部完成</span></div>
+  </summary>
   <div class="more-body">
     <p class="dw"><span class="k">完成标准</span>支架到货并装好</p>
     
@@ -407,7 +418,6 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
     
   </div>
 </details>
-</article>
       </section>
     </div>
 
@@ -419,18 +429,20 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
       <section class="advice-panel box-panel" aria-labelledby="adv-h"><div class="panel-head"><h2 id="adv-h">秘书建议</h2><span class="mono count">2</span></div><article class="advice">
   <h3>投递节奏落后</h3>
   <p class="goal-ref">G04 拿到秋招 offer · 调整</p>
-  <ol class="opts"><li class="rec"><b class="mono">A</b><div><p>今天先花 45m 建清单，下周配额不变</p><p class="cost">代价：本周投递数再少 1-2 家</p></div></li><li class=""><b class="mono">B</b><div><p>配额降到 6 家/周</p><p class="cost">代价：预计拿到 offer 的时间推迟约 2 周</p></div></li></ol>
+  <ol class="opts"><li class="rec"><label><input type="radio" class="pick" name="pick-A0914-1" data-card="A0914-1" data-msg="秘书，关于「投递节奏落后」（A0914-1）：我选 A —— 今天先花 45m 建清单，下周配额不变"><b class="mono">A</b><div><p>今天先花 45m 建清单，下周配额不变</p><p class="cost">代价：本周投递数再少 1-2 家</p></div></label></li><li class=""><label><input type="radio" class="pick" name="pick-A0914-1" data-card="A0914-1" data-msg="秘书，关于「投递节奏落后」（A0914-1）：我选 B —— 配额降到 6 家/周"><b class="mono">B</b><div><p>配额降到 6 家/周</p><p class="cost">代价：预计拿到 offer 的时间推迟约 2 周</p></div></label></li></ol>
   <p class="rec-line">推荐 <b class="mono">A</b> （已排进今日主线）</p>
   <p class="ask">需要你：回复 A 或 B</p>
+  <button type="button" class="adv-reply" id="reply-A0914-1" hidden data-done="已复制">一键回复秘书</button>
   <details class="more"><summary>事实与判断</summary>
     <div class="more-body"><p>近7天投递 3/10 家；G04.T02 推迟 2 次，原因都是 U（不清楚投哪家）</p><p>瓶颈是缺少目标公司清单，不是时间不够</p></div>
   </details>
 </article><article class="advice">
   <h3>iCloud 同步调研卡住了</h3>
   <p class="goal-ref">G02 上线记账 App v1 · 教练</p>
-  <ol class="opts"><li class="rec"><b class="mono">A</b><div><p>拆成两步：① 25m 列出 CloudKit/Core Data+CloudKit/第三方 3 个候选及官方文档链接 ② 30m 按“成本/复杂度/离线支持”填对比表</p><p class="cost">代价：多一次拆解，今天不增加工作量</p></div></li><li class=""><b class="mono">B</b><div><p>v1 先不做同步，挪到 M3 之后</p><p class="cost">代价：上架时没有多设备同步，可能影响前 10 个用户的留存</p></div></li></ol>
+  <ol class="opts"><li class="rec"><label><input type="radio" class="pick" name="pick-A0914-2" data-card="A0914-2" data-msg="秘书，关于「iCloud 同步调研卡住了」（A0914-2）：我选 A —— 拆成两步：① 25m 列出 CloudKit/Core Data+CloudKit/第三方 3 个候选及官方文档链接 ② 30m 按“成本/复杂度/离线支持”填对比表"><b class="mono">A</b><div><p>拆成两步：① 25m 列出 CloudKit/Core Data+CloudKit/第三方 3 个候选及官方文档链接 ② 30m 按“成本/复杂度/离线支持”填对比表</p><p class="cost">代价：多一次拆解，今天不增加工作量</p></div></label></li><li class=""><label><input type="radio" class="pick" name="pick-A0914-2" data-card="A0914-2" data-msg="秘书，关于「iCloud 同步调研卡住了」（A0914-2）：我选 B —— v1 先不做同步，挪到 M3 之后"><b class="mono">B</b><div><p>v1 先不做同步，挪到 M3 之后</p><p class="cost">代价：上架时没有多设备同步，可能影响前 10 个用户的留存</p></div></label></li></ol>
   <p class="rec-line">推荐 <b class="mono">A</b> （同步是核心体验，只是任务定义不清）</p>
   <p class="ask">需要你：回复 A 或 B，我来更新计划</p>
+  <button type="button" class="adv-reply" id="reply-A0914-2" hidden data-done="已复制">一键回复秘书</button>
   <details class="more"><summary>事实与判断</summary>
     <div class="more-body"><p>G02.T04 已推迟 3 次，其中 2 次原因是 U（不清楚从哪开始）</p><p>任务太模糊：「调研 3 种方案」没有明确的第一步和产出格式</p></div>
   </details>
@@ -441,7 +453,7 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
     </aside>
   </main>
 
-  <footer class="foot">只读视图 · 由 mishu.py 于 2026-09-20 13:16 生成 · 修改数据请直接和秘书对话</footer>
+  <footer class="foot">只读视图 · 由 mishu.py 于 2026-09-20 13:31 生成 · 修改数据请直接和秘书对话</footer>
 </div>
 <div id="tray" hidden data-head="秘书，今天（2026-09-14）的情况："
      data-foot="请据此更新记录。">
@@ -457,7 +469,6 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
   var tray = document.getElementById("tray");
   var num = document.getElementById("tray-n");
   var btn = document.getElementById("tray-copy");
-  var label = btn ? btn.textContent : "";
   var touched = false;
   function ref(b) { return b.getAttribute("data-ref"); }
   function key(b) { return "mishu:" + date + ":" + ref(b); }          // ticks are a report about today
@@ -478,6 +489,41 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
     if (tray) tray.hidden = !touched || n === 0;   // nothing ticked, nothing to report
   }
   function line(b) { return (b.checked ? "✓" : "✗") + " " + ref(b) + " " + (b.getAttribute("data-title") || ""); }
+  function copy(text, button) {
+    var was = button.textContent;
+    function ok() {
+      button.textContent = button.getAttribute("data-done");
+      setTimeout(function () { button.textContent = was; }, 1500);
+    }
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); ok(); } catch (err) {}
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(ok, fallback);
+    } else { fallback(); }
+  }
+  // advice cards: pick an option, then hand the choice back to Mishu
+  [].slice.call(document.querySelectorAll("input.pick")).forEach(function (r) {
+    r.addEventListener("change", function () {
+      var card = r.closest(".advice");
+      [].slice.call(card.querySelectorAll(".opts li")).forEach(function (li) {
+        li.classList.toggle("on", li.contains(r));
+      });
+      var b = document.getElementById("reply-" + r.getAttribute("data-card"));
+      if (b) b.hidden = false;
+    });
+  });
+  [].slice.call(document.querySelectorAll("button.adv-reply")).forEach(function (b) {
+    b.addEventListener("click", function () {
+      var r = b.closest(".advice").querySelector("input.pick:checked");
+      if (r) copy(r.getAttribute("data-msg"), b);
+    });
+  });
   try {   // ticks stored by older versions of this page were never day-scoped
     for (var i = localStorage.length - 1; i >= 0; i--) {
       var k = localStorage.key(i);
@@ -509,22 +555,7 @@ html[lang="en"] .att{grid-template-columns:52px minmax(0,1fr)}
       day.forEach(function (b) { lines.push(line(b)); });
       picked().forEach(function (b) { if (!planned(ref(b))) lines.push(line(b)); });
       lines.push(tray.getAttribute("data-foot"));
-      var text = lines.join("\n");
-      function ok() {
-        btn.textContent = btn.getAttribute("data-done");
-        setTimeout(function () { btn.textContent = label; }, 1500);
-      }
-      function fallback() {
-        var ta = document.createElement("textarea");
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        try { document.execCommand("copy"); ok(); } catch (err) {}
-        document.body.removeChild(ta);
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(ok, fallback);
-      } else { fallback(); }
+      copy(lines.join("\n"), btn);
     });
   }
 })();
