@@ -447,7 +447,9 @@ Updated 2026-09-14 Mon · week 38 · this week 2h35m / capacity 25h
 
 **Every goal card has exactly five lines: Progress, Pace, This week, Next, Risks.** An empty line shows "—" rather than disappearing.
 
-The web dashboard `dashboard.html` shows the same data read-only. On a timeline goal, the progress bar has a marker for expected progress; habits show dots for the last 7 days; every goal has a 14-day activity strip. An empty vault shows an onboarding panel instead.
+The web dashboard `dashboard.html` shows the same data read-only, but deliberately quieter: the main column holds **today's main items and the goal cards**, the sidebar holds **what needs attention, the advice cards, what Mishu needs from you, and completed goals**. A goal card is five short lines (title, progress, pace/due/this week, next action); phases, the numbered action list, the 14-day activity strip, the log and the decisions live behind a **Details** toggle. Today's items show the title alone, with a toggle for the goal, the id and the notes. Habits, errands and the evening check-in stay in the Markdown daily file and are not shown on the dashboard; a reviewed item just carries its result next to the title. An empty vault shows an onboarding panel instead.
+
+Actions and today's items carry a **checkbox**. Ticking one changes nothing in the vault: the state lives in the browser's localStorage, and a small tray offers **"reply to Mishu"**, which copies a ready-made message ("Mishu, here's today (date): ✓ G02.T03 …") for you to paste into the conversation. The vault is still only written by `mishu.py`.
 
 ### 5.2 📅 Daily plan `daily/YYYY-MM-DD.md`
 
@@ -614,7 +616,7 @@ Changes and additions made while implementing the spec (reflected in the skill a
 5. **Writes have three permission levels** (progress / structural / forbidden). Structural changes need `--confirmed --reason` and are recorded as decisions automatically.
 6. **Commands are `/mishu <subcommand>` or natural language.** The weekly review is still planned.
 7. **"No next action" only warns during execution** and never blocks a progress write. When every action is done, Mishu asks whether to close the goal.
-8. **A read-only `dashboard.html`** is generated alongside BOARD.md. Markdown remains the only source of truth.
+8. **A read-only `dashboard.html`** is generated alongside BOARD.md. Markdown remains the only source of truth; the dashboard's checkboxes are browser-local and come back to Mishu as copied text.
 9. **Bilingual.** `profile.lang` (`en` / `zh`) sets the language of every rendered output. Section headers (`## Actions` / `## 行动`) and decision fields (`Reason:` / `原因：`) parse in both languages, so switching language needs no migration.
 10. **First run starts empty.** After installation the vault is empty, and the setup workflow onboards the user's first goals. Demo data is only generated under `examples/` and never enters a user's vault.
 11. **Completed history.** Setting a goal to `done` stamps `completed: YYYY-MM-DD` and archives it. The board and dashboard gain a "Completed" block with a one-line brief per goal, and `mishu.py done` lists them all with the closing note.

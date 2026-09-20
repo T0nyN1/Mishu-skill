@@ -21,6 +21,8 @@ List the items with numbers and suggest a compact reply, e.g.:
 >
 > Also: anything done that wasn't on the list? Any numbers to update today (weight, applications…)?
 
+**If the user pastes ticks from the dashboard** — a message like "Mishu, here's today (2026-09-15):" followed by lines such as `✓ G02.T03 Implement local expense CRUD` / `✗ G04.T03 Apply to 5 target companies` — read them as results (`✓` done, `✗` not done) and only ask for what's missing: time spent, reasons for the misses, and evidence where `verify.when` requires it. The dashboard's checkboxes never write to the vault; this check-in does.
+
 ### 3. Fill in evidence (see `references/evidence.md`)
 - **`repo` goals with ✓/◐:** before writing, dispatch read-only sub-agents. If several repos are involved, send them in one message, in parallel.
   - The check agrees → log 🔍 and put the commit hash in the note.

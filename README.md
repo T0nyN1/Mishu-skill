@@ -42,7 +42,7 @@ Existing AI planners either auto-schedule your calendar or track a single habit.
 | **Evidence** | Code projects: a read-only sub-agent checks the commits. Body metrics: one photo request, with verbal always accepted and never pushed. Outputs: a link. |
 | **Coach mode** | Works out where you're stuck (unclear, avoiding, blocked, doubting, overloaded), then offers ≤3 routes, each with its cost and a recommendation. |
 | **Anti-drift rules** | After 3 deferrals, a task stops being scheduled and gets broken down instead. Idle goals turn yellow, then red. New goals can't exceed your capacity. |
-| **Web dashboard** | A read-only, single-file HTML page with an expected-progress marker and a 14-day activity strip. Light and dark themes, works on mobile. |
+| **Web dashboard** | A read-only, single-file HTML page: today's list and the goal cards up front, details behind a toggle, attention and advice in the sidebar. Tick items off as you go and copy the result back to Mishu. Light and dark themes, works on mobile. |
 | **Completed history** | Finished goals are archived with their completion date. The dashboard lists a short brief for each (dates, days taken, time spent, definition of done), and `done` lets you look back at all of them. |
 | **Bilingual** | Set `lang: en` or `zh` per vault. Files written in either language keep working after you switch. |
 
