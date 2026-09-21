@@ -276,11 +276,13 @@ class TestDashboardUI(Base):
         self.assertIn("I pick A — Cut scope", html)
         self.assertIn('class="adv-reply"', html)
 
-    def test_dashboard_is_the_only_place_ticks_live(self):
+    def test_ticks_live_in_the_browser_only(self):
         self.add(PROJECT)
         self.run_cli("plan", "--hours", "4", "--energy", "3", "--main", "G01.T01")
-        self.assertIn("localStorage", self.html())
-        self.assertNotIn("checked", (self.vault / "goals" / "G01-test-project.md").read_text("utf-8"))
+        html = self.html()
+        self.assertIn("localStorage", html)            # the tick is kept by the browser
+        self.assertIn('data-init="0"', html)           # …against the vault's own state
+        self.assertIn("- [ ] T01", self.goal_file("G01").read_text("utf-8"))
 
 
 class TestCompleted(Base):
